@@ -10,6 +10,7 @@ specifiers:
   svelte-preprocess: ^4.10.6
   tslib: ^2.3.1
   typescript: ^4.7.2
+  vite-plugin-windicss: ^1.8.6
 
 devDependencies:
   '@sveltejs/adapter-auto': 1.0.0-next.53
@@ -21,8 +22,13 @@ devDependencies:
   svelte-preprocess: 4.10.7_lvfi2wesz6u4l5rfbnetbucfmm
   tslib: 2.4.0
   typescript: 4.7.4
+  vite-plugin-windicss: 1.8.6
 
 packages:
+
+  /@antfu/utils/0.5.2:
+    resolution: {integrity: sha512-CQkeV+oJxUazwjlHD0/3ZD08QWKuGQkhnrKo3e6ly5pd48VUpXbb77q0xMU4+vc2CkJnDS02Eq/M9ugyX20XZA==}
+    dev: true
 
   /@iarna/toml/2.2.5:
     resolution: {integrity: sha512-trnsAYxU3xnS1gPHPyU961coFyLkh4gAD/0zQ5mymY4yOZ+CYvsPqUbOFSw0aDM4y0tV7tiFxL/1XfXPNC6IPg==}
@@ -201,6 +207,30 @@ packages:
       rollup-pluginutils: 2.8.2
     transitivePeerDependencies:
       - encoding
+      - supports-color
+    dev: true
+
+  /@windicss/config/1.8.6:
+    resolution: {integrity: sha512-WVS41qUJtd44g2iWzTAE8tpgk8gD0yAr1RwwaWi7FAECKm3LVNMLOoToum9R/QKFE2n64EUVJpIvSUNby8rlhg==}
+    dependencies:
+      debug: 4.3.4
+      jiti: 1.14.0
+      windicss: 3.5.6
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /@windicss/plugin-utils/1.8.6:
+    resolution: {integrity: sha512-YY6EcUsgkosaQkIseFiIoHfU1H5boOAs/l74QWLI6ryNeHLMq2e04QVsFz+Rt+U8b8PRNxXPC8ADbxE05X7I7g==}
+    dependencies:
+      '@antfu/utils': 0.5.2
+      '@windicss/config': 1.8.6
+      debug: 4.3.4
+      fast-glob: 3.2.11
+      magic-string: 0.26.2
+      micromatch: 4.0.5
+      windicss: 3.5.6
+    transitivePeerDependencies:
       - supports-color
     dev: true
 
@@ -745,9 +775,18 @@ packages:
     engines: {node: '>=0.12.0'}
     dev: true
 
+  /jiti/1.14.0:
+    resolution: {integrity: sha512-4IwstlaKQc9vCTC+qUXLM1hajy2ImiL9KnLvVYiaHOtS/v3wRjhLlGl121AmgDgx/O43uKmxownJghS5XMya2A==}
+    hasBin: true
+    dev: true
+
   /kleur/4.1.5:
     resolution: {integrity: sha512-o+NO+8WrRiQEE4/7nwRJhN1HWpVmJm511pBHUxPLtp0BUISzlBplORYSmTclCnJvQq2tKu/sgl3xVpkc7ZWuQQ==}
     engines: {node: '>=6'}
+    dev: true
+
+  /kolorist/1.5.1:
+    resolution: {integrity: sha512-lxpCM3HTvquGxKGzHeknB/sUjuVoUElLlfYnXZT73K8geR9jQbroGlSCFBax9/0mpGoD3kzcMLnOlGQPJJNyqQ==}
     dev: true
 
   /lru-cache/6.0.0:
@@ -1271,6 +1310,19 @@ packages:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
 
+  /vite-plugin-windicss/1.8.6:
+    resolution: {integrity: sha512-D4G4qmumgklPiPrq/ZALqq8Mby6krskFVShbmb5c+0VCSsLUN96qyFRTwi81rNIHwFvlbpqflgh+BpUM/9VjQg==}
+    peerDependencies:
+      vite: ^2.0.1
+    dependencies:
+      '@windicss/plugin-utils': 1.8.6
+      debug: 4.3.4
+      kolorist: 1.5.1
+      windicss: 3.5.6
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
   /vite/2.9.13:
     resolution: {integrity: sha512-AsOBAaT0AD7Mhe8DuK+/kE4aWYFMx/i0ZNi98hJclxb4e0OhQcZYUrvLjIaQ8e59Ui7txcvKMiJC1yftqpQoDw==}
     engines: {node: '>=12.2.0'}
@@ -1310,6 +1362,12 @@ packages:
     resolution: {integrity: sha512-eDMORYaPNZ4sQIuuYPDHdQvf4gyCF9rEEV/yPxGfwPkRodwEgiMUUXTx/dex+Me0wxx53S+NgUHaP7y3MGlDmg==}
     dependencies:
       string-width: 4.2.3
+    dev: true
+
+  /windicss/3.5.6:
+    resolution: {integrity: sha512-P1mzPEjgFMZLX0ZqfFht4fhV/FX8DTG7ERG1fBLiWvd34pTLVReS5CVsewKn9PApSgXnVfPWwvq+qUsRwpnwFA==}
+    engines: {node: '>= 12'}
+    hasBin: true
     dev: true
 
   /worktop/0.8.0-next.14:
