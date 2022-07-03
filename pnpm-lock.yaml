@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@sveltejs/adapter-auto': next
   '@sveltejs/kit': next
+  malachite-ui: ^0.8.0
   prettier: ^2.6.2
   prettier-plugin-svelte: ^2.7.0
   svelte: ^3.44.0
@@ -15,6 +16,7 @@ specifiers:
 devDependencies:
   '@sveltejs/adapter-auto': 1.0.0-next.53
   '@sveltejs/kit': 1.0.0-next.357_svelte@3.48.0
+  malachite-ui: 0.8.0
   prettier: 2.7.1
   prettier-plugin-svelte: 2.7.0_nakrehnrzdf7fdea5k3a4dfy4m
   svelte: 3.48.0
@@ -814,6 +816,10 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       semver: 6.3.0
+    dev: true
+
+  /malachite-ui/0.8.0:
+    resolution: {integrity: sha512-rXvmVkgcOSBt1uxuSII2MMzxYAU/MrqCartFdSciZhJG+OsBmMlTVeJI8lthTNWHl5i3N+dLYML1GZq5gJR2Bg==}
     dev: true
 
   /merge2/1.4.1:
