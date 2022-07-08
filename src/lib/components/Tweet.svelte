@@ -50,7 +50,7 @@
 				slot="items"
 				use:items
 				use:hideScrollbar
-				transition:fly={{ y: 250 }}
+				transition:fly|local={{ y: 250 }}
 			>
 				<TweetMenuItem icon="bx-sad" text="Not interested in this Tweet" />
 				<TweetMenuItem icon="bx-user-x">
