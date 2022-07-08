@@ -20,7 +20,7 @@
 	<title>ShawnLee (@{name}) | Twitter</title>
 </svelte:head>
 
-<header class="fixed top-0 inset-x-0 h-20 z-90 | flex items-center justify-center | bg-zinc-900/90">
+<header class="fixed top-0 inset-x-0 h-20 z-10 | flex items-center justify-center | bg-zinc-900/90">
 	<div class="max-w-md w-full mx-auto px-6 | flex items-center gap-4">
 		<button class="h-12 min-w-12 w-12 | bg-zinc-800 rounded-full" on:click={() => history.back()}>
 			<i class="bx bxs-left-arrow-alt | text-2xl" />

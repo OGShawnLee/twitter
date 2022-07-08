@@ -1,4 +1,10 @@
 <script lang="ts">
+	import { TweetMenuItem } from "$lib/components";
+	import { Menu, MenuButton, MenuItem } from "malachite-ui/components";
+	import { fade, fly } from "svelte/transition";
+	import { cubicOut } from "svelte/easing";
+	import { hideScrollbar } from "$lib/actions";
+
 	export let isReply = false;
 	export let imageURL: string | undefined = undefined;
 </script>
@@ -26,10 +32,51 @@
 			</div>
 		</div>
 
-		<button>
-			<span class="sr-only">Options</span>
-			<i class="bx bx-dots-horizontal-rounded text-3xl" />
-		</button>
+		<Menu let:items let:isOpen>
+			<MenuButton>
+				<span class="sr-only">Options</span>
+				<i class="bx bx-dots-horizontal-rounded text-3xl" />
+			</MenuButton>
+
+			{#if isOpen}
+				<div
+					class="fixed inset-0 z-20 | bg-zinc-800/70"
+					transition:fade|local={{ easing: cubicOut }}
+				/>
+			{/if}
+
+			<div
+				class="fixed inset-x-0 bottom-0 z-20 bg-zinc-900 | grid | outline-none"
+				slot="items"
+				use:items
+				use:hideScrollbar
+				transition:fly={{ y: 250 }}
+			>
+				<TweetMenuItem icon="bx-sad" text="Not interested in this Tweet" />
+				<TweetMenuItem icon="bx-user-x">
+					<span> Unfollow <b>@OGShawnLee</b> </span>
+				</TweetMenuItem>
+				<TweetMenuItem icon="bx-detail">
+					<span> Add/remove <b>@OGShawnLee</b> from lists </span>
+				</TweetMenuItem>
+				<TweetMenuItem icon="bx-volume-mute">
+					<span> Mute <b>@OGShawnLee</b> </span>
+				</TweetMenuItem>
+				<TweetMenuItem icon="bx-block" isDanger>
+					<span> Block <b>@OGShawnLee</b> </span>
+				</TweetMenuItem>
+				<TweetMenuItem icon="bxs-radiation" text="Report Tweet" isDanger />
+				<MenuItem
+					as="button"
+					class={{
+						base: "min-h-10.5 mx-6 my-4 px-6 py-2 | rounded-full border-2",
+						selected: { on: "border-white", off: "border-zinc-600" }
+					}}
+				>
+					Cancel
+				</MenuItem>
+			</div>
+		</Menu>
 	</header>
 
 	<div class="grid gap-4">
