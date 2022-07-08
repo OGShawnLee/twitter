@@ -9,7 +9,7 @@
 	export let name: string;
 
 	$: route = $page.routeId;
-	$: isActive = isRoot ? route?.includes("[name]") ?? false : route?.includes(path) ?? false;
+	$: isActive = isRoot ? route === "[name]@user" : route?.includes(path) ?? false;
 	$: href = `/${name}/${path}`;
 
 	$: className = useClassNameResolver<"isActive">({
