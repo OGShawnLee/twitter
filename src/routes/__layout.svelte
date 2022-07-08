@@ -5,7 +5,7 @@
 <slot />
 
 <nav class="fixed bottom-0 inset-x-0 h-15 | bg-zinc-800">
-	<ul class="max-w-xs h-full mx-auto | flex items-center justify-between | text-32px">
+	<ul class="max-w-md h-full w-full px-6 mx-auto | flex items-center justify-between | text-32px">
 		<li>
 			<a href="/home">
 				<i class="bx bxs-home-circle" />

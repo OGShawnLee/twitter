@@ -21,7 +21,7 @@
 </svelte:head>
 
 <header class="fixed top-0 inset-x-0 h-20 z-90 | flex items-center justify-center | bg-zinc-900/90">
-	<div class="max-w-xs w-full mx-auto flex items-center gap-4">
+	<div class="max-w-md w-full mx-auto px-6 | flex items-center gap-4">
 		<button class="h-12 min-w-12 w-12 | bg-zinc-800 rounded-full" on:click={() => history.back()}>
 			<i class="bx bxs-left-arrow-alt | text-2xl" />
 			<span class="sr-only">Go Back</span>
@@ -46,7 +46,7 @@
 			/>
 		</div>
 
-		<div class="relative max-w-xs mx-auto py-3 | flex items-center">
+		<div class="relative max-w-md w-full mx-auto px-6 py-3 | flex items-center">
 			<img
 				class="absolute top-0 h-25 w-25 min-w-25 | rounded-full ring-3 ring-zinc-900 transform -translate-y-1/2"
 				src="https://pbs.twimg.com/profile_images/1408089447455891461/hwvI8tM1_400x400.jpg"
@@ -57,7 +57,7 @@
 			</button>
 		</div>
 
-		<div class="max-w-xs mx-auto my-4 | flex flex-col gap-3">
+		<div class="max-w-md w-full mx-auto my-4 px-6 | flex flex-col gap-3">
 			<div class="grid">
 				<div class="flex items-center gap-3">
 					<h1 class="text-2xl font-semibold tracking-wide">
@@ -87,7 +87,7 @@
 		</div>
 	</header>
 
-	<Navigable class="max-w-xs w-full mx-auto | grid gap-8">
+	<Navigable class="max-w-md w-full mx-auto px-6 | grid gap-8">
 		<div class="flex items-center justify-between">
 			<NavigableLink {name} isRoot>Tweets</NavigableLink>
 			<NavigableLink {name} path="with_replies">Tweets & Replies</NavigableLink>

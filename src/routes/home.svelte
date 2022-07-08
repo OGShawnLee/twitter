@@ -14,7 +14,7 @@
 	<header
 		class="fixed top-0 inset-x-0 h-20 z-10 | flex items-center justify-center | bg-zinc-900/90"
 	>
-		<div class="max-w-xs w-full mx-auto flex items-center gap-4">
+		<div class="max-w-md w-full mx-auto px-6 | flex items-center gap-4">
 			<PopoverButton class="h-12 min-w-12 rounded-full outline-none focus:(ring-2 ring-white)">
 				<img
 					class="h-full w-full rounded-full"
@@ -108,7 +108,7 @@
 	</aside>
 </Popover>
 
-<main class="max-w-xs mx-auto my-24">
+<main class="max-w-md w-full mx-auto px-6 my-24">
 	<section>
 		<h2 class="sr-only">Tweets</h2>
 		<div class="grid gap-12">

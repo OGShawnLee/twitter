@@ -5,7 +5,7 @@
 <header
 	class="fixed top-0 inset-x-0 h-20 | flex items-center justify-center | bg-zinc-900/70 backdrop-blur-sm"
 >
-	<div class="max-w-xs w-full mx-auto | flex items-center justify-between">
+	<div class="max-w-md w-full mx-auto px-6 | flex items-center justify-between">
 		<a
 			class="h-12 min-w-12 w-12 | grid place-content-center | bg-zinc-800 rounded-full"
 			href="/home"
@@ -20,6 +20,6 @@
 	</div>
 </header>
 
-<main class="max-w-xs mx-auto my-24 | grid gap-12">
+<main class="max-w-md w-full mx-auto my-24 px-6 | grid gap-12">
 	<TweetCompose />
 </main>

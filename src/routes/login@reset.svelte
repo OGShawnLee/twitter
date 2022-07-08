@@ -14,7 +14,7 @@
 			/>
 			<i class="bx bxl-twitter absolute absolute-center text-white text-[25vw]" />
 		</div>
-		<section class="max-w-xs w-full py-10 m-auto | flex flex-col gap-9">
+		<section class="max-w-md w-full px-6 py-10 m-auto | flex flex-col gap-9">
 			<header>
 				<h2 class="sr-only">Sign Up Options</h2>
 				<div class="h-22 w-full mb-3 | flex justify-start">
