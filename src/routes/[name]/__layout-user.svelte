@@ -10,8 +10,11 @@
 </script>
 
 <script lang="ts">
-	import { NavigableLink } from "$lib/components";
-	import { Navigable } from "malachite-ui/components";
+	import { NavigableLink, TweetMenuItem } from "$lib/components";
+	import { Menu, MenuButton, MenuItem, Navigable } from "malachite-ui/components";
+	import { fade, fly } from "svelte/transition";
+	import { cubicOut } from "svelte/easing";
+	import { hideScrollbar } from "$lib/actions";
 
 	export let name: string;
 </script>
@@ -52,9 +55,63 @@
 				src="https://pbs.twimg.com/profile_images/1408089447455891461/hwvI8tM1_400x400.jpg"
 				alt=""
 			/>
-			<button class="ml-auto px-6 py-1.5 | bg-white rounded-full text-sm text-zinc-900 font-medium">
-				Follow
-			</button>
+
+			<div class="ml-auto | flex items-center gap-3">
+				<Menu let:items let:isOpen>
+					<MenuButton
+						class="h-9.5 w-9.5 min-w-9.5 | grid place-content-center | rounded-full border-2 border-zinc-600 outline-none focus:(border-white)"
+					>
+						<span class="sr-only">Options</span>
+						<i class="bx bx-dots-horizontal-rounded text-xl" />
+					</MenuButton>
+
+					{#if isOpen}
+						<div
+							class="fixed inset-0 z-20 | bg-zinc-800/70"
+							transition:fade|local={{ easing: cubicOut }}
+						/>
+					{/if}
+
+					<div
+						class="fixed inset-x-0 bottom-0 z-20 bg-zinc-900 | grid | outline-none"
+						slot="items"
+						use:items
+						use:hideScrollbar
+						transition:fly|local={{ y: 250 }}
+					>
+						<TweetMenuItem icon="bx-recycle" text="Turn off Retweets" />
+						<TweetMenuItem icon="bx-category" text="View Topics" />
+						<TweetMenuItem icon="bxs-bolt" text="View Moments" />
+						<TweetMenuItem icon="bx-detail">
+							<span> Add/remove <b>@Windows</b> from lists </span>
+						</TweetMenuItem>
+						<TweetMenuItem icon="bx-detail" text="View Lists" />
+						<TweetMenuItem icon="bx-link" text="Copy link to profile" />
+						<TweetMenuItem icon="bx-volume-mute">
+							<span> Mute <b>@Windows</b> </span>
+						</TweetMenuItem>
+						<TweetMenuItem icon="bx-block" isDanger>
+							<span> Block <b>@Windows</b> </span>
+						</TweetMenuItem>
+						<TweetMenuItem icon="bxs-radiation" isDanger>
+							<span> Report <b>@Windows</b> </span>
+						</TweetMenuItem>
+						<MenuItem
+							as="button"
+							class={{
+								base: "min-h-10.5 mx-6 my-4 px-6 py-2 | rounded-full border-2",
+								selected: { on: "border-white", off: "border-zinc-600" }
+							}}
+						>
+							Cancel
+						</MenuItem>
+					</div>
+				</Menu>
+
+				<button class="h-9.5 px-8 | bg-white rounded-full text-sm text-zinc-900 font-medium">
+					Follow
+				</button>
+			</div>
 		</div>
 
 		<div class="max-w-md w-full mx-auto my-4 px-6 | flex flex-col gap-3">
