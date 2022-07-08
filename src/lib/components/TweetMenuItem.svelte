@@ -23,6 +23,6 @@
 			: 'text-zinc-400'}"
 	/>
 	<slot>
-		<span class="capitalize"> {text} </span>
+		<span> {text} </span>
 	</slot>
 </MenuItem>
