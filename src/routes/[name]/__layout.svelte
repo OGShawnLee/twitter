@@ -22,7 +22,7 @@
 
 <header class="fixed top-0 inset-x-0 h-20 z-90 | flex items-center justify-center | bg-zinc-900/90">
 	<div class="max-w-xs w-full mx-auto flex items-center gap-4">
-		<button class="h-12 min-w-12 w-12 | bg-zinc-800 rounded-full">
+		<button class="h-12 min-w-12 w-12 | bg-zinc-800 rounded-full" on:click={() => history.back()}>
 			<i class="bx bxs-left-arrow-alt | text-2xl" />
 			<span class="sr-only">Go Back</span>
 		</button>
