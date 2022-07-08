@@ -36,7 +36,7 @@
 
 	<aside
 		slot="panel"
-		class="fixed inset-y-0 left-0 min-w-xs z-30 | bg-zinc-900"
+		class="fixed inset-y-0 left-0 min-w-xs z-30 | overflow-y-auto | bg-zinc-900"
 		use:panel
 		use:hideScrollbar
 		transition:fly|local={{ x: -250, easing: cubicOut }}
