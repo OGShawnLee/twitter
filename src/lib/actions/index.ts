@@ -1,0 +1,1 @@
+export { hideScrollbar } from "./hideScrollbar";
