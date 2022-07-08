@@ -99,7 +99,7 @@
 
 			<div class="mt-8">
 				<NavigableLinkSidebar icon="bx-user-circle" href="/Windows" text="Profile" />
-				<NavigableLinkSidebar icon="bx-detail" href="/lists" text="Lists" />
+				<NavigableLinkSidebar icon="bx-detail" href="/Windows/lists" text="Lists" />
 				<NavigableLinkSidebar icon="bx-bookmark" href="/i/bookmarks" text="Bookmarks" />
 				<div class="h-1 w-full bg-zinc-800" role="separator" />
 				<NavigableLinkSidebar icon="bx-cog" href="/settings" text="Settings" />
