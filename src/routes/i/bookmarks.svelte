@@ -21,6 +21,8 @@
 	<div class="grid gap-6">
 		<img
 			src="https://abs.twimg.com/sticky/illustrations/empty-states/book-in-bird-cage-800x400.v1.png"
+			width="800"
+			height="400"
 			alt=""
 		/>
 		<div class="grid gap-1.5 | text-center">
