@@ -80,7 +80,9 @@
 
 	<div class="flex flex-col items-start gap-3">
 		<Menu let:isOpen let:items>
-			<MenuButton class="flex items-center gap-3 | text-sky-500">
+			<MenuButton
+				class="px-2 py-0.5 | flex items-center gap-1.5 outline-none | rounded-full text-sky-500 transition ease-out hover:(bg-sky-900 text-sky-200) focus:(bg-sky-900 ring-2 ring-white text-sky-200)"
+			>
 				<i class="bx {canReplyIcon} text-xl" />
 				<span class="text-sm"> {canReplyText} </span>
 			</MenuButton>
