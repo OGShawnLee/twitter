@@ -1,17 +1,48 @@
 <script lang="ts" context="module">
+	type WhoCanReply = "EVERYONE" | "FOLLOWED" | "MENTIONED";
+
 	function getCharCountColour(charCount: number) {
 		if (charCount === 0) return "text-current";
 		if (charCount < 160) return "text-green-500";
 		if (charCount >= 160 && charCount < 280) return "text-orange-500";
 		return "text-red-500";
 	}
+
+	function getWhoCanReplyIcon(target: WhoCanReply) {
+		if (target === "MENTIONED") return "bx-at";
+		if (target === "FOLLOWED") return "bx-user-check";
+		return "bx-world";
+	}
+
+	function getWhoCanReplyText(target: WhoCanReply) {
+		if (target === "MENTIONED") return "Only people you mention can reply";
+		if (target === "FOLLOWED") return "People you follow can reply";
+		return "Everyone can reply";
+	}
+
+	function useChooseWhoCanReply(onClick: (target: WhoCanReply) => void) {
+		return (target: WhoCanReply) => {
+			return () => onClick(target);
+		};
+	}
 </script>
 
 <script lang="ts">
+	import { TweetComposeMenuItem } from "$lib/components";
+	import { Menu, MenuButton, MenuItem } from "malachite-ui/components";
+	import { fade, fly } from "svelte/transition";
+	import { cubicOut } from "svelte/easing";
+	import { hideScrollbar } from "$lib/actions";
+
 	export let value = "";
+	export let canReply: WhoCanReply = "EVERYONE";
+
+	const setCanReply = useChooseWhoCanReply((target) => (canReply = target));
 
 	$: charCount = value.length;
 	$: textColour = getCharCountColour(charCount);
+	$: canReplyIcon = getWhoCanReplyIcon(canReply);
+	$: canReplyText = getWhoCanReplyText(canReply);
 </script>
 
 <article class="grid gap-6">
@@ -48,10 +79,61 @@
 	</div>
 
 	<div class="flex flex-col items-start gap-3">
-		<button class="flex items-center gap-3 | text-sky-500">
-			<i class="bx bx-world text-xl" />
-			<span class="text-sm"> Everyone can reply </span>
-		</button>
+		<Menu let:isOpen let:items>
+			<MenuButton class="flex items-center gap-3 | text-sky-500">
+				<i class="bx {canReplyIcon} text-xl" />
+				<span class="text-sm"> {canReplyText} </span>
+			</MenuButton>
+
+			{#if isOpen}
+				<div
+					class="fixed inset-0 z-20 | bg-zinc-800/70"
+					transition:fade|local={{ easing: cubicOut }}
+				/>
+			{/if}
+
+			<div
+				class="fixed inset-x-0 bottom-0 z-20 bg-zinc-900 | grid | outline-none"
+				slot="items"
+				use:items
+				use:hideScrollbar
+				transition:fly|local={{ y: 250 }}
+			>
+				<div class="my-4 mx-6 | grid gap-1.5">
+					<span class="text-xl font-medium">Who can reply?</span>
+					<span class="text-zinc-400 text-sm">
+						Choose who can reply to this Tweet. Anyone mentioned can always reply.
+					</span>
+				</div>
+				<TweetComposeMenuItem
+					icon="bx-world"
+					text="Everyone"
+					isChecked={canReply === "EVERYONE"}
+					on:click={setCanReply("EVERYONE")}
+				/>
+				<TweetComposeMenuItem
+					icon="bx-user-check"
+					text="People you follow"
+					isChecked={canReply === "FOLLOWED"}
+					on:click={setCanReply("FOLLOWED")}
+				/>
+				<TweetComposeMenuItem
+					icon="bx-at"
+					text="Only people you mention"
+					isChecked={canReply === "MENTIONED"}
+					on:click={setCanReply("MENTIONED")}
+				/>
+				<MenuItem
+					as="button"
+					class={{
+						base: "min-h-10.5 mx-6 my-4 px-6 py-2 | rounded-full border-2",
+						selected: { on: "border-white", off: "border-zinc-600" }
+					}}
+				>
+					Cancel
+				</MenuItem>
+			</div>
+		</Menu>
 
 		<div class="h-0.5 w-full | bg-zinc-800 rounded-md" role="separator" />
 
