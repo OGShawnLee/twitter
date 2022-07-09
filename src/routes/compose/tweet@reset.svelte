@@ -2,6 +2,10 @@
 	import { TweetCompose } from "$lib/components";
 </script>
 
+<svelte:head>
+	<title>Compose new Tweet / Twitter</title>
+</svelte:head>
+
 <header
 	class="fixed top-0 inset-x-0 h-20 | flex items-center justify-center | bg-zinc-900/70 backdrop-blur-sm"
 >
