@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { TweetMenuItem } from "$lib/components";
+	import { TweetButton, TweetMenuItem } from "$lib/components";
 	import { Menu, MenuButton, MenuItem } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
@@ -94,21 +94,10 @@
 		</div>
 
 		<div class="flex items-center justify-between | text-zinc-400">
-			<button class="flex items-center gap-2">
-				<i class="bx bx-message-rounded text-lg" />
-				<span class="text-sm"> 122 </span>
-			</button>
-			<button class="flex items-center gap-2">
-				<i class="bx bx-recycle text-lg" />
-				<span class="text-sm"> 19 </span>
-			</button>
-			<button class="flex items-center gap-2">
-				<i class="bx bx-heart text-lg" />
-				<span class="text-sm"> 234 </span>
-			</button>
-			<button class="flex items-center">
-				<i class="bx bx-upload text-lg transform -translate-y-0.5" />
-			</button>
+			<TweetButton icon="bx-message-rounded" value={122} />
+			<TweetButton icon="bx-recycle" value={19} />
+			<TweetButton icon="bx-heart" value={234} />
+			<TweetButton icon="bx-upload" />
 		</div>
 	</div>
 </article>
