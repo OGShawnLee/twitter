@@ -16,7 +16,7 @@
 	on:click
 >
 	<div class="flex items-center gap-3">
-		<span class="h-10 min-w-10 w-10 | grid place-content-center | bg-emerald-600 rounded-full">
+		<span class="h-10 min-w-10 w-10 | grid place-content-center | bg-sky-600 rounded-full">
 			<i class="bx {icon} text-2xl" />
 		</span>
 		<span> {text} </span>
