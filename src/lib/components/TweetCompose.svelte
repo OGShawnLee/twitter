@@ -28,16 +28,36 @@
 </script>
 
 <script lang="ts">
-	import { TweetComposeMenuItem } from "$lib/components";
+	import { ButtonRounded, TweetComposeMenuItem } from "$lib/components";
 	import { Menu, MenuButton, MenuItem } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
 	import { hideScrollbar } from "$lib/actions";
+	import { browser } from "$app/env";
+	import { isValidImageFileType } from "$lib/predicate";
+	import { isEmpty, isString } from "malachite-ui/predicate";
 
 	export let value = "";
 	export let canReply: WhoCanReply = "EVERYONE";
 
 	const setCanReply = useChooseWhoCanReply((target) => (canReply = target));
+
+	let files: FileList;
+	let fileInputRef: HTMLInputElement;
+	let imagePathURL: string | null = null;
+
+	$: if (files && browser) {
+		const file = files.item(0);
+		const reader = new FileReader();
+		if (file && isValidImageFileType(file.type)) {
+			reader.readAsDataURL(file);
+			reader.onload = ({ target }) => {
+				const imageResult = target?.result;
+				const isValidImage = isString(imageResult) && !isEmpty(imageResult);
+				if (isValidImage) imagePathURL = imageResult;
+			};
+		}
+	}
 
 	$: charCount = value.length;
 	$: textColour = getCharCountColour(charCount);
@@ -67,7 +87,7 @@
 		</div>
 	</header>
 
-	<div class="w-full">
+	<div class="w-full | grid gap-4">
 		<label class="sr-only" for="tweet"> Tweet </label>
 		<textarea
 			class="w-full | bg-transparent outline-none text-white"
@@ -76,6 +96,16 @@
 			maxlength="280"
 			bind:value
 		/>
+
+		{#if imagePathURL}
+			<div class="relative w-full">
+				<ButtonRounded class="absolute top-4 left-4" on:click={() => (imagePathURL = null)}>
+					<i class="bx bx-x text-2xl text-white" />
+					<span class="sr-only">Remove Image</span>
+				</ButtonRounded>
+				<img src={imagePathURL} alt="" class="w-full rounded-lg" />
+			</div>
+		{/if}
 	</div>
 
 	<div class="flex flex-col items-start gap-3">
@@ -141,9 +171,10 @@
 
 		<div class="w-full | flex items-center justify-between">
 			<div class="flex items-center gap-3">
-				<button class="text-sky-600">
+				<button class="text-sky-600" on:click={() => fileInputRef.click()}>
 					<i class="bx bx-image" />
 					<span class="sr-only">Add a Picture</span>
+					<input class="hidden" type="file" bind:files bind:this={fileInputRef} />
 				</button>
 				<button class="text-sky-600">
 					<i class="bx bx-poll" />

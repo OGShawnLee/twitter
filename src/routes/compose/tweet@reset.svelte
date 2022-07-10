@@ -7,7 +7,7 @@
 </svelte:head>
 
 <header
-	class="fixed top-0 inset-x-0 h-20 | flex items-center justify-center | bg-zinc-900/70 backdrop-blur-sm"
+	class="fixed top-0 inset-x-0 h-20 z-10 | flex items-center justify-center | bg-zinc-900/70 backdrop-blur-sm"
 >
 	<div class="max-w-md w-full mx-auto px-6 | flex items-center justify-between">
 		<a
