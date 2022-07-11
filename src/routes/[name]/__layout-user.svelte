@@ -10,7 +10,7 @@
 </script>
 
 <script lang="ts">
-	import { NavigableLink, TweetMenuItem } from "$lib/components";
+	import { Header, NavigableLink, TweetMenuItem } from "$lib/components";
 	import { Menu, MenuButton, MenuItem, Navigable } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
@@ -23,21 +23,19 @@
 	<title>ShawnLee (@{name}) | Twitter</title>
 </svelte:head>
 
-<header class="fixed top-0 inset-x-0 h-20 z-10 | flex items-center justify-center | bg-zinc-900/90">
-	<div class="max-w-md w-full mx-auto px-6 | flex items-center gap-4">
-		<button class="h-12 min-w-12 w-12 | bg-zinc-800 rounded-full" on:click={() => history.back()}>
-			<i class="bx bxs-left-arrow-alt | text-2xl" />
-			<span class="sr-only">Go Back</span>
-		</button>
-		<div class="grid">
-			<div class="flex items-center gap-3">
-				<h1 class="text-xl font-medium">{name}</h1>
-				<i class="bx bxs-badge-check | text-2xl" />
-			</div>
-			<span class="text-xs text-zinc-500">374.6K Tweets</span>
+<Header>
+	<button class="h-12 min-w-12 w-12 | bg-zinc-800 rounded-full" on:click={() => history.back()}>
+		<i class="bx bxs-left-arrow-alt | text-2xl" />
+		<span class="sr-only">Go Back</span>
+	</button>
+	<div class="grid">
+		<div class="flex items-center gap-3">
+			<h1 class="text-xl font-medium">{name}</h1>
+			<i class="bx bxs-badge-check | text-2xl" />
 		</div>
+		<span class="text-xs text-zinc-500">374.6K Tweets</span>
 	</div>
-</header>
+</Header>
 
 <main class="my-20 | flex flex-col gap-0">
 	<header>

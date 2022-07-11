@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { hideScrollbar } from "$lib/actions";
-	import { Tweet, NavigableLinkSidebar } from "$lib/components";
+	import { Header, Tweet, NavigableLinkSidebar } from "$lib/components";
 	import { Popover, PopoverButton, Navigable, NavigableItem } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
@@ -11,21 +11,17 @@
 </svelte:head>
 
 <Popover as="slot" forceFocus let:close let:overlay let:panel>
-	<header
-		class="fixed top-0 inset-x-0 h-20 z-10 | flex items-center justify-center | bg-zinc-900/90"
-	>
-		<div class="max-w-md w-full mx-auto px-6 | flex items-center gap-4">
-			<PopoverButton class="h-12 min-w-12 rounded-full outline-none focus:(ring-2 ring-white)">
-				<img
-					class="h-full w-full rounded-full"
-					src="https://avatars.githubusercontent.com/u/86738291?v=4"
-					alt=""
-				/>
-				<span class="sr-only">View Account Info</span>
-			</PopoverButton>
-			<h1 class="text-2xl font-medium">Home</h1>
-		</div>
-	</header>
+	<Header>
+		<PopoverButton class="h-12 min-w-12 rounded-full outline-none focus:(ring-2 ring-white)">
+			<img
+				class="h-full w-full rounded-full"
+				src="https://avatars.githubusercontent.com/u/86738291?v=4"
+				alt=""
+			/>
+			<span class="sr-only">View Account Info</span>
+		</PopoverButton>
+		<h1 class="text-2xl font-medium">Home</h1>
+	</Header>
 
 	<div
 		slot="overlay"
