@@ -1,3 +1,7 @@
+<script>
+	import { goto } from "$app/navigation";
+</script>
+
 <svelte:head>
 	<title>Twitter / Login</title>
 </svelte:head>
@@ -28,11 +32,17 @@
 
 			<div class="flex flex-col gap-4">
 				<div class="grid gap-6">
-					<button class="button button--white | transition duration-250">
+					<button
+						class="button button--white | transition duration-250"
+						on:click={() => goto("/home")}
+					>
 						<i class="bx bxl-google text-3xl" />
 						<span class="text-lg font-bold font-quick"> Sign up with Google </span>
 					</button>
-					<button class="button button--white | transition duration-250">
+					<button
+						class="button button--white | transition duration-250"
+						on:click={() => goto("/home")}
+					>
 						<i class="bx bxl-apple text-3xl" />
 						<span class="text-xl font-bold"> Sign up with Apple </span>
 					</button>
@@ -45,7 +55,10 @@
 				</div>
 
 				<div>
-					<button class="button button--sky | w-full mb-2 | transition duration-250">
+					<button
+						class="button button--sky | w-full mb-2 | transition duration-250"
+						on:click={() => goto("/home")}
+					>
 						<span class="text-lg font-medium | md:text-lg"> Sign up with email and password </span>
 					</button>
 					<span class="w-10/12 mx-auto | block | opacity-90 text-sm text-center">
