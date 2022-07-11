@@ -12,9 +12,12 @@
 			<button class="min-h-10.5 px-6 py-2 | bg-white rounded-full text-zinc-900 font-medium">
 				Log Out
 			</button>
-			<button class="min-h-10.5 px-6 py-2 | rounded-full border-2 border-white font-medium">
+			<a
+				class="min-h-10.5 px-6 py-2 | flex justify-center | rounded-full border-2 border-white font-medium"
+				href="/home"
+			>
 				Cancel
-			</button>
+			</a>
 		</div>
 	</div>
 </main>
