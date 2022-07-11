@@ -9,9 +9,12 @@
 			</p>
 		</div>
 		<div class="grid gap-3 | mt-6">
-			<button class="min-h-10.5 px-6 py-2 | bg-white rounded-full text-zinc-900 font-medium">
+			<a
+				class="min-h-10.5 px-6 py-2 | flex justify-center | bg-white rounded-full text-zinc-900 font-medium"
+				href="/login"
+			>
 				Log Out
-			</button>
+			</a>
 			<a
 				class="min-h-10.5 px-6 py-2 | flex justify-center | rounded-full border-2 border-white font-medium"
 				href="/home"
