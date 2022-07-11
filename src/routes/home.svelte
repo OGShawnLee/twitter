@@ -101,8 +101,12 @@
 				<NavigableLinkSidebar icon="bx-user-circle" href="/Windows" text="Profile" />
 				<NavigableLinkSidebar icon="bx-detail" href="/Windows/lists" text="Lists" />
 				<NavigableLinkSidebar icon="bx-bookmark" href="/i/bookmarks" text="Bookmarks" />
+				<NavigableLinkSidebar icon="bx-category" href="/Windows/topics" text="Topics" />
+				<NavigableLinkSidebar icon="bxs-bolt" href="/i/moment_maker" text="Moments" />
 				<div class="h-1 w-full bg-zinc-800" role="separator" />
 				<NavigableLinkSidebar icon="bx-cog" href="/settings" text="Settings" />
+				<div class="h-1 w-full bg-zinc-800" role="separator" />
+				<NavigableLinkSidebar icon="bx-log-out" href="/logout" text="Log Out" />
 			</div>
 		</Navigable>
 	</aside>
