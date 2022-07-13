@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { hideScrollbar } from "$lib/actions";
-	import { Header, Tweet, NavigableLinkSidebar } from "$lib/components";
+	import { TopTweetPreferences } from "$lib/layout";
+	import { Header, NavigableLinkSidebar, Tweet } from "$lib/components";
 	import { Popover, PopoverButton, Navigable, NavigableItem } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
@@ -11,16 +12,19 @@
 </svelte:head>
 
 <Popover as="slot" forceFocus let:close let:overlay let:panel>
-	<Header>
-		<PopoverButton class="h-12 min-w-12 rounded-full outline-none focus:(ring-2 ring-white)">
-			<img
-				class="h-full w-full rounded-full"
-				src="https://avatars.githubusercontent.com/u/86738291?v=4"
-				alt=""
-			/>
-			<span class="sr-only">View Account Info</span>
-		</PopoverButton>
-		<h1 class="text-2xl font-medium">Home</h1>
+	<Header class="justify-between">
+		<div class="flex items-center gap-4">
+			<PopoverButton class="h-12 min-w-12 rounded-full outline-none focus:(ring-2 ring-white)">
+				<img
+					class="h-full w-full rounded-full"
+					src="https://avatars.githubusercontent.com/u/86738291?v=4"
+					alt=""
+				/>
+				<span class="sr-only">View Account Info</span>
+			</PopoverButton>
+			<h1 class="text-2xl font-medium">Home</h1>
+		</div>
+		<TopTweetPreferences />
 	</Header>
 
 	<div
@@ -109,7 +113,7 @@
 </Popover>
 
 <main class="max-w-md w-full mx-auto px-6 my-24">
-	<section>
+	<section class="after:text-red-400">
 		<h2 class="sr-only">Tweets</h2>
 		<div class="grid gap-12">
 			<Tweet />
