@@ -1,5 +1,5 @@
 <script>
-	import { Header, TweetCompose } from "$lib/components";
+	import { ButtonRounded, Header, TweetCompose } from "$lib/components";
 </script>
 
 <svelte:head>
@@ -7,14 +7,14 @@
 </svelte:head>
 
 <Header class="justify-between">
-	<a class="h-12 min-w-12 w-12 | grid place-content-center | bg-zinc-800 rounded-full" href="/home">
+	<ButtonRounded as="a" class="grid place-content-center" href="/home">
 		<i class="bx bxs-left-arrow-alt | text-2xl" />
 		<span class="sr-only">Go Back</span>
-	</a>
-	<button class="h-12 min-w-12 w-12 | bg-sky-500 rounded-full">
+	</ButtonRounded>
+	<ButtonRounded backgroundColor="bg-sky-500">
 		<i class="bx bx-pen | text-2xl" />
 		<span class="sr-only">Tweet</span>
-	</button>
+	</ButtonRounded>
 </Header>
 
 <main class="max-w-md w-full mx-auto my-24 px-6 | grid gap-12">

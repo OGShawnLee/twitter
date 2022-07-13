@@ -1,5 +1,5 @@
 <script>
-	import { Header } from "$lib/components";
+	import { ButtonRounded, Header } from "$lib/components";
 </script>
 
 <svelte:head>
@@ -7,10 +7,10 @@
 </svelte:head>
 
 <Header>
-	<button class="h-12 min-w-12 w-12 | bg-zinc-800 rounded-full" on:click={() => history.back()}>
+	<ButtonRounded on:click={() => history.back()}>
 		<i class="bx bxs-left-arrow-alt | text-2xl" />
 		<span class="sr-only">Go Back</span>
-	</button>
+	</ButtonRounded>
 	<div class="grid">
 		<div class="flex items-center gap-3">
 			<h1 class="text-xl font-medium">Bookmarks</h1>

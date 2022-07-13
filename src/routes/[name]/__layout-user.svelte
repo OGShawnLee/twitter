@@ -10,7 +10,7 @@
 </script>
 
 <script lang="ts">
-	import { Header, NavigableLink, TweetMenuItem } from "$lib/components";
+	import { ButtonRounded, Header, NavigableLink, TweetMenuItem } from "$lib/components";
 	import { Menu, MenuButton, MenuItem, Navigable } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
@@ -24,10 +24,10 @@
 </svelte:head>
 
 <Header>
-	<button class="h-12 min-w-12 w-12 | bg-zinc-800 rounded-full" on:click={() => history.back()}>
+	<ButtonRounded on:click={() => history.back()}>
 		<i class="bx bxs-left-arrow-alt | text-2xl" />
 		<span class="sr-only">Go Back</span>
-	</button>
+	</ButtonRounded>
 	<div class="grid">
 		<div class="flex items-center gap-3">
 			<h1 class="text-xl font-medium">{name}</h1>

@@ -1,5 +1,6 @@
 <script>
 	import "virtual:windi.css";
+	import { ButtonRounded } from "$lib/components";
 </script>
 
 <slot />
@@ -25,13 +26,15 @@
 			<a href="/notifications">
 				<i class="bx bx-envelope" />
 			</a>
-			<a
-				class="absolute -top-24 right-1/2 h-12 min-w-12 w-12 | grid place-content-center | bg-sky-500 rounded-full transform translate-x-1/2"
+			<ButtonRounded
+				as="a"
+				class="absolute -top-24 right-1/2 | grid place-content-center | transform translate-x-1/2"
+				backgroundColor="bg-sky-500"
 				href="/compose/tweet"
 			>
 				<i class="bx bx-pen | text-2xl" />
 				<span class="sr-only">Tweet</span>
-			</a>
+			</ButtonRounded>
 		</li>
 	</ul>
 </nav>
