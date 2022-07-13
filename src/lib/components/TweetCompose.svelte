@@ -99,7 +99,11 @@
 
 		{#if imagePathURL}
 			<div class="relative w-full">
-				<ButtonRounded class="absolute top-4 left-4" on:click={() => (imagePathURL = null)}>
+				<ButtonRounded
+					class="absolute top-2 left-2"
+					size="h-8 w-8 min-w-8"
+					on:click={() => (imagePathURL = null)}
+				>
 					<i class="bx bx-x text-2xl text-white" />
 					<span class="sr-only">Remove Image</span>
 				</ButtonRounded>
