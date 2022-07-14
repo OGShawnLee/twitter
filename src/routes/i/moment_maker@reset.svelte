@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { Header, NavigableLinkSidebar } from "$lib/components";
+	import { Header, MobileNavigationLink, NavigableLinkSidebar } from "$lib/components";
 	import { Popover, PopoverButton, Navigable, NavigableItem } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
 	import { hideScrollbar } from "$lib/actions";
+	import { MobileNavigation } from "$lib/layout";
 </script>
 
 <svelte:head>
@@ -138,17 +139,7 @@
 	</div>
 </main>
 
-<nav class="fixed bottom-0 inset-x-0 h-15 | bg-zinc-800">
-	<ul class="max-w-md h-full w-full px-6 mx-auto | flex items-center justify-around | text-32px">
-		<li>
-			<a href="/home">
-				<i class="bx bx-home-circle" />
-			</a>
-		</li>
-		<li class="relative">
-			<button>
-				<i class="bx bxs-bolt" />
-			</button>
-		</li>
-	</ul>
-</nav>
+<MobileNavigation class="justify-around">
+	<MobileNavigationLink icon="bx-home-circle" href="/home" />
+	<MobileNavigationLink icon="bxs-bolt" href="/i/moment_maker" />
+</MobileNavigation>
