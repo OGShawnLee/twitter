@@ -18,7 +18,7 @@
 <Menu let:isOpen let:items>
 	<MenuButton as="slot" let:button>
 		<button
-			class="button-after | after:(h-12 w-12 min-h-12 bg-zinc-800 opacity-0 transition) hover:after:opacity-100 focus:after:(opacity-100 border-2 border-white)"
+			class="button-after | outline-none after:(h-12 w-12 min-h-12 bg-zinc-800 opacity-0 transition) hover:after:opacity-100 focus:after:(opacity-100 border-2 border-white)"
 			use:button
 			disabled={isDisabled}
 			bind:this={buttonRef}
