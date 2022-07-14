@@ -11,3 +11,21 @@
 	border-radius: 100%;
 	transform: translate(50%, 50%);
 }
+
+.button-after-10::after {
+	height: 2.5rem;
+	width: 2.5rem;
+	min-width: 2.5rem;
+}
+
+.button-after--zinc::after {
+	@apply bg-zinc-800 opacity-0;
+}
+
+.button-after--zinc:hover::after {
+	@apply opacity-100;
+}
+
+.button-after--zinc:focus::after {
+	@apply opacity-100 border-2 border-white;
+}

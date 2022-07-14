@@ -1,4 +1,5 @@
 <script lang="ts">
+	import "@root/styles/button-after.css";
 	import { TweetButton, TweetMenuItem } from "$lib/components";
 	import { Menu, MenuButton, MenuItem } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
@@ -12,7 +13,7 @@
 <article class="grid gap-5" class:reply-tweet={isReply}>
 	<header class="flex items-center justify-between">
 		<div class="flex items-center gap-4">
-			<a href="/Windows">
+			<a class="rounded-full outline-none focus:(ring-2 ring-white)" href="/Windows">
 				<img
 					class="h-10 min-w-10 w-10 rounded-full"
 					src="https://avatars.githubusercontent.com/u/86738291?v=4"
@@ -23,7 +24,7 @@
 
 			<div class="grid">
 				<h3 class="font-medium">
-					<a href="/Windows"> Shawn Lee </a>
+					<a class="outline-none focus:underline" href="/Windows"> Shawn Lee </a>
 				</h3>
 				<div class="space-x-1 | text-xs">
 					<span class="text-zinc-400">@ShawnLee</span>
@@ -33,9 +34,13 @@
 		</div>
 
 		<Menu let:items let:isOpen>
-			<MenuButton>
+			<MenuButton
+				class="button-after button-after-10 button-after--zinc | group outline-none after:transition"
+			>
 				<span class="sr-only">Options</span>
-				<i class="bx bx-dots-horizontal-rounded text-3xl" />
+				<i
+					class="bx bx-dots-horizontal-rounded text-zinc-400 text-2xl group-hover:text-white group-focus:text-white"
+				/>
 			</MenuButton>
 
 			{#if isOpen}
