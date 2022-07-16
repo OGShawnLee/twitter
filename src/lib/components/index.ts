@@ -1,6 +1,7 @@
 export { default as ButtonRounded } from "./ButtonRounded.svelte";
 export { default as Header } from "./Header.svelte";
 export { default as MobileNavigationLink } from "./MobileNavigationLink.svelte";
+export { default as SettingsLink } from "./SettingsLink.svelte";
 export { default as Tweet } from "./Tweet.svelte";
 export { default as TweetButton } from "./TweetButton.svelte";
 export { default as TweetCompose } from "./TweetCompose.svelte";
