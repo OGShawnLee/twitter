@@ -4,12 +4,17 @@
 	export let icon: string;
 	export let value: number | undefined = undefined;
 	export let buttonClass: string;
+	export let backgroundSize = "2.15rem";
+	export let iconSize = "text-lg";
 	export let iconClass: string;
 </script>
 
-<button class="group | flex items-center gap-3 | outline-none transition {buttonClass}">
+<button
+	class="group | flex items-center gap-3 | outline-none transition {buttonClass}"
+	style:--size={backgroundSize}
+>
 	<i
-		class="bx {icon} | relative | text-lg {iconClass} after:(opacity-0 transition) group-hover:after:opacity-100 group-focus:after:(opacity-100 border-2)"
+		class="bx {icon} | relative | {iconSize} {iconClass} after:(opacity-0 transition) group-hover:after:opacity-100 group-focus:after:(opacity-100 border-2)"
 	/>
 	{#if !isNullish(value)}
 		<span class="text-sm"> {value} </span>
@@ -23,8 +28,8 @@
 		bottom: 50%;
 		right: 50%;
 		z-index: -10;
-		width: 2.15rem;
-		height: 2.15rem;
+		width: var(--size);
+		height: var(--size);
 		border-radius: 100%;
 		transform: translate(50%, 50%);
 	}

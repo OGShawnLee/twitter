@@ -10,10 +10,10 @@
 	export let imageURL: string | undefined = undefined;
 </script>
 
-<article class="grid gap-5" class:reply-tweet={isReply}>
+<article class="relative | grid gap-5" class:reply-tweet={isReply}>
 	<header class="flex items-center justify-between">
 		<div class="flex items-center gap-4">
-			<a class="rounded-full outline-none focus:(ring-2 ring-white)" href="/Windows">
+			<a class="rounded-full outline-none focus:(ring-2 ring-white) z-5" href="/Windows">
 				<img
 					class="h-10 min-w-10 w-10 rounded-full"
 					src="https://avatars.githubusercontent.com/u/86738291?v=4"
@@ -24,7 +24,7 @@
 
 			<div class="grid">
 				<h3 class="font-medium">
-					<a class="outline-none focus:underline" href="/Windows"> Shawn Lee </a>
+					<a class="relative outline-none focus:underline z-5" href="/Windows"> Shawn Lee </a>
 				</h3>
 				<div class="space-x-1 | text-xs">
 					<span class="text-zinc-400">@ShawnLee</span>
@@ -35,7 +35,7 @@
 
 		<Menu let:items let:isOpen>
 			<MenuButton
-				class="button-after button-after-10 button-after--zinc | group outline-none after:transition"
+				class="button-after button-after-10 button-after--zinc | z-5 | group outline-none after:transition"
 			>
 				<span class="sr-only">Options</span>
 				<i
@@ -84,8 +84,8 @@
 		</Menu>
 	</header>
 
-	<div class="grid gap-4">
-		<div class="contents">
+	<div class="grid">
+		<div class="mb-4 | grid gap-4">
 			<p class="text-sm leading-relaxed">
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam maximus, lacus vel vulputate
 				consequat, mauris sapien faucibus nisl, et malesuada velit urna vitae tortor. Quisque ac
@@ -97,6 +97,10 @@
 				<img class="rounded-lg" src={imageURL} alt="" />
 			{/if}
 		</div>
+
+		<a class="full-container-link" href="/OGShawnLee/status/1548398191246069760">
+			<span class="sr-only"> View Tweet </span>
+		</a>
 
 		<div class="flex items-center justify-between | text-zinc-400">
 			<TweetButton
@@ -134,5 +138,12 @@
 	.reply-tweet::before {
 		content: "";
 		@apply absolute left-0 inset-y-0 w-1 bg-zinc-800 rounded-md;
+	}
+
+	.full-container-link::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		pointer-events: auto;
 	}
 </style>
