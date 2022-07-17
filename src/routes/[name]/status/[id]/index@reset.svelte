@@ -11,16 +11,8 @@
 
 <script lang="ts">
 	import { MobileNavigation, TweetReplyInput } from "$lib/layout";
-	import {
-		ButtonRounded,
-		Header,
-		MobileNavigationLink,
-		Tweet,
-		TweetButton,
-		TweetHeader,
-		TweetMenuItem,
-		TweetStat
-	} from "$lib/components";
+	import { ButtonRounded, Header, MobileNavigationLink } from "$lib/components";
+	import { Tweet, TweetButton, TweetHeader, TweetMenuItem, TweetStat } from "$lib/components/Tweet";
 	import { MenuItem } from "malachite-ui/components";
 	import { page } from "$app/stores";
 
