@@ -7,11 +7,13 @@
 	export let backgroundSize = "2.15rem";
 	export let iconSize = "text-lg";
 	export let iconClass: string;
+	export let use: (element: HTMLElement) => void = () => {};
 </script>
 
 <button
 	class="group | flex items-center gap-3 | outline-none transition {buttonClass}"
 	style:--size={backgroundSize}
+	use:use
 >
 	<i
 		class="bx {icon} | relative | {iconSize} {iconClass} after:(opacity-0 transition) group-hover:after:opacity-100 group-focus:after:(opacity-100 border-2)"

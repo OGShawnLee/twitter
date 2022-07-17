@@ -13,8 +13,11 @@
 	import { MobileNavigation, TweetReplyInput } from "$lib/layout";
 	import { ButtonRounded, Header, MobileNavigationLink } from "$lib/components";
 	import { Tweet, TweetButton, TweetHeader, TweetMenuItem, TweetStat } from "$lib/components/Tweet";
-	import { MenuItem } from "malachite-ui/components";
+	import { Menu, MenuItem } from "malachite-ui/components";
 	import { page } from "$app/stores";
+	import { fade, fly } from "svelte/transition";
+	import { cubicOut } from "svelte/easing";
+	import { hideScrollbar } from "$lib/actions";
 
 	$: path = $page.url.pathname;
 
@@ -115,13 +118,43 @@
 				iconClass="after:bg-sky-900/30 group-focus:after:border-sky-300"
 				iconSize="text-xl"
 			/>
-			<TweetButton
-				icon="bx-recycle"
-				buttonClass="hover:text-green-500 focus:text-green-500"
-				backgroundSize="2.5rem"
-				iconClass="after:bg-green-900/30 group-focus:after:border-green-300"
-				iconSize="text-xl"
-			/>
+			<Menu let:isOpen let:button let:items>
+				<TweetButton
+					icon="bx-recycle"
+					buttonClass="hover:text-green-500 focus:text-green-500"
+					backgroundSize="2.5rem"
+					iconClass="after:bg-green-900/30 group-focus:after:border-green-300"
+					iconSize="text-xl"
+					use={button}
+				/>
+
+				{#if isOpen}
+					<div
+						class="fixed inset-0 z-20 | bg-zinc-800/70"
+						transition:fade|local={{ easing: cubicOut }}
+					/>
+				{/if}
+
+				<div
+					class="fixed inset-x-0 bottom-0 z-20 bg-zinc-900 | grid | outline-none"
+					slot="items"
+					use:items
+					use:hideScrollbar
+					transition:fly|local={{ y: 250 }}
+				>
+					<TweetMenuItem icon="bx-recycle" text="Retweet" />
+					<TweetMenuItem icon="bxs-quote-left" text="Quote Tweet" />
+					<MenuItem
+						as="button"
+						class={{
+							base: "min-h-10.5 mx-6 my-4 px-6 py-2 | rounded-full border-2",
+							selected: { on: "border-white", off: "border-zinc-600" }
+						}}
+					>
+						Cancel
+					</MenuItem>
+				</div>
+			</Menu>
 			<TweetButton
 				icon="bx-heart"
 				buttonClass="hover:text-rose-500 focus:text-rose-500"
