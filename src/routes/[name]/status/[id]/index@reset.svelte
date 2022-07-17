@@ -162,13 +162,45 @@
 				iconClass="after:bg-rose-900/30 group-focus:after:border-rose-300"
 				iconSize="text-xl"
 			/>
-			<TweetButton
-				icon="bx-upload"
-				buttonClass="hover:text-sky-500 focus:text-sky-500"
-				backgroundSize="2.5rem"
-				iconClass="after:bg-sky-900/30 group-focus:after:border-sky-300"
-				iconSize="text-xl"
-			/>
+
+			<Menu let:isOpen let:button let:items>
+				<TweetButton
+					icon="bx-upload"
+					buttonClass="hover:text-sky-500 focus:text-sky-500"
+					backgroundSize="2.5rem"
+					iconClass="after:bg-sky-900/30 group-focus:after:border-sky-300"
+					iconSize="text-xl"
+					use={button}
+				/>
+
+				{#if isOpen}
+					<div
+						class="fixed inset-0 z-20 | bg-zinc-800/70"
+						transition:fade|local={{ easing: cubicOut }}
+					/>
+				{/if}
+
+				<div
+					class="fixed inset-x-0 bottom-0 z-20 bg-zinc-900 | grid | outline-none"
+					slot="items"
+					use:items
+					use:hideScrollbar
+					transition:fly|local={{ y: 250 }}
+				>
+					<TweetMenuItem icon="bx-envelope" text="Send via Direct Message" />
+					<TweetMenuItem icon="bx-bookmark" text="Bookmark" />
+					<TweetMenuItem icon="bx-link" text="Copy link to Tweet" />
+					<MenuItem
+						as="button"
+						class={{
+							base: "min-h-10.5 mx-6 my-4 px-6 py-2 | rounded-full border-2",
+							selected: { on: "border-white", off: "border-zinc-600" }
+						}}
+					>
+						Cancel
+					</MenuItem>
+				</div>
+			</Menu>
 		</div>
 
 		<TweetReplyInput />
