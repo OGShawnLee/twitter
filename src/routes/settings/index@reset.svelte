@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { MobileNavigation } from "$lib/layout";
 	import { ButtonRounded, Header, MobileNavigationLink, SettingsLink } from "$lib/components";
+	import { Navigable } from "malachite-ui/components";
 </script>
 
 <Header>
@@ -17,7 +18,7 @@
 </Header>
 
 <main class="max-w-md w-full mx-auto my-24">
-	<div>
+	<Navigable vertical>
 		<SettingsLink text="Account" href="/account" icon="bx-user-circle" />
 		<SettingsLink
 			text="Security and Account Access"
@@ -32,7 +33,7 @@
 			icon="bx-accessibility"
 		/>
 		<SettingsLink text="Additional Resources" href="/about" icon="bx-info-circle" />
-	</div>
+	</Navigable>
 </main>
 
 <MobileNavigation>
