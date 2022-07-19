@@ -96,6 +96,8 @@
 			{#if imageURL}
 				<img class="rounded-lg" src={imageURL} alt="" />
 			{/if}
+
+			<slot />
 		</div>
 
 		<a class="full-container-link" href="/OGShawnLee/status/1548398191246069760">
