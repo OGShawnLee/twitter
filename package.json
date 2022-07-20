@@ -26,5 +26,8 @@
 		"vite": "^3.0.2",
 		"vite-plugin-windicss": "^1.8.6"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@supabase/supabase-js": "^1.35.4"
+	}
 }
