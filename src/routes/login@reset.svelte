@@ -55,12 +55,12 @@
 				</div>
 
 				<div>
-					<button
+					<a
 						class="button button--sky | w-full mb-2 | transition duration-250"
-						on:click={() => goto("/home")}
+						href="/i/flow/signup"
 					>
 						<span class="text-lg font-medium | md:text-lg"> Sign up with email and password </span>
-					</button>
+					</a>
 					<span class="w-10/12 mx-auto | block | opacity-90 text-sm text-center">
 						By signing up, you agree to the
 						<span class="text-sky-500 font-bold">Terms of Service</span> and

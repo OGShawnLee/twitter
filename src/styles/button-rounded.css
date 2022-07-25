@@ -1,0 +1,29 @@
+.button-rounded {
+	border-radius: 9999px;
+	outline: none;
+}
+
+a.button-rounded {
+	display: grid;
+	place-content: center;
+}
+
+.button-rounded.size-12 {
+	width: 3rem;
+	height: 3rem;
+	min-height: 3rem;
+}
+
+.button-rounded.size-10 {
+	width: 2.5rem;
+	height: 2.5rem;
+	min-height: 2.5rem;
+}
+
+.button-rounded.background-zinc {
+	@apply bg-zinc-800 hover:bg-zinc-700 focus:(ring-2 ring-white);
+}
+
+.button-rounded.background-sky {
+	@apply bg-sky-500 hover:bg-sky-400 focus:(ring-2 ring-white);
+}
