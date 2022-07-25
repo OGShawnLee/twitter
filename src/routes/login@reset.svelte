@@ -71,9 +71,9 @@
 
 				<div class="flex flex-col gap-6 mt-3">
 					<strong class="text-2xl text-center"> Already have an account? </strong>
-					<button class="button button--black | transition duration-250">
+					<a class="button button--black | transition duration-250" href="/i/flow/login">
 						<span class="text-lg text-sky-500 font-medium"> Sign in </span>
-					</button>
+					</a>
 				</div>
 			</div>
 		</section>
