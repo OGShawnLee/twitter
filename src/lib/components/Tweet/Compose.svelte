@@ -33,30 +33,20 @@
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
 	import { hideScrollbar } from "$lib/actions";
-	import { browser } from "$app/env";
-	import { isValidImageFileType } from "$lib/predicate";
-	import { isEmpty, isString } from "malachite-ui/predicate";
+	import { getImageFilePathURL } from "$lib/utils";
 
 	export let value = "";
 	export let canReply: WhoCanReply = "EVERYONE";
 
 	const setCanReply = useChooseWhoCanReply((target) => (canReply = target));
 
-	let files: FileList;
+	let files: FileList | null = null;
 	let fileInputRef: HTMLInputElement;
 	let imagePathURL: string | null = null;
 
-	$: if (files && browser) {
-		const file = files.item(0);
-		const reader = new FileReader();
-		if (file && isValidImageFileType(file.type)) {
-			reader.readAsDataURL(file);
-			reader.onload = ({ target }) => {
-				const imageResult = target?.result;
-				const isValidImage = isString(imageResult) && !isEmpty(imageResult);
-				if (isValidImage) imagePathURL = imageResult;
-			};
-		}
+	$: file = files?.item(0);
+	$: if (file) {
+		getImageFilePathURL(file).then((imagePath) => (imagePathURL = imagePath));
 	}
 
 	$: charCount = value.length;
