@@ -14,3 +14,7 @@ export function getImageFilePathURL(file: File) {
 		};
 	});
 }
+
+export function toUnderscore(str: string) {
+	return str.trim().replace(/\s+/g, "_");
+}

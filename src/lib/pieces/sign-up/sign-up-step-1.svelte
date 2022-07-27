@@ -1,15 +1,23 @@
 <script lang="ts">
 	import "@root/styles/button-rounded.css";
 	import { InputGroup, PasswordToggler } from "$lib/components";
+	import { createEventDispatcher } from "svelte";
 
-	let name = "";
+	const dispath = createEventDispatcher<{ success: void }>();
+
+	export let name = "";
+
 	let isShowingPassword = false;
 
 	$: charCount = name.length;
 	$: passwordType = isShowingPassword ? "text" : "password";
+
+	function handleSubmit() {
+		dispath("success");
+	}
 </script>
 
-<form class="grid gap-8">
+<form class="grid gap-8" on:submit|preventDefault={handleSubmit}>
 	<div class="grid gap-8">
 		<h3 class="text-2xl font-medium">Create your Account</h3>
 		<div class="grid gap-4">
