@@ -1,3 +1,14 @@
+<script>
+	import { auth } from "@root/firebase";
+	import { signOut } from "firebase/auth";
+	import { goto } from "$app/navigation";
+
+	async function handleSignOut() {
+		await signOut(auth);
+		goto("/login");
+	}
+</script>
+
 <main class="min-h-screen | flex items-center justify-center">
 	<div class="max-w-xs p-7.5 | bg-zinc-800 rounded-2xl">
 		<i class="bx bxl-twitter | mb-4 | text-40px" />
@@ -9,12 +20,12 @@
 			</p>
 		</div>
 		<div class="grid gap-3 | mt-6">
-			<a
-				class="min-h-10.5 px-6 py-2 | flex justify-center | bg-white rounded-full text-zinc-900 font-medium"
-				href="/login"
+			<button
+				class="min-h-10.5 px-6 py-2 | bg-white rounded-full text-zinc-900 font-medium"
+				on:click={handleSignOut}
 			>
 				Log Out
-			</a>
+			</button>
 			<a
 				class="min-h-10.5 px-6 py-2 | flex justify-center | rounded-full border-2 border-white font-medium"
 				href="/home"
