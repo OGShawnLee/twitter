@@ -1,3 +1,11 @@
+export { isStringOrNull } from "./core";
+
+const AUTH_ROUTES = Object.freeze({
+	"/login": true,
+	"/i/flow/login": true,
+	"/i/flow/signup": true
+});
+
 const RESTRICTED_ROUTES = Object.freeze({
 	"/home": true,
 	"/settings": true,
@@ -11,6 +19,10 @@ const SUPPORTED_FILE_TYPES = {
 	"image/jpeg": true,
 	"image/png": true
 };
+
+export function isAuthRoute(pathname: string) {
+	return pathname in AUTH_ROUTES;
+}
 
 export function isRestrictedRoute(pathname: string) {
 	return pathname in RESTRICTED_ROUTES;

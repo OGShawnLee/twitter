@@ -1,5 +1,10 @@
 <script>
 	import { goto } from "$app/navigation";
+	import { createUserWithGoogle } from "@root/services/auth";
+
+	async function signUpWithGoogle() {
+		createUserWithGoogle();
+	}
 </script>
 
 <svelte:head>
@@ -34,7 +39,7 @@
 				<div class="grid gap-6">
 					<button
 						class="button button--white | transition duration-250"
-						on:click={() => goto("/home")}
+						on:click={signUpWithGoogle}
 					>
 						<i class="bx bxl-google text-3xl" />
 						<span class="text-lg font-bold font-quick"> Sign up with Google </span>

@@ -10,14 +10,14 @@ declare namespace App {
 	// interface Stuff {}
 }
 
-interface UserData {
+interface UserDocument {
 	uid: string;
 	createdAt: string;
-	name: string;
-	displayName: string;
+	name: string | null;
+	displayName: string | null;
 	imageURL: string | null;
 	bannerURL: string | null;
-	description: string;
+	description: string | null;
 	isVerified: boolean;
 	stats: UserStats;
 }

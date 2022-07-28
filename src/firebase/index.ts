@@ -23,4 +23,4 @@ const app = getUniqueApp({
 export default app;
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const collections = Object.freeze({ users: "users" });
+export const collections = Object.freeze({ users: "Users" });
