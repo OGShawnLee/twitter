@@ -9,3 +9,20 @@ declare namespace App {
 	// interface Session {}
 	// interface Stuff {}
 }
+
+interface UserData {
+	uid: string;
+	createdAt: string;
+	name: string;
+	displayName: string;
+	imageURL: string | null;
+	bannerURL: string | null;
+	description: string;
+	isVerified: boolean;
+	stats: UserStats;
+}
+
+interface UserStats {
+	tweetCount: number;
+	followerCount: number;
+}
