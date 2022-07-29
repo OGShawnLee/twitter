@@ -9,7 +9,6 @@ export function createUserWithGoogle() {
 		const userCredentials = await signInWithPopup(auth, new GoogleAuthProvider());
 		const [isNew, error] = await isNewUser(userCredentials.user.uid);
 
-		console.log(error);
 		if (error) throw new Error("Sign Up (Google): Unable to check new user.");
 		if (isNew) await createUserDocument(userCredentials.user);
 
