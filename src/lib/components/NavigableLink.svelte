@@ -6,7 +6,7 @@
 
 	export let path = "";
 	export let isRoot = false;
-	export let name: string;
+	export let name: string | null;
 
 	$: route = $page.routeId;
 	$: isActive = isRoot ? route === "[name]@user" : route?.includes(path) ?? false;

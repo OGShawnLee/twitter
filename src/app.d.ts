@@ -20,9 +20,12 @@ interface UserDocument {
 	description: string | null;
 	isVerified: boolean;
 	stats: UserStats;
+	url: string | null;
+	location: string | null;
 }
 
 interface UserStats {
 	tweetCount: number;
 	followerCount: number;
+	followingCount: number;
 }

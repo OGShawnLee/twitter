@@ -21,13 +21,16 @@ export function isUserDocument(val: unknown): val is UserDocument {
 		bannerURL: isStringOrNull,
 		description: isStringOrNull,
 		isVerified: isBoolean,
-		stats: isUserStats
+		stats: isUserStats,
+		url: isStringOrNull,
+		location: isStringOrNull
 	});
 }
 
 export function isUserStats(val: unknown): val is UserStats {
 	return isInterface<UserStats>(val, {
 		tweetCount: isNumber,
-		followerCount: isNumber
+		followerCount: isNumber,
+		followingCount: isNumber
 	});
 }

@@ -1,5 +1,14 @@
 import type { User } from "firebase/auth";
-import { Timestamp, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+	Timestamp,
+	collection,
+	doc,
+	getDoc,
+	getDocs,
+	query,
+	setDoc,
+	where
+} from "firebase/firestore";
 import { useAwait } from "$lib/hooks";
 import { collections, db } from "@root/firebase";
 import { isUserDocument } from "$lib/predicate/db";
@@ -24,9 +33,12 @@ export function createUserDocumentObject(user: User): UserDocument {
 		bannerURL: null,
 		description: null,
 		isVerified: false,
+		url: null,
+		location: null,
 		stats: {
+			tweetCount: 0,
 			followerCount: 0,
-			tweetCount: 0
+			followingCount: 0
 		}
 	};
 }
@@ -34,9 +46,25 @@ export function createUserDocumentObject(user: User): UserDocument {
 export function getUserDocument(uid: string) {
 	return useAwait<UserDocument, string>(async () => {
 		const docSnapshot = await getDoc(doc(db, collections.users, uid));
+
 		if (!docSnapshot.exists()) throw new Error("NOT FOUND");
 
 		const data = docSnapshot.data();
+		if (isUserDocument(data)) return data;
+		else throw new Error("INVALID USER DOCUMENT");
+	});
+}
+
+export function getUserDocumentWithDisplayName(displayName: string) {
+	return useAwait<UserDocument, string>(async () => {
+		const querySnapshot = await getDocs(
+			query(collection(db, collections.users), where("displayName", "==", displayName))
+		);
+
+		if (querySnapshot.empty) throw new Error("NOT FOUND");
+		if (querySnapshot.size > 1) throw new Error("USER IS NOT UNIQUE");
+
+		const data = querySnapshot.docs[0].data();
 		if (isUserDocument(data)) return data;
 		else throw new Error("INVALID USER DOCUMENT");
 	});
