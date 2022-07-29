@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { MobileNavigation } from "$lib/layout";
-	import { ButtonRounded, Header, MobileNavigationLink, SettingsLink } from "$lib/components";
+	import { ButtonRounded, Header, SettingsLink } from "$lib/components";
 	import { Navigable } from "malachite-ui/components";
 </script>
 
@@ -35,10 +34,3 @@
 		<SettingsLink text="Additional Resources" href="/about" icon="bx-info-circle" />
 	</Navigable>
 </main>
-
-<MobileNavigation>
-	<MobileNavigationLink icon="bxs-home-circle" href="/home" />
-	<MobileNavigationLink icon="bx-search" href="/search" />
-	<MobileNavigationLink icon="bx-bell" href="/notifications" />
-	<MobileNavigationLink icon="bx-envelope" href="/messages" />
-</MobileNavigation>
