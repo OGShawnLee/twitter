@@ -4,6 +4,7 @@
 	import { Popover, Navigable, NavigableItem } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
+	import { user } from "@root/state";
 </script>
 
 <Popover as="slot" forceFocus let:close let:overlay let:panel>
@@ -44,13 +45,9 @@
 						<NavigableItem
 							as="a"
 							class="h-10 min-w-10 w-10 rounded-full outline-none focus:(ring-2 ring-white)"
-							href="/Windows"
+							href="/{$user?.displayName}"
 						>
-							<img
-								class="h-full w-full rounded-full"
-								src="https://avatars.githubusercontent.com/u/86738291?v=4"
-								alt=""
-							/>
+							<img class="h-full w-full rounded-full" src={$user?.imageURL} alt="" />
 							<span class="sr-only">View Profile</span>
 						</NavigableItem>
 
@@ -58,23 +55,23 @@
 							<NavigableItem
 								as="a"
 								class="outline-none font-medium focus:(underline underline-white)"
-								href="/Windows"
+								href="/{$user?.displayName}"
 								role="heading"
 								aria-level="3"
 							>
-								Shawn Lee
+								{$user?.name}
 							</NavigableItem>
-							<span class="text-xs text-zinc-400">@ShawnLee</span>
+							<span class="text-xs text-zinc-400">@{$user?.displayName}</span>
 						</div>
 					</div>
 
 					<div class="flex items-center gap-3">
 						<div class="space-x-1 | text-xs">
-							<span class="font-medium">129</span>
+							<span class="font-medium">{$user?.stats.followingCount}</span>
 							<span class="text-zinc-400">Following</span>
 						</div>
 						<div class="space-x-1 | text-xs">
-							<span class="font-medium">78</span>
+							<span class="font-medium">{$user?.stats.followerCount}</span>
 							<span class="text-zinc-400">Followers</span>
 						</div>
 					</div>
@@ -82,10 +79,14 @@
 			</div>
 
 			<div class="mt-8">
-				<NavigableLinkSidebar icon="bx-user-circle" href="/Windows" text="Profile" />
-				<NavigableLinkSidebar icon="bx-detail" href="/Windows/lists" text="Lists" />
+				<NavigableLinkSidebar icon="bx-user-circle" href="/{$user?.displayName}" text="Profile" />
+				<NavigableLinkSidebar icon="bx-detail" href="/{$user?.displayName}/lists" text="Lists" />
 				<NavigableLinkSidebar icon="bx-bookmark" href="/i/bookmarks" text="Bookmarks" />
-				<NavigableLinkSidebar icon="bx-category" href="/Windows/topics" text="Topics" />
+				<NavigableLinkSidebar
+					icon="bx-category"
+					href="/{$user?.displayName}/topics"
+					text="Topics"
+				/>
 				<NavigableLinkSidebar icon="bxs-bolt" href="/i/moment_maker" text="Moments" />
 				<div class="h-1 w-full bg-zinc-800" role="separator" />
 				<NavigableLinkSidebar icon="bx-cog" href="/settings" text="Settings" />
