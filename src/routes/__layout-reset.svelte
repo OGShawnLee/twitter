@@ -5,9 +5,10 @@
 	import { isAuthRoute, isRestrictedRoute } from "$lib/predicate";
 	import { page } from "$app/stores";
 	import { goto } from "$app/navigation";
+	import { user } from "@root/state";
 
 	const { isLoading } = useAuthStateWatcher({
-		isRestrictedRoute: isRestrictedRoute($page.url.pathname),
+		isRestrictedRoute: $user ? false : isRestrictedRoute($page.url.pathname),
 		onNullishState: async () => {
 			if (isRestrictedRoute($page.url.pathname)) await goto("/login");
 		},
