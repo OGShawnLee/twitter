@@ -65,62 +65,61 @@
 			/>
 
 			<div class="ml-auto | flex items-center gap-3">
-				<Menu let:items let:isOpen>
-					<MenuButton
-						class="h-9.5 w-9.5 min-w-9.5 | grid place-content-center | rounded-full border-2 border-zinc-600 outline-none focus:(border-white)"
-					>
-						<span class="sr-only">Options</span>
-						<i class="bx bx-dots-horizontal-rounded text-xl" />
-					</MenuButton>
-
-					{#if isOpen}
-						<div
-							class="fixed inset-0 z-20 | bg-zinc-800/70"
-							transition:fade|local={{ easing: cubicOut }}
-						/>
-					{/if}
-
-					<div
-						class="fixed inset-x-0 bottom-0 z-20 bg-zinc-900 | grid | outline-none"
-						slot="items"
-						use:items
-						use:hideScrollbar
-						transition:fly|local={{ y: 250 }}
-					>
-						<TweetMenuItem icon="bx-recycle" text="Turn off Retweets" />
-						<TweetMenuItem icon="bx-category" text="View Topics" />
-						<TweetMenuItem icon="bxs-bolt" text="View Moments" />
-						<TweetMenuItem icon="bx-detail">
-							<span> Add/remove <b>@{userDoc.displayName}</b> from lists </span>
-						</TweetMenuItem>
-						<TweetMenuItem icon="bx-detail" text="View Lists" />
-						<TweetMenuItem icon="bx-link" text="Copy link to profile" />
-						<TweetMenuItem icon="bx-volume-mute">
-							<span> Mute <b>@{userDoc.displayName}</b> </span>
-						</TweetMenuItem>
-						<TweetMenuItem icon="bx-block" isDanger>
-							<span> Block <b>@{userDoc.displayName}</b> </span>
-						</TweetMenuItem>
-						<TweetMenuItem icon="bxs-radiation" isDanger>
-							<span> Report <b>@{userDoc.displayName}</b> </span>
-						</TweetMenuItem>
-						<MenuItem
-							as="button"
-							class={{
-								base: "min-h-10.5 mx-6 my-4 px-6 py-2 | rounded-full border-2",
-								selected: { on: "border-white", off: "border-zinc-600" }
-							}}
-						>
-							Cancel
-						</MenuItem>
-					</div>
-				</Menu>
-
 				{#if isUserProfile}
 					<button class="h-9.5 px-8 | border-2 border-zinc-700 rounded-full text-sm font-medium">
 						Edit Profile
 					</button>
 				{:else}
+					<Menu let:items let:isOpen>
+						<MenuButton
+							class="h-9.5 w-9.5 min-w-9.5 | grid place-content-center | rounded-full border-2 border-zinc-600 outline-none focus:(border-white)"
+						>
+							<span class="sr-only">Options</span>
+							<i class="bx bx-dots-horizontal-rounded text-xl" />
+						</MenuButton>
+
+						{#if isOpen}
+							<div
+								class="fixed inset-0 z-20 | bg-zinc-800/70"
+								transition:fade|local={{ easing: cubicOut }}
+							/>
+						{/if}
+
+						<div
+							class="fixed inset-x-0 bottom-0 z-20 bg-zinc-900 | grid | outline-none"
+							slot="items"
+							use:items
+							use:hideScrollbar
+							transition:fly|local={{ y: 250 }}
+						>
+							<TweetMenuItem icon="bx-recycle" text="Turn off Retweets" />
+							<TweetMenuItem icon="bx-category" text="View Topics" />
+							<TweetMenuItem icon="bxs-bolt" text="View Moments" />
+							<TweetMenuItem icon="bx-detail">
+								<span> Add/remove <b>@{userDoc.displayName}</b> from lists </span>
+							</TweetMenuItem>
+							<TweetMenuItem icon="bx-detail" text="View Lists" />
+							<TweetMenuItem icon="bx-link" text="Copy link to profile" />
+							<TweetMenuItem icon="bx-volume-mute">
+								<span> Mute <b>@{userDoc.displayName}</b> </span>
+							</TweetMenuItem>
+							<TweetMenuItem icon="bx-block" isDanger>
+								<span> Block <b>@{userDoc.displayName}</b> </span>
+							</TweetMenuItem>
+							<TweetMenuItem icon="bxs-radiation" isDanger>
+								<span> Report <b>@{userDoc.displayName}</b> </span>
+							</TweetMenuItem>
+							<MenuItem
+								as="button"
+								class={{
+									base: "min-h-10.5 mx-6 my-4 px-6 py-2 | rounded-full border-2",
+									selected: { on: "border-white", off: "border-zinc-600" }
+								}}
+							>
+								Cancel
+							</MenuItem>
+						</div>
+					</Menu>
 					<button class="h-9.5 px-8 | bg-white rounded-full text-sm text-zinc-900 font-medium">
 						Follow
 					</button>
