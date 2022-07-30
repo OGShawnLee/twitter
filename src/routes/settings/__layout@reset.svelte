@@ -3,6 +3,10 @@
 	import { MobileNavigationLink } from "$lib/components";
 </script>
 
+<svelte:head>
+	<title>Settings / Twitter</title>
+</svelte:head>
+
 <slot />
 
 <MobileNavigation>
