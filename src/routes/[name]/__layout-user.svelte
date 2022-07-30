@@ -22,6 +22,8 @@
 	import { user } from "@root/state";
 
 	export let userDoc: UserDocument;
+
+	$: isUserProfile = $user?.document?.uid === userDoc.uid;
 </script>
 
 <svelte:head>
@@ -114,9 +116,15 @@
 					</div>
 				</Menu>
 
-				<button class="h-9.5 px-8 | bg-white rounded-full text-sm text-zinc-900 font-medium">
-					Follow
-				</button>
+				{#if isUserProfile}
+					<button class="h-9.5 px-8 | border-2 border-zinc-700 rounded-full text-sm font-medium">
+						Edit Profile
+					</button>
+				{:else}
+					<button class="h-9.5 px-8 | bg-white rounded-full text-sm text-zinc-900 font-medium">
+						Follow
+					</button>
+				{/if}
 			</div>
 		</div>
 
