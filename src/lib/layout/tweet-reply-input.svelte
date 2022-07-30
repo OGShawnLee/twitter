@@ -1,8 +1,10 @@
-<script>
+<script lang="ts">
 	import { slide } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
+	import { user } from "@root/state";
 
 	export let value = "";
+	export let displayName: string;
 
 	let isReplyActive = false;
 </script>
@@ -10,17 +12,13 @@
 <form class="py-2.5 | grid gap-3 | border-y-2 border-zinc-800">
 	{#if isReplyActive}
 		<span class="text-sm text-zinc-400" transition:slide|local={{ easing: cubicOut }}>
-			Replying to <span class="text-sky-400 font-medium">@OGShawnLee</span>
+			Replying to <span class="text-sky-400 font-medium">@{displayName}</span>
 		</span>
 	{/if}
 
 	<div class="flex gap-3">
 		<a class="self-start | rounded-full outline-none focus:(ring-2 ring-white) z-5" href="/Windows">
-			<img
-				class="h-10 min-w-10 w-10 rounded-full"
-				src="https://avatars.githubusercontent.com/u/86738291?v=4"
-				alt=""
-			/>
+			<img class="h-10 min-w-10 w-10 rounded-full" src={$user?.document?.imageURL} alt="" />
 			<span class="sr-only">View Profile Picture</span>
 		</a>
 
