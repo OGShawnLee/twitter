@@ -1,11 +1,12 @@
 import type { User } from "firebase/auth";
+import type { UserDocument, UserDocumentTimestamp } from "@root/app";
 import {
-	Timestamp,
 	collection,
 	doc,
 	getDoc,
 	getDocs,
 	query,
+	serverTimestamp,
 	setDoc,
 	where
 } from "firebase/firestore";
@@ -23,10 +24,10 @@ export function createUserDocument(user: User) {
 	});
 }
 
-export function createUserDocumentObject(user: User): UserDocument {
+export function createUserDocumentObject(user: User): UserDocumentTimestamp {
 	return {
 		uid: user.uid,
-		createdAt: user.metadata.creationTime || Timestamp.now().toString(),
+		createdAt: user.metadata.creationTime || serverTimestamp(),
 		name: user.displayName,
 		displayName: user.displayName && toUnderscore(user.displayName),
 		imageURL: user.photoURL,

@@ -13,6 +13,7 @@
 </script>
 
 <script lang="ts">
+	import type { UserDocument } from "@root/app";
 	import { ButtonRounded, Header, NavigableLink, TweetMenuItem } from "$lib/components";
 	import { Menu, MenuButton, MenuItem, Navigable } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";

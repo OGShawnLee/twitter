@@ -45,9 +45,9 @@
 						<NavigableItem
 							as="a"
 							class="h-10 min-w-10 w-10 rounded-full outline-none focus:(ring-2 ring-white)"
-							href="/{$user?.displayName}"
+							href="/{$user?.document?.displayName}"
 						>
-							<img class="h-full w-full rounded-full" src={$user?.imageURL} alt="" />
+							<img class="h-full w-full rounded-full" src={$user?.document.imageURL} alt="" />
 							<span class="sr-only">View Profile</span>
 						</NavigableItem>
 
@@ -55,23 +55,23 @@
 							<NavigableItem
 								as="a"
 								class="outline-none font-medium focus:(underline underline-white)"
-								href="/{$user?.displayName}"
+								href="/{$user?.document?.displayName}"
 								role="heading"
 								aria-level="3"
 							>
-								{$user?.name}
+								{$user?.document?.name}
 							</NavigableItem>
-							<span class="text-xs text-zinc-400">@{$user?.displayName}</span>
+							<span class="text-xs text-zinc-400">@{$user?.document?.displayName}</span>
 						</div>
 					</div>
 
 					<div class="flex items-center gap-3">
 						<div class="space-x-1 | text-xs">
-							<span class="font-medium">{$user?.stats.followingCount}</span>
+							<span class="font-medium">{$user?.document?.stats.followingCount}</span>
 							<span class="text-zinc-400">Following</span>
 						</div>
 						<div class="space-x-1 | text-xs">
-							<span class="font-medium">{$user?.stats.followerCount}</span>
+							<span class="font-medium">{$user?.document?.stats.followerCount}</span>
 							<span class="text-zinc-400">Followers</span>
 						</div>
 					</div>
@@ -79,12 +79,20 @@
 			</div>
 
 			<div class="mt-8">
-				<NavigableLinkSidebar icon="bx-user-circle" href="/{$user?.displayName}" text="Profile" />
-				<NavigableLinkSidebar icon="bx-detail" href="/{$user?.displayName}/lists" text="Lists" />
+				<NavigableLinkSidebar
+					icon="bx-user-circle"
+					href="/{$user?.document?.displayName}"
+					text="Profile"
+				/>
+				<NavigableLinkSidebar
+					icon="bx-detail"
+					href="/{$user?.document?.displayName}/lists"
+					text="Lists"
+				/>
 				<NavigableLinkSidebar icon="bx-bookmark" href="/i/bookmarks" text="Bookmarks" />
 				<NavigableLinkSidebar
 					icon="bx-category"
-					href="/{$user?.displayName}/topics"
+					href="/{$user?.document?.displayName}/topics"
 					text="Topics"
 				/>
 				<NavigableLinkSidebar icon="bxs-bolt" href="/i/moment_maker" text="Moments" />

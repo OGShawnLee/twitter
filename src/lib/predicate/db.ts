@@ -1,3 +1,4 @@
+import type { UserDocument, UserStats } from "@root/app";
 import { collections, db } from "@root/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useAwait } from "$lib/hooks";

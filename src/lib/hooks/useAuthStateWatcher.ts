@@ -1,5 +1,6 @@
 import type { User } from "firebase/auth";
 import type { Readable } from "svelte/store";
+import type { UserDocument } from "@root/app";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@root/firebase";
 import { onMount } from "svelte";
@@ -10,8 +11,8 @@ import { user } from "@root/state";
 export function useAuthStateWatcher(options?: {
 	onNullishState?: () => void | Promise<void>;
 	onUserState?: (context: {
-		user: User;
-		userDocument: UserDocument | null;
+		account: User;
+		document: UserDocument | null;
 		error: string | null;
 	}) => void | Promise<void>;
 	isRestrictedRoute?: boolean;
@@ -20,14 +21,14 @@ export function useAuthStateWatcher(options?: {
 	const isLoading = writable(isRestrictedRoute);
 
 	onMount(() =>
-		onAuthStateChanged(auth, async (userState) => {
-			if (userState === null) {
+		onAuthStateChanged(auth, async (account) => {
+			if (account === null) {
 				await onNullishState?.();
 				user.set(null);
 			} else {
-				const [userDocument, error] = await getUserDocument(userState.uid);
-				onUserState?.({ user: userState, userDocument, error });
-				if (userDocument) user.set(userDocument);
+				const [document, error] = await getUserDocument(account.uid);
+				onUserState?.({ account, document, error });
+				if (document) user.set({ account, document });
 			}
 
 			isLoading.set(false);
