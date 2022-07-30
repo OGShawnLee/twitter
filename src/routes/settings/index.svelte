@@ -17,7 +17,7 @@
 	</div>
 </Header>
 
-<main class="max-w-md w-full mx-auto my-24">
+<main class="max-w-md w-full mx-auto mt-20 mb-24">
 	<Navigable vertical>
 		<SettingsLink text="Account" href="/account" icon="bx-user-circle" />
 		<SettingsLink
