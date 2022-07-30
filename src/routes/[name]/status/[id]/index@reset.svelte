@@ -18,6 +18,7 @@
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
 	import { hideScrollbar } from "$lib/actions";
+	import { user } from "@root/state";
 
 	$: path = $page.url.pathname;
 
@@ -203,7 +204,9 @@
 			</Menu>
 		</div>
 
-		<TweetReplyInput />
+		{#if $user?.document}
+			<TweetReplyInput displayName={name} />
+		{/if}
 	</div>
 
 	<section>
