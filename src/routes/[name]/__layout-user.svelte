@@ -52,7 +52,7 @@
 			{#if userDoc.bannerURL}
 				<img class="w-full h-full" src={userDoc.bannerURL} alt="" />
 			{:else}
-				<div class="w-full h-full bg-zinc-700" />
+				<div class="w-full h-full bg-zinc-800" />
 			{/if}
 		</div>
 
