@@ -1,5 +1,6 @@
 <script>
 	import { ButtonRounded, Header } from "$lib/components";
+	import { user } from "@root/state";
 </script>
 
 <svelte:head>
@@ -15,7 +16,7 @@
 		<div class="flex items-center gap-3">
 			<h1 class="text-xl font-medium">Bookmarks</h1>
 		</div>
-		<span class="text-xs text-zinc-500">@OGShawnLee</span>
+		<span class="text-xs text-zinc-500">@{$user?.document?.displayName}</span>
 	</div>
 </Header>
 

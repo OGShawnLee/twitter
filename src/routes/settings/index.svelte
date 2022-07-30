@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { ButtonRounded, Header, SettingsLink } from "$lib/components";
 	import { Navigable } from "malachite-ui/components";
+	import { user } from "@root/state";
 </script>
 
 <Header>
@@ -12,7 +13,7 @@
 		<div class="flex items-center gap-3">
 			<h1 class="text-xl font-medium">Settings</h1>
 		</div>
-		<span class="text-xs text-zinc-500">@OGShawnLee</span>
+		<span class="text-xs text-zinc-500">@{$user?.document?.displayName}</span>
 	</div>
 </Header>
 
