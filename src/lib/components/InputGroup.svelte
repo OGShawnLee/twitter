@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { isEmpty, isNumber, isString } from "malachite-ui/predicate";
+	import { slide } from "svelte/transition";
 
 	export let id: string;
 	export let label = id;
 	export let icon: string;
 	export let charCount: number | undefined = undefined;
 	export let charLimit: string | undefined = undefined;
+	export let error: string | null = null;
+	export let success: string | null = null;
 </script>
 
 <div class="grid gap-4">
@@ -28,5 +31,17 @@
 				{id}
 			/>
 		</div>
+		{#if error}
+			<div class="mt-3 | flex items-center gap-1.5" transition:slide|local>
+				<i class="bx bx-error-circle | text-lg text-rose-500" />
+				<span class="text-sm text-zinc-400"> {error} </span>
+			</div>
+		{/if}
+		{#if success}
+			<div class="mt-3 | flex items-center gap-1.5" transition:slide|local>
+				<i class="bx bx-check-circle | text-lg text-lime-500" />
+				<span class="text-sm text-zinc-400"> {success} </span>
+			</div>
+		{/if}
 	</div>
 </div>

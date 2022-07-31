@@ -8,12 +8,24 @@ import {
 	query,
 	serverTimestamp,
 	setDoc,
+	updateDoc,
 	where
 } from "firebase/firestore";
 import { useAwait } from "$lib/hooks";
 import { collections, db } from "@root/firebase";
 import { isUserDocument } from "$lib/predicate/db";
 import { toUnderscore } from "$lib/utils";
+
+export function changeDisplayName(uid: string, displayName: string) {
+	return useAwait(async () => {
+		const querySnapshot = await getDocs(
+			query(collection(db, collections.users), where("displayName", "==", displayName))
+		);
+
+		if (querySnapshot.size >= 1) throw new Error("Display Name has been already taken.");
+		else updateDoc(doc(db, collections.users, uid), { displayName });
+	});
+}
 
 export function createUserDocument(user: User) {
 	return useAwait(async () => {
