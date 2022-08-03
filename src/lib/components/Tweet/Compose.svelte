@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-	type WhoCanReply = "EVERYONE" | "FOLLOWED" | "MENTIONED";
+	import type { WhoCanReply } from "@root/app";
 
 	function getCharCountColour(charCount: number) {
 		if (charCount === 0) return "text-current";
@@ -34,22 +34,23 @@
 	import { cubicOut } from "svelte/easing";
 	import { hideScrollbar } from "$lib/actions";
 	import { getImageFilePathURL } from "$lib/utils";
+	import { user } from "@root/state";
 
-	export let value = "";
+	export let value: string | null = "";
 	export let canReply: WhoCanReply = "EVERYONE";
+	export let imagePathURL: string | null = null;
 
 	const setCanReply = useChooseWhoCanReply((target) => (canReply = target));
 
 	let files: FileList | null = null;
 	let fileInputRef: HTMLInputElement;
-	let imagePathURL: string | null = null;
 
 	$: file = files?.item(0);
 	$: if (file) {
 		getImageFilePathURL(file).then((imagePath) => (imagePathURL = imagePath));
 	}
 
-	$: charCount = value.length;
+	$: charCount = value?.length ?? 0;
 	$: textColour = getCharCountColour(charCount);
 	$: canReplyIcon = getWhoCanReplyIcon(canReply);
 	$: canReplyText = getWhoCanReplyText(canReply);
@@ -58,19 +59,15 @@
 <article class="grid gap-6">
 	<header class="flex items-center justify-between">
 		<div class="flex items-center gap-4">
-			<a href="/Windows">
-				<img
-					class="h-10 min-w-10 w-10 rounded-full"
-					src="https://avatars.githubusercontent.com/u/86738291?v=4"
-					alt=""
-				/>
-				<span class="sr-only">View Profile Picture</span>
+			<a href="/{$user?.document.displayName}">
+				<img class="h-10 min-w-10 w-10 rounded-full" src={$user?.document.imageURL} alt="" />
+				<span class="sr-only">View {$user?.document.displayName} Profile</span>
 			</a>
 
 			<div class="grid">
-				<h1 class="font-medium">Shawn Lee</h1>
+				<h1 class="font-medium">{$user?.document.name}</h1>
 				<div class="space-x-1 | text-xs | text-zinc-400">
-					<span>@ShawnLee</span>
+					<span>@{$user?.document.displayName}</span>
 					<span class="text-zinc-500">Jun 12 </span>
 				</div>
 			</div>

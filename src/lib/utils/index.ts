@@ -1,4 +1,5 @@
 import { isValidImageFileType } from "$lib/predicate";
+import type { RuntimeTweet, TweetDocument } from "@root/app";
 import { isString } from "malachite-ui/predicate";
 
 export function getImageFilePathURL(file: File) {
@@ -17,4 +18,8 @@ export function getImageFilePathURL(file: File) {
 
 export function toUnderscore(str: string) {
 	return str.trim().replace(/\s+/g, "_");
+}
+
+export function toRuntimeTweet(document: TweetDocument): RuntimeTweet {
+	return { ...document, createdAt: document.createdAt.toDate().toDateString(), isFavourite: false };
 }

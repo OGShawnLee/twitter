@@ -1,10 +1,19 @@
 import type { User } from "firebase/auth";
-import type { UserDocument, UserDocumentTimestamp } from "@root/app";
+import type {
+	DraftTweet,
+	TweetDocument,
+	UpdatableUserDocument,
+	UserDocument,
+	UserDocumentTimestamp,
+	WhoCanReply
+} from "@root/app";
+import type { Timestamp } from "firebase/firestore";
 import {
 	collection,
 	doc,
 	getDoc,
 	getDocs,
+	increment,
 	query,
 	serverTimestamp,
 	setDoc,
@@ -12,9 +21,10 @@ import {
 	where
 } from "firebase/firestore";
 import { useAwait } from "$lib/hooks";
-import { collections, db } from "@root/firebase";
+import { collections, db, storage } from "@root/firebase";
 import { isUserDocument } from "$lib/predicate/db";
 import { toUnderscore } from "$lib/utils";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
 
 export function changeDisplayName(uid: string, displayName: string) {
 	return useAwait(async () => {
@@ -25,6 +35,67 @@ export function changeDisplayName(uid: string, displayName: string) {
 		if (querySnapshot.size >= 1) throw new Error("Display Name has been already taken.");
 		else updateDoc(doc(db, collections.users, uid), { displayName });
 	});
+}
+
+export function createTweetDocument(
+	user: UserDocument,
+	{ imageURL, text, whoCanReply }: DraftTweet
+) {
+	return useAwait(async () => {
+		const collectionRef = collection(db, collections.tweets);
+		const docReference = doc(collectionRef);
+
+		await setDoc(
+			docReference,
+			createTweetDocumentObject(user, { id: docReference.id, text, whoCanReply })
+		);
+
+		if (imageURL) {
+			const fileRef = ref(storage, "/posts/" + docReference.id);
+			await uploadString(fileRef, imageURL, "data_url");
+			const imagePathURL = await getDownloadURL(fileRef);
+			await updateDoc(docReference, { imageURL: imagePathURL });
+		}
+
+		await updateUserDocument(user.uid, {
+			stats: {
+				tweetCount: increment(1)
+			}
+		});
+	});
+}
+
+function updateUserDocument<K extends keyof Omit<UserDocument, "uid">>(
+	uid: string,
+	data: Pick<UpdatableUserDocument, K>
+) {
+	return useAwait(() => setDoc(doc(db, collections.users, uid), data, { merge: true }));
+}
+
+function createTweetDocumentObject(
+	user: UserDocument,
+	{ id, text, whoCanReply }: { id: string; text: string | null; whoCanReply: WhoCanReply }
+): TweetDocument {
+	return {
+		id,
+		createdAt: serverTimestamp() as Timestamp,
+		text,
+		imageURL: null,
+		user: {
+			uid: user.uid,
+			name: user.name,
+			displayName: user.displayName,
+			description: user.description,
+			imageURL: user.imageURL,
+			stats: user.stats
+		},
+		stats: {
+			favouritedCount: 0,
+			retweetCount: 0,
+			replyCount: 0
+		},
+		whoCanReply
+	};
 }
 
 export function createUserDocument(user: User) {

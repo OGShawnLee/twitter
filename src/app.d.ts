@@ -1,6 +1,6 @@
 /// <reference types="@sveltejs/kit" />
 
-import type { FieldValue } from "firebase/firestore";
+import type { FieldValue, Timestamp } from "firebase/firestore";
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -12,6 +12,34 @@ declare namespace App {
 	// interface Stuff {}
 }
 
+// * Tweet
+interface DraftTweet {
+	text: string | null;
+	imageURL: string | null;
+	whoCanReply: WhoCanReply;
+}
+
+interface TweetDocument extends DraftTweet {
+	id: string;
+	createdAt: Timestamp;
+	user: UserHeader;
+	stats: TweetStats;
+}
+
+interface TweetStats {
+	favouritedCount: number;
+	retweetCount: number;
+	replyCount: number;
+}
+
+interface RuntimeTweet extends TweetDocument {
+	isFavourite: boolean; // current user has favourited this tweet?
+	createdAt: string;
+}
+
+type WhoCanReply = "EVERYONE" | "FOLLOWED" | "MENTIONED";
+
+// * USER
 interface UserState {
 	account: User;
 	document: UserDocument;
@@ -24,6 +52,7 @@ interface UserStats {
 }
 
 interface UserHeader {
+	uid: string;
 	name: string | null;
 	displayName: string | null;
 	imageURL: string | null;
@@ -47,4 +76,12 @@ interface UserDocumentTimestamp extends Omit<UserDocument, "createdAt"> {
 
 interface RuntimeUser {
 	isFollowing: boolean; // current user follows this user?
+}
+
+interface UpdatableUserDocument extends Omit<UserDocument, "uid" | "stats" | "whoCanReply"> {
+	stats: {
+		followerCount?: FieldValue;
+		followingCount?: FieldValue;
+		tweetCount?: FieldValue;
+	};
 }

@@ -2,6 +2,7 @@ import type { FirebaseOptions } from "firebase/app";
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 function getUniqueApp(settings: FirebaseOptions) {
 	return isInitialised() ? getApp() : initializeApp(settings);
@@ -23,4 +24,5 @@ const app = getUniqueApp({
 export default app;
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const collections = Object.freeze({ users: "Users" });
+export const storage = getStorage(app);
+export const collections = Object.freeze({ tweets: "Tweets", users: "Users" });
