@@ -1,5 +1,5 @@
 import { isValidImageFileType } from "$lib/predicate";
-import type { RuntimeTweet, TweetDocument } from "@root/app";
+import type { RuntimeTweet, TweetDocument } from "@root/types";
 import { isString } from "malachite-ui/predicate";
 
 export function getImageFilePathURL(file: File) {

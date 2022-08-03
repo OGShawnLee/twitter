@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-	import type { WhoCanReply } from "@root/app";
+	import type { WhoCanReply } from "@root/types";
 
 	function getCharCountColour(charCount: number) {
 		if (charCount === 0) return "text-current";

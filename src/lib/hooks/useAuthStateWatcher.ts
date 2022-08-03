@@ -1,6 +1,6 @@
 import type { User } from "firebase/auth";
 import type { Readable } from "svelte/store";
-import type { UserDocument } from "@root/app";
+import type { UserDocument } from "@root/types";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@root/firebase";
 import { onMount } from "svelte";

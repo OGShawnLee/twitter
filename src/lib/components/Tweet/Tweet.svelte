@@ -1,6 +1,6 @@
 <script lang="ts">
 	import "@root/styles/button-after.css";
-	import type { RuntimeTweet } from "@root/app";
+	import type { RuntimeTweet } from "@root/types";
 	import { TweetButton, TweetMenuItem } from "$lib/components";
 	import { Menu, MenuButton, MenuItem } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";

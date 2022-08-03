@@ -5,7 +5,7 @@ import type {
 	UserHeader,
 	UserStats,
 	WhoCanReply
-} from "@root/app";
+} from "@root/types";
 import { collections, db } from "@root/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useAwait } from "$lib/hooks";

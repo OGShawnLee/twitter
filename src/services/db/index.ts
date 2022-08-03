@@ -6,7 +6,7 @@ import type {
 	UserDocument,
 	UserDocumentTimestamp,
 	WhoCanReply
-} from "@root/app";
+} from "@root/types";
 import type { Timestamp } from "firebase/firestore";
 import {
 	collection,

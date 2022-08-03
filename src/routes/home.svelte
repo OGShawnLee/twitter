@@ -28,7 +28,7 @@
 </script>
 
 <script lang="ts">
-	import type { RuntimeTweet } from "@root/app";
+	import type { RuntimeTweet } from "@root/types";
 	import { MobileSidebar, TopTweetPreferences } from "$lib/layout";
 	import { Tweet } from "$lib/components";
 	import { PopoverButton } from "malachite-ui/components";

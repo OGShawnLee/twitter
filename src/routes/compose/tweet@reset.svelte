@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { WhoCanReply } from "@root/app";
+	import type { WhoCanReply } from "@root/types";
 	import { ButtonRounded, Header, TweetCompose } from "$lib/components";
 	import { createTweetDocument } from "@root/services/db";
 	import { user } from "@root/state";
