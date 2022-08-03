@@ -1,18 +1,42 @@
 <script lang="ts" context="module">
 	import type { Load } from "@sveltejs/kit";
+	import { collections, db } from "@root/firebase";
+	import { collection, getDocs, query, where } from "firebase/firestore";
+	import { isTweetDocument } from "$lib/predicate/db";
 
-	export const load: Load = ({ params: { name } }) => {
-		return {
-			status: 200,
-			props: { name }
-		};
+	export const load: Load = async ({ params: { name, id } }) => {
+		const querySnapshot = await getDocs(
+			query(
+				collection(db, collections.tweets),
+				where("user.displayName", "==", name),
+				where("id", "==", id)
+			)
+		);
+
+		if (querySnapshot.empty) return { status: 404 };
+
+		const docData = querySnapshot.docs[0].data();
+		if (isTweetDocument(docData))
+			return {
+				status: 200,
+				props: { name, tweet: docData }
+			};
+		else
+			return {
+				status: 500,
+				error: {
+					name: "Type Error",
+					message: "Invalid Tweet Type"
+				}
+			};
 	};
 </script>
 
 <script lang="ts">
+	import type { RuntimeTweet } from "@root/types";
 	import { MobileNavigation, TweetReplyInput } from "$lib/layout";
 	import { ButtonRounded, Header, MobileNavigationLink } from "$lib/components";
-	import { Tweet, TweetButton, TweetHeader, TweetMenuItem, TweetStat } from "$lib/components/Tweet";
+	import { TweetButton, TweetHeader, TweetMenuItem, TweetStat } from "$lib/components/Tweet";
 	import { Menu, MenuItem } from "malachite-ui/components";
 	import { page } from "$app/stores";
 	import { fade, fly } from "svelte/transition";
@@ -22,17 +46,16 @@
 
 	$: path = $page.url.pathname;
 
-	export let imageURL: string | undefined = undefined;
 	export let name: string;
+	export let tweet: RuntimeTweet;
 </script>
 
 <svelte:head>
-	<title>
-		@{name} on Twitter: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam maximus, lacus
-		vel vulputate consequat, mauris sapien faucibus nisl, et malesuada velit urna vitae tortor. Quisque
-		ac pretium eros. Suspendisse at faucibus ex. In eu ultrices est, vel eleifend mi. Nulla at efficitur
-		diam. Ut ultricies accumsan tempor."
-	</title>
+	{#if tweet.text}
+		<title>@{name} on Twitter: "{tweet.text}"</title>
+	{:else}
+		<title>@{name} on Twitter</title>
+	{/if}
 </svelte:head>
 
 <Header>
@@ -44,25 +67,25 @@
 		<div class="flex items-center gap-3">
 			<h1 class="text-xl font-medium">Tweet</h1>
 		</div>
-		<span class="text-xs text-zinc-500">@OGShawnLee</span>
+		<span class="text-xs text-zinc-500">@{tweet.user.displayName}</span>
 	</div>
 </Header>
 
 <main class="max-w-md w-full mx-auto px-6 my-24 | grid gap-5">
 	<div>
-		<TweetHeader hasDate={false}>
+		<TweetHeader user={tweet.user}>
 			<TweetMenuItem icon="bx-user-x">
-				<span> Unfollow <b>@OGShawnLee</b> </span>
+				<span> Unfollow <b>@{tweet.user.displayName}</b> </span>
 			</TweetMenuItem>
 			<TweetMenuItem icon="bx-detail">
-				<span> Add/remove <b>@OGShawnLee</b> from lists </span>
+				<span> Add/remove <b>@{tweet.user.displayName}</b> from lists </span>
 			</TweetMenuItem>
 			<TweetMenuItem icon="bx-volume-mute">
-				<span> Mute <b>@OGShawnLee</b> </span>
+				<span> Mute <b>@{tweet.user.displayName}</b> </span>
 			</TweetMenuItem>
 			<TweetMenuItem icon="bx-volume-mute" text="Mute this conversation" />
 			<TweetMenuItem icon="bx-block" isDanger>
-				<span> Block <b>@OGShawnLee</b> </span>
+				<span> Block <b>@{tweet.user.displayName}</b> </span>
 			</TweetMenuItem>
 			<TweetMenuItem icon="bx-code-alt" text="Embed Tweet" />
 			<TweetMenuItem icon="bxs-radiation" text="Report Tweet" isDanger />
@@ -82,15 +105,12 @@
 	<section class="grid gap-5">
 		<h2 class="sr-only">Tweet Content</h2>
 
-		<p class="leading-relaxed">
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam maximus, lacus vel vulputate
-			consequat, mauris sapien faucibus nisl, et malesuada velit urna vitae tortor. Quisque ac
-			pretium eros. Suspendisse at faucibus ex. In eu ultrices est, vel eleifend mi. Nulla at
-			efficitur diam. Ut ultricies accumsan tempor.
-		</p>
+		{#if tweet.text}
+			<p class="leading-relaxed">{tweet.text}</p>
+		{/if}
 
-		{#if imageURL}
-			<img class="rounded-lg" src={imageURL} alt="" />
+		{#if tweet.imageURL}
+			<img class="rounded-lg" src={tweet.imageURL} alt="" />
 		{/if}
 	</section>
 
@@ -106,9 +126,13 @@
 		</div>
 
 		<div class="py-2.5 | flex items-center justify-between | border-b-2 border-zinc-800">
-			<TweetStat href="{path}/retweets" value="19" stat="Retweets" />
-			<TweetStat href="{path}/retweets/with_comments" value="21" stat="Quote Tweets" />
-			<TweetStat href="{path}/likes" value="234" stat="Likes" />
+			<TweetStat href="{path}/retweets" value={tweet.stats.retweetCount} stat="Retweets" />
+			<TweetStat
+				href="{path}/retweets/with_comments"
+				value={tweet.stats.replyCount}
+				stat="Quote Tweets"
+			/>
+			<TweetStat href="{path}/likes" value={tweet.stats.favouritedCount} stat="Likes" />
 		</div>
 
 		<div class="py-2.5 | flex items-center justify-around | border-t-2 border-zinc-800">
@@ -213,9 +237,9 @@
 		<h2 class="sr-only">Replies</h2>
 
 		<div class="grid gap-12">
+			<!-- <Tweet />
 			<Tweet />
-			<Tweet />
-			<Tweet />
+			<Tweet /> -->
 		</div>
 	</section>
 </main>

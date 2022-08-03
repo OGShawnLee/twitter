@@ -1,31 +1,31 @@
 <script lang="ts">
+	import type { UserHeader } from "@root/types";
 	import { Menu, MenuButton } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
 	import { hideScrollbar } from "$lib/actions";
 
-	export let hasDate = false;
+	export let user: UserHeader;
+	export let createdAt: string | null = null;
 </script>
 
 <header class="flex items-center justify-between">
 	<div class="flex items-center gap-4">
-		<a class="rounded-full outline-none focus:(ring-2 ring-white) z-5" href="/Windows">
-			<img
-				class="h-10 min-w-10 w-10 rounded-full"
-				src="https://avatars.githubusercontent.com/u/86738291?v=4"
-				alt=""
-			/>
-			<span class="sr-only">View Profile Picture</span>
+		<a class="rounded-full outline-none focus:(ring-2 ring-white) z-5" href="/{user.displayName}">
+			<img class="h-10 min-w-10 w-10 rounded-full" src={user.imageURL} alt="" />
+			<span class="sr-only">View {user.displayName} Profile</span>
 		</a>
 
 		<div class="grid">
 			<h3 class="font-medium">
-				<a class="relative outline-none focus:underline z-5" href="/Windows"> Shawn Lee </a>
+				<a class="relative outline-none focus:underline z-5" href="/{user.displayName}">
+					{user.name}
+				</a>
 			</h3>
 			<div class="space-x-1 | text-xs">
-				<span class="text-zinc-400">@ShawnLee</span>
-				{#if hasDate}
-					<span class="text-zinc-500">Jun 12</span>
+				<span class="text-zinc-400">@{user.displayName}</span>
+				{#if createdAt}
+					<span class="text-zinc-500">{createdAt}</span>
 				{/if}
 			</div>
 		</div>
