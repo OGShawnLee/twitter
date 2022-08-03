@@ -1,4 +1,5 @@
-import type { Timestamp } from "firebase/firestore";
+import type { User } from "firebase/auth";
+import type { FieldValue, Timestamp } from "firebase/firestore";
 
 // * Tweet
 interface DraftTweet {
