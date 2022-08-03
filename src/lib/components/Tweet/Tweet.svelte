@@ -6,6 +6,7 @@
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
 	import { hideScrollbar } from "$lib/actions";
+	import { user } from "@root/state";
 
 	export let tweet: RuntimeTweet;
 	export let isReply = false;
@@ -35,55 +36,57 @@
 			</div>
 		</div>
 
-		<Menu let:items let:isOpen>
-			<MenuButton
-				class="button-after button-after-10 button-after--zinc | z-5 | group outline-none after:transition"
-			>
-				<span class="sr-only">Options</span>
-				<i
-					class="bx bx-dots-horizontal-rounded text-zinc-400 text-2xl group-hover:text-white group-focus:text-white"
-				/>
-			</MenuButton>
-
-			{#if isOpen}
-				<div
-					class="fixed inset-0 z-20 | bg-zinc-800/70"
-					transition:fade|local={{ easing: cubicOut }}
-				/>
-			{/if}
-
-			<div
-				class="fixed inset-x-0 bottom-0 z-20 bg-zinc-900 | grid | outline-none"
-				slot="items"
-				use:items
-				use:hideScrollbar
-				transition:fly|local={{ y: 250 }}
-			>
-				<TweetMenuItem icon="bx-sad" text="Not interested in this Tweet" />
-				<TweetMenuItem icon="bx-user-x">
-					<span> Unfollow <b>@{tweet.user.displayName}</b> </span>
-				</TweetMenuItem>
-				<TweetMenuItem icon="bx-detail">
-					<span> Add/remove <b>@{tweet.user.displayName}</b> from lists </span>
-				</TweetMenuItem>
-				<TweetMenuItem icon="bx-volume-mute">
-					<span> Mute <b>@{tweet.user.displayName}</b> </span>
-				</TweetMenuItem>
-				<TweetMenuItem icon="bx-block" isDanger>
-					<span> Block <b>@{tweet.user.displayName}</b> </span>
-				</TweetMenuItem>
-				<TweetMenuItem icon="bxs-radiation" text="Report Tweet" isDanger />
-				<MenuItem
-					as="button"
-					class={{
-						base: "min-h-10.5 mx-6 my-4 px-6 py-2 | rounded-full border-2",
-						selected: { on: "border-white", off: "border-zinc-600" }
-					}}
+		{#if $user}
+			<Menu let:items let:isOpen>
+				<MenuButton
+					class="button-after button-after-10 button-after--zinc | z-5 | group outline-none after:transition"
 				>
-					Cancel
-				</MenuItem>
-			</div>
-		</Menu>
+					<span class="sr-only">Options</span>
+					<i
+						class="bx bx-dots-horizontal-rounded text-zinc-400 text-2xl group-hover:text-white group-focus:text-white"
+					/>
+				</MenuButton>
+
+				{#if isOpen}
+					<div
+						class="fixed inset-0 z-20 | bg-zinc-800/70"
+						transition:fade|local={{ easing: cubicOut }}
+					/>
+				{/if}
+
+				<div
+					class="fixed inset-x-0 bottom-0 z-20 bg-zinc-900 | grid | outline-none"
+					slot="items"
+					use:items
+					use:hideScrollbar
+					transition:fly|local={{ y: 250 }}
+				>
+					<TweetMenuItem icon="bx-sad" text="Not interested in this Tweet" />
+					<TweetMenuItem icon="bx-user-x">
+						<span> Unfollow <b>@{tweet.user.displayName}</b> </span>
+					</TweetMenuItem>
+					<TweetMenuItem icon="bx-detail">
+						<span> Add/remove <b>@{tweet.user.displayName}</b> from lists </span>
+					</TweetMenuItem>
+					<TweetMenuItem icon="bx-volume-mute">
+						<span> Mute <b>@{tweet.user.displayName}</b> </span>
+					</TweetMenuItem>
+					<TweetMenuItem icon="bx-block" isDanger>
+						<span> Block <b>@{tweet.user.displayName}</b> </span>
+					</TweetMenuItem>
+					<TweetMenuItem icon="bxs-radiation" text="Report Tweet" isDanger />
+					<MenuItem
+						as="button"
+						class={{
+							base: "min-h-10.5 mx-6 my-4 px-6 py-2 | rounded-full border-2",
+							selected: { on: "border-white", off: "border-zinc-600" }
+						}}
+					>
+						Cancel
+					</MenuItem>
+				</div>
+			</Menu>
+		{/if}
 	</header>
 
 	<div class="grid">
