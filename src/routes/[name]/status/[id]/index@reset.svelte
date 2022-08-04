@@ -125,15 +125,17 @@
 			<span> Twitter Web App </span>
 		</div>
 
-		<div class="py-2.5 | flex items-center justify-between | border-b-2 border-zinc-800">
-			<TweetStat href="{path}/retweets" value={tweet.stats.retweetCount} stat="Retweets" />
-			<TweetStat
-				href="{path}/retweets/with_comments"
-				value={tweet.stats.replyCount}
-				stat="Quote Tweets"
-			/>
-			<TweetStat href="{path}/likes" value={tweet.stats.favouritedCount} stat="Likes" />
-		</div>
+		{#if tweet.stats.favouritedCount || tweet.stats.replyCount || tweet.stats.retweetCount}
+			<div class="py-2.5 | flex items-center justify-between | border-b-2 border-zinc-800">
+				<TweetStat href="{path}/retweets" value={tweet.stats.retweetCount} stat="Retweets" />
+				<TweetStat
+					href="{path}/retweets/with_comments"
+					value={tweet.stats.replyCount}
+					stat="Quote Tweets"
+				/>
+				<TweetStat href="{path}/likes" value={tweet.stats.favouritedCount} stat="Likes" />
+			</div>
+		{/if}
 
 		<div class="py-2.5 | flex items-center justify-around | border-t-2 border-zinc-800">
 			<TweetButton
