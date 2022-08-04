@@ -61,20 +61,29 @@
 					use:hideScrollbar
 					transition:fly|local={{ y: 250 }}
 				>
-					<TweetMenuItem icon="bx-sad" text="Not interested in this Tweet" />
-					<TweetMenuItem icon="bx-user-x">
-						<span> Unfollow <b>@{tweet.user.displayName}</b> </span>
-					</TweetMenuItem>
-					<TweetMenuItem icon="bx-detail">
-						<span> Add/remove <b>@{tweet.user.displayName}</b> from lists </span>
-					</TweetMenuItem>
-					<TweetMenuItem icon="bx-volume-mute">
-						<span> Mute <b>@{tweet.user.displayName}</b> </span>
-					</TweetMenuItem>
-					<TweetMenuItem icon="bx-block" isDanger>
-						<span> Block <b>@{tweet.user.displayName}</b> </span>
-					</TweetMenuItem>
-					<TweetMenuItem icon="bxs-radiation" text="Report Tweet" isDanger />
+					{#if $user.account.uid === tweet.user.uid}
+						<TweetMenuItem icon="bx-trash" text="Delete" isDanger />
+						<TweetMenuItem icon="bx-pin" text="Pin to your profile" />
+						<TweetMenuItem icon="bx-detail">
+							<span> Add/remove <b>@{tweet.user.displayName}</b> from lists </span>
+						</TweetMenuItem>
+						<TweetMenuItem icon="bx-message-rounded" text="Change who can reply" />
+					{:else}
+						<TweetMenuItem icon="bx-sad" text="Not interested in this Tweet" />
+						<TweetMenuItem icon="bx-user-x">
+							<span> Follow <b>@{tweet.user.displayName}</b> </span>
+						</TweetMenuItem>
+						<TweetMenuItem icon="bx-detail">
+							<span> Add/remove <b>@{tweet.user.displayName}</b> from lists </span>
+						</TweetMenuItem>
+						<TweetMenuItem icon="bx-volume-mute">
+							<span> Mute <b>@{tweet.user.displayName}</b> </span>
+						</TweetMenuItem>
+						<TweetMenuItem icon="bx-block" isDanger>
+							<span> Block <b>@{tweet.user.displayName}</b> </span>
+						</TweetMenuItem>
+						<TweetMenuItem icon="bxs-radiation" text="Report Tweet" isDanger />
+					{/if}
 					<MenuItem
 						as="button"
 						class={{
