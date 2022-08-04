@@ -9,5 +9,6 @@ declare namespace App {
 	// interface Session {}
 	interface Stuff {
 		displayName: string;
+		uid: string;
 	}
 }

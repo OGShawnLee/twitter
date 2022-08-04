@@ -13,6 +13,7 @@ interface TweetDocument extends DraftTweet {
 	createdAt: Timestamp;
 	user: UserHeader;
 	stats: TweetStats;
+	hasMedia: boolean;
 }
 
 interface TweetStats {

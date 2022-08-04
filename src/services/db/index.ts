@@ -54,7 +54,7 @@ export function createTweetDocument(
 			const fileRef = ref(storage, "/posts/" + docReference.id);
 			await uploadString(fileRef, imageURL, "data_url");
 			const imagePathURL = await getDownloadURL(fileRef);
-			await updateDoc(docReference, { imageURL: imagePathURL });
+			await updateDoc(docReference, { imageURL: imagePathURL, hasMedia: true });
 		}
 
 		await updateUserDocument(user.uid, {
@@ -81,6 +81,7 @@ function createTweetDocumentObject(
 		createdAt: serverTimestamp() as Timestamp,
 		text,
 		imageURL: null,
+		hasMedia: false,
 		user: {
 			uid: user.uid,
 			name: user.name,

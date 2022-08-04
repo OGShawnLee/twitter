@@ -6,7 +6,8 @@
 		const [userDoc, error] = await getUserDocumentWithDisplayName(displayName);
 
 		if (error) return { status: 500, error };
-		if (userDoc) return { status: 200, props: { userDoc }, stuff: { displayName } };
+		if (userDoc)
+			return { status: 200, props: { userDoc }, stuff: { displayName, uid: userDoc.uid } };
 
 		return { status: 404 };
 	};

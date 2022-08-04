@@ -27,7 +27,8 @@ export function isTweetDocument(val: unknown): val is TweetDocument {
 		text: isStringOrNull,
 		stats: isTweetStats,
 		imageURL: isStringOrNull,
-		whoCanReply: isWhoCanReply
+		whoCanReply: isWhoCanReply,
+		hasMedia: isBoolean
 	});
 }
 
