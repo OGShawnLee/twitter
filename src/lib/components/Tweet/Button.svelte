@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { isNullish } from "malachite-ui/predicate";
+	import { clearString } from "malachite-ui/utils";
 
 	export let icon: string;
 	export let value: number | undefined = undefined;
@@ -8,12 +9,25 @@
 	export let iconSize = "text-lg";
 	export let iconClass: string;
 	export let use: (element: HTMLElement) => void = () => {};
+	export let isActive = false;
+	export let activeClass = "";
+	export let isDisabled = false;
+
+	$: className = clearString(
+		`group | flex items-center gap-3 | outline-none transition ${buttonClass} ${
+			isActive ? activeClass : ""
+		}`
+	);
 </script>
 
 <button
-	class="group | flex items-center gap-3 | outline-none transition {buttonClass}"
+	class={className}
 	style:--size={backgroundSize}
 	use:use
+	on:click
+	disabled={isDisabled}
+	class:opacity-50={isDisabled}
+	class:cursor-not-allowed={isDisabled}
 >
 	<i
 		class="bx {icon} | relative | {iconSize} {iconClass} after:(opacity-0 transition) group-hover:after:opacity-100 group-focus:after:(opacity-100 border-2)"

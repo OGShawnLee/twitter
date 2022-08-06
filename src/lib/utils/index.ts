@@ -31,5 +31,5 @@ export function toUnderscore(str: string) {
 }
 
 export function toRuntimeTweet(document: TweetDocument): RuntimeTweet {
-	return { ...document, createdAt: document.createdAt.toDate().toDateString(), isFavourite: false };
+	return { ...document, createdAt: document.createdAt.toDate().toDateString() };
 }

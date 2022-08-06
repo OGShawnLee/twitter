@@ -1,4 +1,5 @@
 import type {
+	RuntimeTweet,
 	TweetDocument,
 	TweetStats,
 	UserDocument,
@@ -19,6 +20,20 @@ export function isNewUser(uid: string) {
 	});
 }
 
+export function isRuntimeTweet(val: unknown): val is RuntimeTweet {
+	return isInterface<RuntimeTweet>(val, {
+		id: isString,
+		createdAt: isString,
+		user: isUserHeader,
+		text: isStringOrNull,
+		stats: isTweetStats,
+		imageURL: isStringOrNull,
+		whoCanReply: isWhoCanReply,
+		hasMedia: isBoolean,
+		likedBy: Array.isArray
+	});
+}
+
 export function isTweetDocument(val: unknown): val is TweetDocument {
 	return isInterface<TweetDocument>(val, {
 		id: isString,
@@ -28,7 +43,8 @@ export function isTweetDocument(val: unknown): val is TweetDocument {
 		stats: isTweetStats,
 		imageURL: isStringOrNull,
 		whoCanReply: isWhoCanReply,
-		hasMedia: isBoolean
+		hasMedia: isBoolean,
+		likedBy: Array.isArray
 	});
 }
 

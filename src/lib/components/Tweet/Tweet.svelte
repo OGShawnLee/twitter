@@ -1,7 +1,7 @@
 <script lang="ts">
 	import "@root/styles/button-after.css";
 	import type { RuntimeTweet } from "@root/types";
-	import { TweetButton, TweetMenuItem } from "$lib/components";
+	import { TweetButton, TweetButtonLike, TweetMenuItem } from "$lib/components";
 	import { Menu, MenuButton, MenuItem } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
@@ -126,12 +126,19 @@
 				buttonClass="hover:text-green-500 focus:text-green-500"
 				iconClass="after:bg-green-900/30 group-focus:after:border-green-300"
 			/>
-			<TweetButton
-				icon="bx-heart"
-				value={tweet.stats.favouritedCount}
-				buttonClass="hover:text-rose-500 focus:text-rose-500"
-				iconClass="after:bg-rose-900/30 group-focus:after:border-rose-300"
-			/>
+
+			<TweetButtonLike {tweet} let:handleClick let:isDisabled let:isFavourite>
+				<TweetButton
+					icon="bx-heart"
+					value={tweet.stats.favouritedCount}
+					buttonClass="hover:text-rose-500 focus:text-rose-500"
+					iconClass="after:bg-rose-900/30 group-focus:after:border-rose-300"
+					isActive={isFavourite}
+					activeClass="text-rose-500"
+					on:click={handleClick}
+					{isDisabled}
+				/>
+			</TweetButtonLike>
 			<TweetButton
 				icon="bx-upload"
 				buttonClass="hover:text-sky-500 focus:text-sky-500"

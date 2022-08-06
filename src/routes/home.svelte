@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
 	import type { Load } from "@sveltejs/kit";
 	import { collections, db } from "@root/firebase";
-	import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
+	import { collection, getDocs, limit, onSnapshot, orderBy, query } from "firebase/firestore";
 
 	export const load: Load = async () => {
 		const querySnapshot = await getDocs(
@@ -34,9 +34,20 @@
 	import { PopoverButton } from "malachite-ui/components";
 	import { user } from "@root/state";
 	import { isTweetDocument } from "$lib/predicate/db";
-	import { toRuntimeTweet } from "$lib/utils";
+	import { generateRuntimeTweets, toRuntimeTweet } from "$lib/utils";
+	import { onMount } from "svelte";
 
 	export let tweets: RuntimeTweet[] = [];
+
+	// ? temporal
+	onMount(() =>
+		onSnapshot(
+			query(collection(db, collections.tweets), orderBy("createdAt", "desc"), limit(10)),
+			(collectionSnapshot) => {
+				tweets = generateRuntimeTweets(collectionSnapshot);
+			}
+		)
+	);
 </script>
 
 <svelte:head>

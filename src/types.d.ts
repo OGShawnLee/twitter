@@ -14,6 +14,7 @@ interface TweetDocument extends DraftTweet {
 	user: UserHeader;
 	stats: TweetStats;
 	hasMedia: boolean;
+	likedBy: string[]; // uid[] -> may not scale well but we worry about that later
 }
 
 interface TweetStats {
@@ -23,8 +24,12 @@ interface TweetStats {
 }
 
 interface RuntimeTweet extends TweetDocument {
-	isFavourite: boolean; // current user has favourited this tweet?
 	createdAt: string;
+}
+
+interface UpdatableTweetDocument extends Omit<TweetDocument, "id" | "stats"> {
+	likedBy: FieldValue;
+	stats: ToFieldValue<TweetStats>;
 }
 
 type WhoCanReply = "EVERYONE" | "FOLLOWED" | "MENTIONED";
@@ -75,3 +80,8 @@ interface UpdatableUserDocument extends Omit<UserDocument, "uid" | "stats" | "wh
 		tweetCount?: FieldValue;
 	};
 }
+
+// Utility
+type ToFieldValue<T> = {
+	[P in keyof T]?: FieldValue;
+};

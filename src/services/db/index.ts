@@ -2,12 +2,14 @@ import type { User } from "firebase/auth";
 import type {
 	DraftTweet,
 	TweetDocument,
+	UpdatableTweetDocument,
 	UpdatableUserDocument,
 	UserDocument,
 	UserDocumentTimestamp,
 	WhoCanReply
 } from "@root/types";
 import type { Timestamp } from "firebase/firestore";
+import { arrayRemove, arrayUnion } from "firebase/firestore";
 import {
 	collection,
 	doc,
@@ -82,6 +84,7 @@ function createTweetDocumentObject(
 		text,
 		imageURL: null,
 		hasMedia: false,
+		likedBy: [],
 		user: {
 			uid: user.uid,
 			name: user.name,
@@ -153,4 +156,45 @@ export function getUserDocumentWithDisplayName(displayName: string) {
 		if (isUserDocument(data)) return data;
 		else throw new Error("INVALID USER DOCUMENT");
 	});
+}
+
+export async function handleLikeTweet(configuration: {
+	uid: string;
+	isFavourite: boolean;
+	tweet: Pick<TweetDocument, "id" | "user" | "stats">;
+	onDislike?: () => void;
+	onLike?: () => void;
+}) {
+	const { uid, isFavourite, tweet, onDislike, onLike } = configuration;
+
+	if (uid === tweet.user.uid) return;
+	if (isFavourite) {
+		if (tweet.stats.favouritedCount <= 0) return;
+		await dislikeTweet(tweet.id, uid);
+		onLike?.();
+	} else {
+		await likeTweet(tweet.id, uid);
+		onDislike?.();
+	}
+}
+
+export function likeTweet(id: string, uid: string) {
+	return updateTweetDocument(id, {
+		likedBy: arrayUnion(uid),
+		stats: { favouritedCount: increment(1) }
+	});
+}
+
+export function dislikeTweet(id: string, uid: string) {
+	return updateTweetDocument(id, {
+		likedBy: arrayRemove(uid),
+		stats: { favouritedCount: increment(-1) }
+	});
+}
+
+function updateTweetDocument<K extends keyof Omit<TweetDocument, "id">>(
+	id: string,
+	data: Pick<UpdatableTweetDocument, K>
+) {
+	return setDoc(doc(db, collections.tweets, id), data, { merge: true });
 }

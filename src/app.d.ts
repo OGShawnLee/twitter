@@ -12,3 +12,5 @@ declare namespace App {
 		uid: string;
 	}
 }
+
+type Predicate<T> = (value: unknown) => value is T;
