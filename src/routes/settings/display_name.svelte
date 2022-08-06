@@ -37,9 +37,7 @@
 		if ($user && finalDisplayName) {
 			const displayName = finalDisplayName;
 			disabled = true;
-			const finalError = (
-				await changeDisplayName($user.document.uid, toUnderscore(displayName))
-			)[1];
+			const finalError = (await changeDisplayName(toUnderscore(displayName), $user.document))[1];
 
 			if (finalError instanceof Error) return (error = finalError.message);
 			else if (isString(finalError)) return (error = finalError);

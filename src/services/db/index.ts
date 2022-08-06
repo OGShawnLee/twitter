@@ -20,7 +20,8 @@ import {
 	serverTimestamp,
 	setDoc,
 	updateDoc,
-	where
+	where,
+	writeBatch
 } from "firebase/firestore";
 import { useAwait } from "$lib/hooks";
 import { collections, db, storage } from "@root/firebase";
@@ -29,14 +30,27 @@ import { joinWithIDs, toUnderscore } from "$lib/utils";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { isString } from "malachite-ui/predicate";
 
-export function changeDisplayName(uid: string, displayName: string) {
+export function changeDisplayName(displayName: string, user: UserDocument) {
 	return useAwait(async () => {
 		const querySnapshot = await getDocs(
 			query(collection(db, collections.users), where("displayName", "==", displayName))
 		);
 
 		if (querySnapshot.size >= 1) throw new Error("Display Name has been already taken.");
-		else updateDoc(doc(db, collections.users, uid), { displayName });
+		else {
+			// ? we should probably handle this on the server with a firebase function
+
+			const batch = writeBatch(db);
+			const tweets = await getDocs(
+				query(collection(db, collections.tweets), where("user.uid", "==", user.uid))
+			);
+
+			batch.update(doc(db, collections.users, user.uid), { displayName });
+			tweets.docs.forEach((document) => {
+				batch.update(doc(db, collections.tweets, document.id), { user: { ...user, displayName } });
+			});
+			return batch.commit();
+		}
 	});
 }
 
