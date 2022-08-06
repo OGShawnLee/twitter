@@ -1,6 +1,7 @@
 export { default as ButtonRounded } from "./ButtonRounded.svelte";
 export { default as Header } from "./Header.svelte";
 export { default as InputGroup } from "./InputGroup.svelte";
+export { default as InputImage } from "./InputImage.svelte";
 export { default as MobileNavigationLink } from "./MobileNavigationLink.svelte";
 export { default as PasswordToggler } from "./PasswordToggler.svelte";
 export { default as Separator } from "./Separator.svelte";

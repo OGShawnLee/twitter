@@ -28,12 +28,11 @@
 </script>
 
 <script lang="ts">
-	import { ButtonRounded, TweetComposeMenuItem } from "$lib/components";
+	import { ButtonRounded, InputImage, TweetComposeMenuItem } from "$lib/components";
 	import { Menu, MenuButton, MenuItem } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
 	import { hideScrollbar } from "$lib/actions";
-	import { getImageFilePathURL } from "$lib/utils";
 	import { user } from "@root/state";
 
 	export let value: string | null = "";
@@ -41,14 +40,6 @@
 	export let imagePathURL: string | null = null;
 
 	const setCanReply = useChooseWhoCanReply((target) => (canReply = target));
-
-	let files: FileList | null = null;
-	let fileInputRef: HTMLInputElement;
-
-	$: file = files?.item(0);
-	$: if (file) {
-		getImageFilePathURL(file).then((imagePath) => (imagePathURL = imagePath));
-	}
 
 	$: charCount = value?.length ?? 0;
 	$: textColour = getCharCountColour(charCount);
@@ -162,11 +153,7 @@
 
 		<div class="w-full | flex items-center justify-between">
 			<div class="flex items-center gap-3">
-				<button class="text-sky-600" on:click={() => fileInputRef.click()}>
-					<i class="bx bx-image" />
-					<span class="sr-only">Add a Picture</span>
-					<input class="hidden" type="file" bind:files bind:this={fileInputRef} />
-				</button>
+				<InputImage bind:imagePathURL />
 				<button class="text-sky-600">
 					<i class="bx bx-poll" />
 					<span class="sr-only">Create a Poll</span>
