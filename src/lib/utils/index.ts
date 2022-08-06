@@ -1,5 +1,6 @@
 import type { RuntimeTweet, TweetDocument } from "@root/types";
-import type { QuerySnapshot } from "firebase/firestore";
+import type { CollectionReference, QuerySnapshot } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { isValidImageFileType } from "$lib/predicate";
 import { isTweetDocument } from "$lib/predicate/db";
 import { isString } from "malachite-ui/predicate";
@@ -23,6 +24,20 @@ export function getImageFilePathURL(file: File) {
 			if (isString(imageResult)) resolve(imageResult);
 			else reject("Invalid Image");
 		};
+	});
+}
+
+export async function joinWithIDs<T>(
+	collection: CollectionReference,
+	ids: string[],
+	predicate: (document: unknown) => document is T
+) {
+	const readList = ids.map((id) => getDoc(doc(collection, id)));
+	const result = await Promise.all(readList);
+	return result.map((document) => {
+		const data = document.data();
+		if (predicate(data)) return data;
+		else throw new Error("Invalid Document Type");
 	});
 }
 

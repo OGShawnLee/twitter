@@ -24,9 +24,10 @@ import {
 } from "firebase/firestore";
 import { useAwait } from "$lib/hooks";
 import { collections, db, storage } from "@root/firebase";
-import { isUserDocument } from "$lib/predicate/db";
-import { toUnderscore } from "$lib/utils";
+import { isTweetDocument, isUserDocument } from "$lib/predicate/db";
+import { joinWithIDs, toUnderscore } from "$lib/utils";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { isString } from "malachite-ui/predicate";
 
 export function changeDisplayName(uid: string, displayName: string) {
 	return useAwait(async () => {
@@ -129,6 +130,37 @@ export function createUserDocumentObject(user: User): UserDocumentTimestamp {
 			followingCount: 0
 		}
 	};
+}
+
+export function getTweetDocument(id: string, displayName: string) {
+	return useAwait(async () => {
+		const querySnapshot = await getDocs(
+			query(
+				collection(db, collections.tweets),
+				where("user.displayName", "==", displayName),
+				where("id", "==", id)
+			)
+		);
+
+		if (querySnapshot.empty) return null;
+		if (querySnapshot.size > 1) throw new Error("Tweet is not unique");
+
+		const document = querySnapshot.docs[0].data();
+		if (isTweetDocument(document)) return document;
+		else throw new Error("Invalid Tweet");
+	});
+}
+
+export async function getTweetLikedByUsers(id: string, displayName: string) {
+	return useAwait(async () => {
+		const [tweet, error] = await getTweetDocument(id, displayName);
+
+		if (error instanceof Error) throw error;
+		else if (isString(error)) throw new Error(error);
+		if (!tweet) return null;
+
+		return joinWithIDs(collection(db, collections.users), tweet.likedBy, isUserDocument);
+	});
 }
 
 export function getUserDocument(uid: string) {

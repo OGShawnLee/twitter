@@ -1,5 +1,19 @@
-<script>
+<script lang="ts" context="module">
+	import type { Load } from "@sveltejs/kit";
+	import { getTweetLikedByUsers } from "@root/services/db";
+
+	export const load: Load = async ({ params: { name, id } }) => {
+		const [users, error] = await getTweetLikedByUsers(id, name);
+		if (error) return { status: 500, error: { name: "Error", message: "Unable to Fetch Tweet" } };
+		return users ? { status: 200, props: { users } } : { status: 404 };
+	};
+</script>
+
+<script lang="ts">
+	import type { UserDocument } from "@root/types";
 	import { ButtonRounded, Header, UserCard } from "$lib/components";
+
+	export let users: UserDocument[] = [];
 </script>
 
 <svelte:head>
@@ -15,17 +29,7 @@
 </Header>
 
 <main class="max-w-md w-full mx-auto mt-24 mb-12">
-	<UserCard displayName="OGShawnLee" name="Shawn Lee">
-		Quisque ac pretium eros. Suspendisse at faucibus ex. In eu ultrices est, vel eleifend mi. Nulla
-		at efficitur diam. Ut ultricies accumsan tempor.
-	</UserCard>
-	<UserCard displayName="OGShawnLee" name="Shawn Lee">
-		In eu ultrices est, vel eleifend mi. Nulla at efficitur diam. Ut ultricies accumsan tempor.
-	</UserCard>
-	<UserCard displayName="OGShawnLee" name="Shawn Lee">Quisque ac pretium eros.</UserCard>
-	<UserCard displayName="OGShawnLee" name="Shawn Lee">
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam maximus, lacus vel vulputate
-		consequat, mauris sapien faucibus nisl, et malesuada velit urna vitae tortor.
-	</UserCard>
-	<UserCard displayName="OGShawnLee" name="Shawn Lee">Ut ultricies accumsan tempor.</UserCard>
+	{#each users as user (user.uid)}
+		<UserCard {user} />
+	{/each}
 </main>
