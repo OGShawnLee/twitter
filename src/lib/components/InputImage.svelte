@@ -12,7 +12,7 @@
 	}
 </script>
 
-<button class="text-sky-600" on:click={() => fileInputRef.click()}>
+<button class="text-sky-600" type="button" on:click={() => fileInputRef.click()}>
 	<i class="bx bx-image" />
 	<span class="sr-only">Add a Picture</span>
 	<input class="hidden" type="file" bind:files bind:this={fileInputRef} />

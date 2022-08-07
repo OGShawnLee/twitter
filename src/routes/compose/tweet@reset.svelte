@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { WhoCanReply } from "@root/types";
 	import { ButtonRounded, Header, TweetCompose } from "$lib/components";
-	import { createTweetDocument } from "@root/services/db";
+	import { sendTweet } from "@root/services/db";
 	import { user } from "@root/state";
 
 	let canReply: WhoCanReply;
@@ -18,7 +18,7 @@
 		const initialCanReply = canReply;
 		canReply = "EVERYONE";
 
-		await createTweetDocument($user.document, {
+		await sendTweet($user.document, {
 			text: initialText,
 			imageURL: initialImagePathURL,
 			whoCanReply: initialCanReply

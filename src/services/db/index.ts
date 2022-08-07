@@ -1,12 +1,12 @@
 import type { User } from "firebase/auth";
 import type {
 	DraftTweet,
+	NewTweetOptions,
 	TweetDocument,
 	UpdatableTweetDocument,
 	UpdatableUserDocument,
 	UserDocument,
-	UserDocumentTimestamp,
-	WhoCanReply
+	UserDocumentTimestamp
 } from "@root/types";
 import type { Timestamp } from "firebase/firestore";
 import { arrayRemove, arrayUnion } from "firebase/firestore";
@@ -44,27 +44,37 @@ export function changeDisplayName(displayName: string, user: UserDocument) {
 			const tweets = await getDocs(
 				query(collection(db, collections.tweets), where("user.uid", "==", user.uid))
 			);
+			const replies = await getDocs(
+				query(
+					collection(db, collections.tweets),
+					where("inReplyToDisplayName", "==", user.displayName)
+				)
+			);
 
 			batch.update(doc(db, collections.users, user.uid), { displayName });
 			tweets.docs.forEach((document) => {
-				batch.update(doc(db, collections.tweets, document.id), { user: { ...user, displayName } });
+				batch.update(doc(db, collections.tweets, document.id), {
+					user: { ...user, displayName }
+				});
+			});
+			replies.forEach((document) => {
+				batch.update(doc(db, collections.tweets, document.id), {
+					inReplyToDisplayName: displayName
+				});
 			});
 			return batch.commit();
 		}
 	});
 }
 
-export function createTweetDocument(
-	user: UserDocument,
-	{ imageURL, text, whoCanReply }: DraftTweet
-) {
-	return useAwait(async () => {
-		const collectionRef = collection(db, collections.tweets);
-		const docReference = doc(collectionRef);
+export function sendTweet(userDoc: UserDocument, draftTweet: DraftTweet) {
+	const { imageURL, text, whoCanReply, inReplyTo = {} } = draftTweet;
 
+	return useAwait(async () => {
+		const docReference = doc(collection(db, collections.tweets));
 		await setDoc(
 			docReference,
-			createTweetDocumentObject(user, { id: docReference.id, text, whoCanReply })
+			createTweetDocumentObject(userDoc, { id: docReference.id, text, whoCanReply, inReplyTo })
 		);
 
 		if (imageURL) {
@@ -74,10 +84,8 @@ export function createTweetDocument(
 			await updateDoc(docReference, { imageURL: imagePathURL, hasMedia: true });
 		}
 
-		await updateUserDocument(user.uid, {
-			stats: {
-				tweetCount: increment(1)
-			}
+		await updateUserDocument(userDoc.uid, {
+			stats: { tweetCount: increment(1) }
 		});
 	});
 }
@@ -91,7 +99,7 @@ function updateUserDocument<K extends keyof Omit<UserDocument, "uid">>(
 
 function createTweetDocumentObject(
 	user: UserDocument,
-	{ id, text, whoCanReply }: { id: string; text: string | null; whoCanReply: WhoCanReply }
+	{ id, text, whoCanReply = "EVERYONE", inReplyTo }: NewTweetOptions
 ): TweetDocument {
 	return {
 		id,
@@ -113,7 +121,11 @@ function createTweetDocumentObject(
 			retweetCount: 0,
 			replyCount: 0
 		},
-		whoCanReply
+		whoCanReply,
+		isReply: inReplyTo !== null,
+		inReplyToDisplayName: inReplyTo?.displayName || null,
+		inReplyToID: inReplyTo?.id || null,
+		inReplyToUID: inReplyTo?.uid || null
 	};
 }
 

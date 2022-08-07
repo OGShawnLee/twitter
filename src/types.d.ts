@@ -6,15 +6,33 @@ interface DraftTweet {
 	text: string | null;
 	imageURL: string | null;
 	whoCanReply: WhoCanReply;
+	inReplyTo?: TweetReply;
 }
 
-interface TweetDocument extends DraftTweet {
+interface NewTweetOptions {
+	id: string;
+	text: string | null;
+	whoCanReply?: WhoCanReply;
+	inReplyTo?: TweetReply;
+}
+
+interface TweetDocument extends Omit<DraftTweet, "inReplyTo"> {
 	id: string;
 	createdAt: Timestamp;
 	user: UserHeader;
 	stats: TweetStats;
 	hasMedia: boolean;
 	likedBy: string[]; // uid[] -> may not scale well but we worry about that later
+	isReply: boolean;
+	inReplyToDisplayName: string | null;
+	inReplyToUID: string | null;
+	inReplyToID: string | null;
+}
+
+interface TweetReply {
+	id?: string;
+	uid?: string;
+	displayName?: string;
 }
 
 interface TweetStats {

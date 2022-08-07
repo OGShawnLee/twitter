@@ -255,7 +255,7 @@
 		</div>
 
 		{#if $user?.document}
-			<TweetReplyInput displayName={name} />
+			<TweetReplyInput displayName={name} id={initialTweet.id} uid={initialTweet.user.uid} />
 		{/if}
 	</div>
 

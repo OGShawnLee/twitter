@@ -30,7 +30,11 @@ export function isRuntimeTweet(val: unknown): val is RuntimeTweet {
 		imageURL: isStringOrNull,
 		whoCanReply: isWhoCanReply,
 		hasMedia: isBoolean,
-		likedBy: Array.isArray
+		likedBy: Array.isArray,
+		isReply: isBoolean,
+		inReplyToDisplayName: isStringOrNull,
+		inReplyToID: isStringOrNull,
+		inReplyToUID: isStringOrNull
 	});
 }
 
@@ -44,7 +48,11 @@ export function isTweetDocument(val: unknown): val is TweetDocument {
 		imageURL: isStringOrNull,
 		whoCanReply: isWhoCanReply,
 		hasMedia: isBoolean,
-		likedBy: Array.isArray
+		likedBy: Array.isArray,
+		isReply: isBoolean,
+		inReplyToDisplayName: isStringOrNull,
+		inReplyToID: isStringOrNull,
+		inReplyToUID: isStringOrNull
 	});
 }
 
