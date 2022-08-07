@@ -4,6 +4,7 @@
 	import { collection, doc, getDocs, query, where } from "firebase/firestore";
 	import { isRuntimeTweet, isTweetDocument } from "$lib/predicate/db";
 	import { toRuntimeTweet } from "$lib/utils";
+	import { getTweetReplies } from "@root/services/db";
 
 	export const load: Load = async ({ params: { name, id } }) => {
 		const querySnapshot = await getDocs(
@@ -20,7 +21,7 @@
 		if (isTweetDocument(docData))
 			return {
 				status: 200,
-				props: { name, initialTweet: toRuntimeTweet(docData) }
+				props: { name, initialTweet: toRuntimeTweet(docData), replies: await getTweetReplies(id) }
 			};
 		else
 			return {
@@ -36,7 +37,7 @@
 <script lang="ts">
 	import type { RuntimeTweet } from "@root/types";
 	import { MobileNavigation, TweetReplyInput } from "$lib/layout";
-	import { ButtonRounded, Header, MobileNavigationLink } from "$lib/components";
+	import { ButtonRounded, Header, MobileNavigationLink, Tweet } from "$lib/components";
 	import {
 		TweetButton,
 		TweetButtonLike,
@@ -56,6 +57,7 @@
 
 	export let name: string;
 	export let initialTweet: RuntimeTweet;
+	export let replies: RuntimeTweet[];
 
 	const tweet = useClientDocumentSnapshot<RuntimeTweet>({
 		ref: doc(db, collections.tweets, initialTweet.id),
@@ -263,9 +265,9 @@
 		<h2 class="sr-only">Replies</h2>
 
 		<div class="grid gap-12">
-			<!-- <Tweet />
-			<Tweet />
-			<Tweet /> -->
+			{#each replies as reply}
+				<Tweet tweet={reply} />
+			{/each}
 		</div>
 	</section>
 </main>
