@@ -1,9 +1,5 @@
 <script lang="ts" context="module">
 	import type { Load } from "@sveltejs/kit";
-	import { collections, db } from "@root/firebase";
-	import { doc } from "firebase/firestore";
-	import { isRuntimeTweet, isTweetDocument } from "$lib/predicate/db";
-	import { toRuntimeTweet } from "$lib/utils";
 	import { getTweetDocument, getTweetReplies } from "@root/services/db";
 
 	export const load: Load = async ({ params: { name, id } }) => {
@@ -11,7 +7,7 @@
 		if (err) return { status: 500 };
 		if (tweet) {
 			const [replies = []] = await getTweetReplies(id);
-			return { status: 200, props: { name, initialTweet: tweet, replies } };
+			return { status: 200, props: { name, tweet, replies } };
 		}
 		return { status: 404 };
 	};
@@ -34,27 +30,17 @@
 	import { cubicOut } from "svelte/easing";
 	import { hideScrollbar } from "$lib/actions";
 	import { user } from "@root/state";
-	import { useClientDocumentSnapshot } from "$lib/hooks";
 
 	$: path = $page.url.pathname;
 
 	export let name: string;
-	export let initialTweet: RuntimeTweet;
+	export let tweet: RuntimeTweet;
 	export let replies: RuntimeTweet[];
-
-	const tweet = useClientDocumentSnapshot<RuntimeTweet>({
-		ref: doc(db, collections.tweets, initialTweet.id),
-		initialValue: initialTweet,
-		isCorrectType: isRuntimeTweet,
-		useMutation: (document) => {
-			if (isTweetDocument(document)) return toRuntimeTweet(document);
-		}
-	});
 </script>
 
 <svelte:head>
-	{#if $tweet.text}
-		<title>@{name} on Twitter: "{$tweet.text}"</title>
+	{#if tweet.text}
+		<title>@{name} on Twitter: "{tweet.text}"</title>
 	{:else}
 		<title>@{name} on Twitter</title>
 	{/if}
@@ -69,25 +55,25 @@
 		<div class="flex items-center gap-3">
 			<h1 class="text-xl font-medium">Tweet</h1>
 		</div>
-		<span class="text-xs text-zinc-500">@{$tweet.user.displayName}</span>
+		<span class="text-xs text-zinc-500">@{tweet.user.displayName}</span>
 	</div>
 </Header>
 
 <main class="max-w-md w-full mx-auto px-6 my-24 | grid gap-5">
 	<div>
-		<TweetHeader user={$tweet.user}>
+		<TweetHeader user={tweet.user}>
 			<TweetMenuItem icon="bx-user-x">
-				<span> Unfollow <b>@{$tweet.user.displayName}</b> </span>
+				<span> Unfollow <b>@{tweet.user.displayName}</b> </span>
 			</TweetMenuItem>
 			<TweetMenuItem icon="bx-detail">
-				<span> Add/remove <b>@{$tweet.user.displayName}</b> from lists </span>
+				<span> Add/remove <b>@{tweet.user.displayName}</b> from lists </span>
 			</TweetMenuItem>
 			<TweetMenuItem icon="bx-volume-mute">
-				<span> Mute <b>@{$tweet.user.displayName}</b> </span>
+				<span> Mute <b>@{tweet.user.displayName}</b> </span>
 			</TweetMenuItem>
 			<TweetMenuItem icon="bx-volume-mute" text="Mute this conversation" />
 			<TweetMenuItem icon="bx-block" isDanger>
-				<span> Block <b>@{$tweet.user.displayName}</b> </span>
+				<span> Block <b>@{tweet.user.displayName}</b> </span>
 			</TweetMenuItem>
 			<TweetMenuItem icon="bx-code-alt" text="Embed Tweet" />
 			<TweetMenuItem icon="bxs-radiation" text="Report Tweet" isDanger />
@@ -107,12 +93,12 @@
 	<section class="grid gap-5">
 		<h2 class="sr-only">Tweet Content</h2>
 
-		{#if $tweet.text}
-			<p class="leading-relaxed">{$tweet.text}</p>
+		{#if tweet.text}
+			<p class="leading-relaxed">{tweet.text}</p>
 		{/if}
 
-		{#if $tweet.imageURL}
-			<img class="rounded-lg" src={$tweet.imageURL} alt="" />
+		{#if tweet.imageURL}
+			<img class="rounded-lg" src={tweet.imageURL} alt="" />
 		{/if}
 	</section>
 
@@ -127,15 +113,15 @@
 			<span> Twitter Web App </span>
 		</div>
 
-		{#if $tweet.stats.favouritedCount || $tweet.stats.replyCount || $tweet.stats.retweetCount}
+		{#if tweet.stats.favouritedCount || tweet.stats.replyCount || tweet.stats.retweetCount}
 			<div class="py-2.5 | flex items-center justify-between | border-b-2 border-zinc-800">
-				<TweetStat href="{path}/retweets" value={$tweet.stats.retweetCount} stat="Retweets" />
+				<TweetStat href="{path}/retweets" value={tweet.stats.retweetCount} stat="Retweets" />
 				<TweetStat
 					href="{path}/retweets/with_comments"
-					value={$tweet.stats.replyCount}
+					value={tweet.stats.replyCount}
 					stat="Quote Tweets"
 				/>
-				<TweetStat href="{path}/likes" value={$tweet.stats.favouritedCount} stat="Likes" />
+				<TweetStat href="{path}/likes" value={tweet.stats.favouritedCount} stat="Likes" />
 			</div>
 		{/if}
 
@@ -185,7 +171,7 @@
 				</div>
 			</Menu>
 
-			<TweetButtonLike tweet={$tweet} let:handleClick let:isDisabled let:isFavourite>
+			<TweetButtonLike {tweet} let:handleClick let:isDisabled let:isFavourite>
 				<TweetButton
 					icon="bx-heart"
 					backgroundSize="2.5rem"
@@ -240,7 +226,7 @@
 		</div>
 
 		{#if $user?.document}
-			<TweetReplyInput displayName={name} id={initialTweet.id} uid={initialTweet.user.uid} />
+			<TweetReplyInput displayName={name} id={tweet.id} uid={tweet.user.uid} />
 		{/if}
 	</div>
 
