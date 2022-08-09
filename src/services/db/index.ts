@@ -33,16 +33,19 @@ import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { isString } from "malachite-ui/predicate";
 
 export async function getTweetReplies(id: string) {
-	const querySnapshot = await getDocs(
-		query(
-			collection(db, collections.tweets),
-			where("isReply", "==", true),
-			where("inReplyToID", "==", id),
-			orderBy("createdAt", "desc"),
-			limit(10)
-		)
-	);
-	return generateRuntimeTweets(querySnapshot);
+	return useAwait(async () => {
+		const querySnapshot = await getDocs(
+			query(
+				collection(db, collections.tweets),
+				where("isReply", "==", true),
+				where("inReplyToID", "==", id),
+				orderBy("createdAt", "desc"),
+				limit(10)
+			)
+		);
+
+		return generateRuntimeTweets(querySnapshot);
+	})
 }
 
 export function changeDisplayName(displayName: string, user: UserDocument) {

@@ -1,36 +1,19 @@
 <script lang="ts" context="module">
 	import type { Load } from "@sveltejs/kit";
 	import { collections, db } from "@root/firebase";
-	import { collection, doc, getDocs, query, where } from "firebase/firestore";
+	import { doc } from "firebase/firestore";
 	import { isRuntimeTweet, isTweetDocument } from "$lib/predicate/db";
 	import { toRuntimeTweet } from "$lib/utils";
-	import { getTweetReplies } from "@root/services/db";
+	import { getTweetDocument, getTweetReplies } from "@root/services/db";
 
 	export const load: Load = async ({ params: { name, id } }) => {
-		const querySnapshot = await getDocs(
-			query(
-				collection(db, collections.tweets),
-				where("user.displayName", "==", name),
-				where("id", "==", id)
-			)
-		);
-
-		if (querySnapshot.empty) return { status: 404 };
-
-		const docData = querySnapshot.docs[0].data();
-		if (isTweetDocument(docData))
-			return {
-				status: 200,
-				props: { name, initialTweet: toRuntimeTweet(docData), replies: await getTweetReplies(id) }
-			};
-		else
-			return {
-				status: 500,
-				error: {
-					name: "Type Error",
-					message: "Invalid Tweet Type"
-				}
-			};
+		const [tweet, err] = await getTweetDocument(id, name);
+		if (err) return { status: 500 };
+		if (tweet) {
+			const [replies = []] = await getTweetReplies(id);
+			return { status: 200, props: { name, initialTweet: tweet, replies } };
+		}
+		return { status: 404 };
 	};
 </script>
 
