@@ -51,7 +51,7 @@
 	<header>
 		<div class="h-36">
 			{#if userDoc.bannerURL}
-				<img class="w-full h-full" src={userDoc.bannerURL} alt="" />
+				<img class="w-full h-full object-center object-cover" src={userDoc.bannerURL} alt="" />
 			{:else}
 				<div class="w-full h-full bg-zinc-800" />
 			{/if}
