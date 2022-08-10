@@ -67,9 +67,12 @@
 
 			<div class="ml-auto | flex items-center gap-3">
 				{#if isUserProfile}
-					<button class="h-9.5 px-8 | border-2 border-zinc-700 rounded-full text-sm font-medium">
+					<a
+						class="h-9.5 px-8 | flex items-center | border-2 border-zinc-700 rounded-full text-sm font-medium"
+						href="/settings/profile"
+					>
 						Edit Profile
-					</button>
+					</a>
 				{:else}
 					{#if $user}
 						<Menu let:items let:isOpen>

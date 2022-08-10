@@ -3,25 +3,36 @@
 	outline: none;
 }
 
-a.button-rounded {
+a.button-rounded,
+.button-rounded.center {
 	display: grid;
 	place-content: center;
 }
 
 .button-rounded.size-12 {
 	width: 3rem;
+	min-width: 3rem;
 	height: 3rem;
 	min-height: 3rem;
 }
 
 .button-rounded.size-10 {
 	width: 2.5rem;
+	min-width: 2.5rem;
 	height: 2.5rem;
 	min-height: 2.5rem;
 }
 
 .button-rounded.background-zinc {
 	@apply bg-zinc-800 hover:bg-zinc-700 focus:(ring-2 ring-white);
+}
+
+div.button-rounded.bg-zinc-900\/60 {
+	@apply focus-within:(ring-2 ring-white);
+}
+
+.button-rounded.bg-zinc-900\/60 {
+	@apply focus:(ring-2 ring-white);
 }
 
 .button-rounded.background-sky {

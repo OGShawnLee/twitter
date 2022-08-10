@@ -4,32 +4,34 @@
 
 	export let id: string;
 	export let label = id;
-	export let icon: string;
-	export let charCount: number | undefined = undefined;
-	export let charLimit: string | undefined = undefined;
+	export let icon: string | undefined = undefined;
+	export let charCount: number | string | undefined = undefined;
+	export let charLimit: number | string | undefined = undefined;
 	export let error: string | null = null;
 	export let success: string | null = null;
+	export let fontWeight = "font-medium";
+
+	$: className = `w-full h-full px-3 | bg-transparent outline-none ${fontWeight} placeholder-zinc-500`;
 </script>
 
 <div class="grid gap-4">
 	<div class="grid gap-1.25">
 		<div class="flex items-center justify-between">
 			<label class="capitalize" for={id}>{label}</label>
-			{#if isNumber(charCount) && isString(charLimit) && !isEmpty(charLimit)}
+			{#if isNumber(charCount) && isNumber(charLimit)}
 				<span class="text-sm text-zinc-400">
 					{charCount} / {charLimit}
 				</span>
 			{/if}
 		</div>
 		<div class="flex group | border-2 border-zinc-800 focus-within:border-white">
-			<div class="w-12 min-w-12 h-12 | grid place-content-center | bg-zinc-800 text-sky-500">
-				<i class="bx {icon} | text-2xl text-sky-500 group-focus-within:text-white" />
-			</div>
+			{#if icon}
+				<div class="w-12 min-w-12 h-12 | grid place-content-center | bg-zinc-800 text-sky-500">
+					<i class="bx {icon} | text-2xl text-sky-500 group-focus-within:text-white" />
+				</div>
+			{/if}
 			<!-- svelte-ignore invalid-html-attribute -->
-			<slot
-				className="w-full h-full px-3 | bg-transparent outline-none font-medium placeholder-zinc-500"
-				{id}
-			/>
+			<slot {className} {id} />
 		</div>
 		{#if error}
 			<div class="mt-3 | flex items-center gap-1.5" transition:slide|local>
