@@ -1,28 +1,65 @@
-<script lang="ts">
-	import "@root/styles/button-rounded.css";
-	import { Header, InputGroup, InputImage } from "$lib/components";
-	import { user } from "@root/state";
-	import { onMount } from "svelte";
-
+<script lang="ts" context="module">
 	const MAX_NAME_LENGTH = 50;
 	const MAX_DESCRIPTION_LENGTH = 160;
 	const MAX_LOCATION_LENGTH = 30;
 	const MAX_WEBSITE_LENGTH = 100;
 
+	function getLengthErrorMessage(type: string, maxLength: number) {
+		return `${type} cannot be longer than ${maxLength} characters!`;
+	}
+</script>
+
+<script lang="ts">
+	import "@root/styles/button-rounded.css";
+	import { Header, InputGroup, InputImage } from "$lib/components";
+	import { DoubleBounce } from "svelte-loading-spinners";
+	import { updateUserProfile } from "@root/services/db";
+	import { user } from "@root/state";
+	import { clearString } from "malachite-ui/utils";
+	import { isEmpty } from "malachite-ui/predicate";
+
 	let bannerURL = $user?.document.bannerURL || null;
 	let imagePathURL = $user?.document.imageURL || null;
-	let name = $user?.document.name || "";
-	let description = $user?.document.description || "";
-	let location = $user?.document.location || "";
-	let website = $user?.document.location || "";
+	let name = $user?.document.name || "",
+		nameError: string | null = null;
+	let description = $user?.document.description || "",
+		descriptionError: string | null = null;
+	let location = $user?.document.location || "",
+		locationError: string | null = null;
+	let url = $user?.document.url || "",
+		urlError: string | null = null;
+	let isSaving = false;
 
-	onMount(() => {
-		imagePathURL = $user?.document.imageURL || null;
-		name = $user?.document.name || "";
-		description = $user?.document.description || "";
-		location = $user?.document.location || "";
-		website = $user?.document.location || "";
-	});
+	async function updateProfile() {
+		if (!$user) return;
+		if (name === null || isEmpty(name)) {
+			return (nameError = "Name cannot be empty!");
+		}
+
+		if (name.length > MAX_NAME_LENGTH)
+			return (nameError = getLengthErrorMessage("Name", MAX_NAME_LENGTH));
+
+		if (description.length > MAX_DESCRIPTION_LENGTH)
+			return (descriptionError = getLengthErrorMessage("Description", MAX_DESCRIPTION_LENGTH));
+
+		if (location.length > MAX_LOCATION_LENGTH)
+			return (locationError = getLengthErrorMessage("Location", MAX_LOCATION_LENGTH));
+
+		if (url.length > MAX_WEBSITE_LENGTH)
+			return (urlError = getLengthErrorMessage("Website", MAX_WEBSITE_LENGTH));
+
+		isSaving = true;
+		await updateUserProfile($user.document, {
+			bannerURL,
+			imageURL: imagePathURL,
+			name: clearString(name),
+			description,
+			location,
+			url
+		});
+		isSaving = false;
+		// TODO: HANDLE ERRORS
+	}
 </script>
 
 <svelte:head>
@@ -42,7 +79,16 @@
 			<span class="text-xs text-zinc-500">@{$user?.document?.displayName}</span>
 		</div>
 	</div>
-	<button class="py-2 px-6 | bg-white rounded-full text-zinc-900 font-medium"> Save </button>
+	{#if isSaving}
+		<DoubleBounce size="32" color="#0EA5E9" />
+	{:else}
+		<button
+			class="py-2 px-6 | bg-white rounded-full text-zinc-900 font-medium text-sky-500"
+			on:click={updateProfile}
+		>
+			Save
+		</button>
+	{/if}
 </Header>
 
 <main class="mt-20 mb-12 | flex flex-col gap-0">
@@ -98,6 +144,7 @@
 				icon="bx-user-circle"
 				charCount={name.length}
 				charLimit={MAX_NAME_LENGTH}
+				error={nameError}
 				let:className
 				let:id
 			>
@@ -108,6 +155,7 @@
 				fontWeight="font-normal"
 				charCount={description.length}
 				charLimit={MAX_DESCRIPTION_LENGTH}
+				error={descriptionError}
 				let:className
 				let:id
 			>
@@ -121,10 +169,11 @@
 			<InputGroup
 				id="location"
 				icon="bx-map"
-				let:className
-				let:id
 				charCount={location.length}
 				charLimit={MAX_LOCATION_LENGTH}
+				error={locationError}
+				let:className
+				let:id
 			>
 				<input
 					class={className}
@@ -137,18 +186,13 @@
 			<InputGroup
 				id="website"
 				icon="bx-link"
+				charCount={url.length}
+				charLimit={MAX_WEBSITE_LENGTH}
+				error={urlError}
 				let:className
 				let:id
-				charCount={website.length}
-				charLimit={MAX_WEBSITE_LENGTH}
 			>
-				<input
-					class={className}
-					{id}
-					type="text"
-					bind:value={website}
-					maxlength={MAX_WEBSITE_LENGTH}
-				/>
+				<input class={className} {id} type="text" bind:value={url} maxlength={MAX_WEBSITE_LENGTH} />
 			</InputGroup>
 		</div>
 	</div>

@@ -32,6 +32,8 @@ import { generateRuntimeTweets, joinWithIDs, toUnderscore } from "$lib/utils";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { isString } from "malachite-ui/predicate";
 
+export { updateUserProfile } from "./user";
+
 export async function getTweetReplies(id: string) {
 	return useAwait(async () => {
 		const querySnapshot = await getDocs(
@@ -45,7 +47,7 @@ export async function getTweetReplies(id: string) {
 		);
 
 		return generateRuntimeTweets(querySnapshot);
-	})
+	});
 }
 
 export function changeDisplayName(displayName: string, user: UserDocument) {
@@ -108,7 +110,7 @@ export function sendTweet(userDoc: UserDocument, draftTweet: DraftTweet) {
 	});
 }
 
-function updateUserDocument<K extends keyof Omit<UserDocument, "uid">>(
+export function updateUserDocument<K extends keyof Omit<UserDocument, "uid">>(
 	uid: string,
 	data: Pick<UpdatableUserDocument, K>
 ) {
