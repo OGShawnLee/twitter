@@ -231,7 +231,9 @@
 					transition:fly|local={{ y: 250 }}
 				>
 					<TweetMenuItem icon="bx-envelope" text="Send via Direct Message" />
-					<TweetMenuItem icon="bx-bookmark" text="Bookmark" />
+					{#if $user}
+						<TweetMenuItem icon="bx-bookmark" text="Bookmark" />
+					{/if}
 					<TweetMenuItem icon="bx-link" text="Copy link to Tweet" />
 					<MenuItem
 						as="button"
