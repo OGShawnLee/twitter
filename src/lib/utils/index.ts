@@ -1,16 +1,22 @@
 import type { RuntimeTweet, TweetDocument } from "@root/types";
-import type { CollectionReference, QuerySnapshot } from "firebase/firestore";
+import { type CollectionReference, QuerySnapshot } from "firebase/firestore";
 import { doc, getDoc } from "firebase/firestore";
 import { isValidImageFileType } from "$lib/predicate";
 import { isTweetDocument } from "$lib/predicate/db";
 import { isString } from "malachite-ui/predicate";
 
-export function generateRuntimeTweets(querySnapshot: QuerySnapshot) {
-	return querySnapshot.docs.map((doc) => {
-		const docData = doc.data();
-		if (isTweetDocument(docData)) return toRuntimeTweet(docData);
-		else throw new TypeError("Invalid Tweet Document");
-	});
+export function generateRuntimeTweets(querySnapshot: QuerySnapshot): RuntimeTweet[];
+export function generateRuntimeTweets(documents: TweetDocument[]): RuntimeTweet[];
+
+export function generateRuntimeTweets(queryOrDocuments: QuerySnapshot | TweetDocument[]) {
+	if (queryOrDocuments instanceof QuerySnapshot) {
+		return queryOrDocuments.docs.map((doc) => {
+			const docData = doc.data();
+			if (isTweetDocument(docData)) return toRuntimeTweet(docData);
+			else throw new TypeError("Invalid Tweet Document");
+		});
+	}
+	return queryOrDocuments.map(toRuntimeTweet);
 }
 
 export function getImageFilePathURL(file: File) {

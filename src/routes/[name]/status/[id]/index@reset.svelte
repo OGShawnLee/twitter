@@ -1,13 +1,18 @@
 <script lang="ts" context="module">
 	import type { Load } from "@sveltejs/kit";
-	import { getTweetDocument, getTweetReplies } from "@root/services/db";
+	import { getTweetDocument, getTweetReplies, getTweetReplyingTo } from "@root/services/db";
+	import { generateRuntimeTweets } from "$lib/utils";
 
 	export const load: Load = async ({ params: { name, id } }) => {
 		const [tweet, err] = await getTweetDocument(id, name);
 		if (err) return { status: 500 };
 		if (tweet) {
 			const [replies = []] = await getTweetReplies(id);
-			return { status: 200, props: { name, tweet, replies } };
+			const replyingTo = await getTweetReplyingTo(tweet);
+			return {
+				status: 200,
+				props: { name, tweet, replies, replyingTo: generateRuntimeTweets(replyingTo) }
+			};
 		}
 		return { status: 404 };
 	};
@@ -36,6 +41,7 @@
 	export let name: string;
 	export let tweet: RuntimeTweet;
 	export let replies: RuntimeTweet[];
+	export let replyingTo: RuntimeTweet[];
 </script>
 
 <svelte:head>
@@ -60,6 +66,9 @@
 </Header>
 
 <main class="max-w-md w-full mx-auto px-6 my-24 | grid gap-5">
+	{#each replyingTo as tweet}
+		<Tweet {tweet} isReply />
+	{/each}
 	<div>
 		<TweetHeader user={tweet.user}>
 			<TweetMenuItem icon="bx-user-x">
@@ -92,6 +101,18 @@
 
 	<section class="grid gap-5">
 		<h2 class="sr-only">Tweet Content</h2>
+
+		{#if tweet.isReply && tweet.inReplyToDisplayName}
+			<span class="text-xs">
+				<span class="text-zinc-400"> Replying to </span>
+				<a
+					class="outline-none text-sky-500 font-medium hover:text-sky-400 focus:(underline underline-offset-3)"
+					href="/{tweet.inReplyToDisplayName}"
+				>
+					@{tweet.inReplyToDisplayName}
+				</a>
+			</span>
+		{/if}
 
 		{#if tweet.text}
 			<p class="leading-relaxed">{tweet.text}</p>

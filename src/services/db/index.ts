@@ -33,6 +33,7 @@ import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { isString } from "malachite-ui/predicate";
 
 export { updateUserProfile } from "./user";
+export { getTweetReplyingTo } from "./tweet";
 
 export async function getTweetReplies(id: string) {
 	return useAwait(async () => {
