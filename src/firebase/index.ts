@@ -25,4 +25,10 @@ export default app;
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
-export const collections = Object.freeze({ tweets: "Tweets", users: "Users" });
+export const collections = Object.freeze({
+	tweets: "Tweets",
+	users: "Users",
+	bookmarks(uid: string) {
+		return `${this.users}/${uid}/Bookmarks`;
+	}
+});

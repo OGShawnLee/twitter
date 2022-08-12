@@ -1,6 +1,7 @@
 export { default as Tweet } from "./Tweet.svelte";
 export { default as TweetButton } from "./Button.svelte";
 export { default as TweetButtonLike } from "./Button/Like.svelte";
+export { default as TweetButtonBookmark } from "./Button/Bookmark.svelte";
 export { default as TweetHeader } from "./Header.svelte";
 export { default as TweetMenuItem } from "./MenuItem.svelte";
 export { default as TweetMenuShare } from "./MenuShare.svelte";

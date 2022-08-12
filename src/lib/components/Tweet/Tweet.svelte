@@ -140,7 +140,7 @@
 				/>
 			</TweetButtonLike>
 
-			<TweetMenuShare let:button>
+			<TweetMenuShare id={tweet.id} loaderSize={18} let:button>
 				<TweetButton
 					use={button}
 					icon="bx-upload"

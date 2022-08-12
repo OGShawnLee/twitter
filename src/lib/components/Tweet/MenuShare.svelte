@@ -1,14 +1,23 @@
-<script>
-	import { TweetMenuItem } from "$lib/components";
+<script lang="ts">
+	import { TweetMenuItem, TweetButtonBookmark } from "$lib/components";
 	import { Menu, MenuItem } from "malachite-ui/components";
+	import { DoubleBounce } from "svelte-loading-spinners";
 	import { hideScrollbar } from "$lib/actions";
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
-	import { user } from "@root/state";
+
+	export let id: string;
+	export let loaderSize = 20;
+
+	let bookmarkState: "IDLE" | "SAVING" | "ERROR" = "IDLE";
 </script>
 
 <Menu let:isOpen let:button let:items>
-	<slot {button} />
+	{#if bookmarkState === "IDLE"}
+		<slot {button} />
+	{:else if bookmarkState === "SAVING"}
+		<DoubleBounce size={loaderSize} color="#0EA5E9" />
+	{/if}
 
 	{#if isOpen}
 		<div class="fixed inset-0 z-20 | bg-zinc-800/70" transition:fade|local={{ easing: cubicOut }} />
@@ -22,9 +31,7 @@
 		transition:fly|local={{ y: 250 }}
 	>
 		<TweetMenuItem icon="bx-envelope" text="Send via Direct Message" />
-		{#if $user}
-			<TweetMenuItem icon="bx-bookmark" text="Bookmark" />
-		{/if}
+		<TweetButtonBookmark bind:state={bookmarkState} {id} />
 		<TweetMenuItem icon="bx-link" text="Copy link to Tweet" />
 		<MenuItem
 			as="button"

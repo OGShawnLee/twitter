@@ -13,6 +13,13 @@ import { useAwait } from "$lib/hooks";
 import { isBoolean, isInterface, isNumber, isString } from "malachite-ui/predicate";
 import { isStringOrNull, isTimestamp } from "./core";
 
+export function isBookmarked(tid: string, uid: string) {
+	return useAwait(async () => {
+		const documentSnapshot = await getDoc(doc(db, collections.bookmarks(uid), tid));
+		return documentSnapshot.exists();
+	});
+}
+
 export function isNewUser(uid: string) {
 	return useAwait(async () => {
 		const userDoc = await getDoc(doc(db, collections.users, uid));

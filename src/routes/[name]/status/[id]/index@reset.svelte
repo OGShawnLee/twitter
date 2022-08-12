@@ -207,7 +207,7 @@
 				/>
 			</TweetButtonLike>
 
-			<TweetMenuShare let:button>
+			<TweetMenuShare id={tweet.id} let:button>
 				<TweetButton
 					icon="bx-upload"
 					buttonClass="hover:text-sky-500 focus:text-sky-500"

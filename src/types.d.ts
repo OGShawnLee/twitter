@@ -1,6 +1,12 @@
 import type { User } from "firebase/auth";
 import type { FieldValue, Timestamp } from "firebase/firestore";
 
+// * Bookmark
+interface BookmarkDocument {
+	id: string; // ? tweet id
+	createdAt: Timestamp;
+}
+
 // * Tweet
 interface DraftTweet {
 	text: string | null;
