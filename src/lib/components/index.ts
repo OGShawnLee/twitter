@@ -13,6 +13,7 @@ export { default as TweetCompose } from "./Tweet/Compose.svelte";
 export { default as TweetComposeMenuItem } from "./Tweet/ComposeMenuItem.svelte";
 export { default as TweetHeader } from "./Tweet/Header.svelte";
 export { default as TweetMenuItem } from "./Tweet/MenuItem.svelte";
+export { default as TweetMenuShare } from "./Tweet/MenuShare.svelte";
 export { default as TweetQuote } from "./Tweet/Quote.svelte";
 export { default as TweetStat } from "./Tweet/Stat.svelte";
 export { default as NavigableLink } from "./NavigableLink.svelte";
