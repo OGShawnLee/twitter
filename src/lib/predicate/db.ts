@@ -1,4 +1,5 @@
 import type {
+	BookmarkDocument,
 	RuntimeTweet,
 	TweetDocument,
 	TweetStats,
@@ -12,6 +13,13 @@ import { doc, getDoc } from "firebase/firestore";
 import { useAwait } from "$lib/hooks";
 import { isBoolean, isInterface, isNumber, isString } from "malachite-ui/predicate";
 import { isStringOrNull, isTimestamp } from "./core";
+
+export function isBookmarkDocument(val: unknown): val is BookmarkDocument {
+	return isInterface<BookmarkDocument>(val, {
+		id: isString,
+		createdAt: isTimestamp
+	});
+}
 
 export function isBookmarked(tid: string, uid: string) {
 	return useAwait(async () => {

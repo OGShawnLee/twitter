@@ -1,8 +1,30 @@
 import type { UserDocument } from "@root/types";
 import { collections, db, storage } from "@root/firebase";
-import { collection, doc, getDocs, query, where, writeBatch } from "firebase/firestore";
+import { collection, doc, getDocs, orderBy, query, where, writeBatch } from "firebase/firestore";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { isEmpty } from "malachite-ui/predicate";
+import { useAwait } from "$lib/hooks";
+import { isBookmarkDocument, isTweetDocument } from "$lib/predicate/db";
+import { generateRuntimeTweets, joinWithIDs } from "$lib/utils";
+
+export async function getUserBookmarks(uid: string) {
+	return useAwait(async () => {
+		const querySnapshot = await getDocs(
+			query(collection(db, collections.bookmarks(uid)), orderBy("createdAt", "desc"))
+		);
+		const initialTweetsIDs = querySnapshot.docs.map((document) => {
+			const data = document.data();
+			if (isBookmarkDocument(data)) return data.id;
+			throw new Error("Invalid Bookmark Document");
+		});
+		const initialTweets = await joinWithIDs(
+			collection(db, collections.tweets),
+			initialTweetsIDs,
+			isTweetDocument
+		);
+		return generateRuntimeTweets(initialTweets);
+	});
+}
 
 export async function updateUserProfile(
 	user: UserDocument,
