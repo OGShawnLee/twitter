@@ -1,11 +1,39 @@
 import type { UserDocument } from "@root/types";
 import { collections, db, storage } from "@root/firebase";
-import { collection, doc, getDocs, orderBy, query, where, writeBatch } from "firebase/firestore";
+import {
+	collection,
+	doc,
+	getDocs,
+	limit,
+	orderBy,
+	query,
+	where,
+	writeBatch
+} from "firebase/firestore";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { isEmpty } from "malachite-ui/predicate";
 import { useAwait } from "$lib/hooks";
-import { isBookmarkDocument, isTweetDocument } from "$lib/predicate/db";
+import { isBookmarkDocument, isLikeDocument, isTweetDocument } from "$lib/predicate/db";
 import { generateRuntimeTweets, joinWithIDs } from "$lib/utils";
+
+export function getUserLikes(uid: string) {
+	return useAwait(async () => {
+		const querySnapshot = await getDocs(
+			query(collection(db, collections.likes(uid)), orderBy("likedAt", "desc"), limit(10))
+		);
+		const initialTweetsIDs = querySnapshot.docs.map((document) => {
+			const data = document.data();
+			if (isLikeDocument(data)) return data.id;
+			else throw new Error("Invalid Like Document");
+		});
+		const initialTweets = await joinWithIDs(
+			collection(db, collections.tweets),
+			initialTweetsIDs,
+			isTweetDocument
+		);
+		return initialTweets;
+	});
+}
 
 export async function getUserBookmarks(uid: string) {
 	return useAwait(async () => {
