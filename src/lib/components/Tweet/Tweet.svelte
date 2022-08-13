@@ -116,13 +116,13 @@
 		<div class="flex items-center justify-between | text-zinc-400">
 			<TweetButton
 				icon="bx-message-rounded"
-				value={tweet.stats.replyCount}
+				value={tweet.replyCount}
 				buttonClass="hover:text-sky-500 focus:text-sky-500"
 				iconClass="after:bg-sky-900/30 group-focus:after:border-sky-300"
 			/>
 			<TweetButton
 				icon="bx-recycle"
-				value={tweet.stats.retweetCount}
+				value={tweet.retweetCount}
 				buttonClass="hover:text-green-500 focus:text-green-500"
 				iconClass="after:bg-green-900/30 group-focus:after:border-green-300"
 			/>
@@ -130,7 +130,7 @@
 			<TweetButtonLike {tweet} let:handleClick let:isDisabled let:isFavourite>
 				<TweetButton
 					icon="bx-heart"
-					value={tweet.stats.favouritedCount}
+					value={tweet.favouriteCount}
 					buttonClass="hover:text-rose-500 focus:text-rose-500"
 					iconClass="after:bg-rose-900/30 group-focus:after:border-rose-300"
 					isActive={isFavourite}

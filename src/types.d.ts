@@ -7,6 +7,13 @@ interface BookmarkDocument {
 	createdAt: Timestamp;
 }
 
+// * Likes
+interface LikeDocument {
+	uid: string;
+	id: string; // ? tweet id
+	likedAt: Timestamp;
+}
+
 // * Tweet
 interface DraftTweet {
 	text: string | null;
@@ -26,7 +33,9 @@ interface TweetDocument extends Omit<DraftTweet, "inReplyTo"> {
 	id: string;
 	createdAt: Timestamp;
 	user: UserHeader;
-	stats: TweetStats;
+	favouriteCount: number;
+	retweetCount: number;
+	replyCount: number;
 	hasMedia: boolean;
 	likedBy: string[]; // uid[] -> may not scale well but we worry about that later
 	isReply: boolean;
@@ -41,19 +50,15 @@ interface TweetReply {
 	displayName?: string;
 }
 
-interface TweetStats {
-	favouritedCount: number;
-	retweetCount: number;
-	replyCount: number;
-}
-
 interface RuntimeTweet extends TweetDocument {
 	createdAt: string;
 }
 
-interface UpdatableTweetDocument extends Omit<TweetDocument, "id" | "stats"> {
+interface UpdatableTweetDocument extends Omit<TweetDocument, "id"> {
 	likedBy: FieldValue;
-	stats: ToFieldValue<TweetStats>;
+	favouriteCount: FieldValue;
+	retweetCount: FieldValue;
+	replyCount: FieldValue;
 }
 
 type WhoCanReply = "EVERYONE" | "FOLLOWED" | "MENTIONED";
@@ -97,7 +102,7 @@ interface RuntimeUser {
 	isFollowing: boolean; // current user follows this user?
 }
 
-interface UpdatableUserDocument extends Omit<UserDocument, "uid" | "stats" | "whoCanReply"> {
+interface UpdatableUserDocument extends Omit<UserDocument, "uid" | "stats"> {
 	stats: {
 		followerCount?: FieldValue;
 		followingCount?: FieldValue;

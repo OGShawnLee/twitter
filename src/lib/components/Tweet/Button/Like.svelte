@@ -15,10 +15,11 @@
 		try {
 			isDisabled = true;
 			state = "PROCESSING";
-			await handleLikeTweet({
-				uid: $user.document.uid,
-				tweet: { id: tweet.id, user: tweet.user, stats: tweet.stats },
-				isFavourite
+			await handleLikeTweet($user.document.uid, {
+				isFavourite,
+				tweet: { id: tweet.id, uid: tweet.user.uid },
+				onDislike: () => (isFavourite = false),
+				onLike: () => (isFavourite = true)
 			});
 		} catch (err) {
 			// TODO: HANDLE ERROR

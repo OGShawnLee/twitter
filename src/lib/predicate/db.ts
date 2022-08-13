@@ -1,8 +1,8 @@
 import type {
 	BookmarkDocument,
+	LikeDocument,
 	RuntimeTweet,
 	TweetDocument,
-	TweetStats,
 	UserDocument,
 	UserHeader,
 	UserStats,
@@ -28,6 +28,14 @@ export function isBookmarked(tid: string, uid: string) {
 	});
 }
 
+export function isLikeDocument(val: unknown): val is LikeDocument {
+	return isInterface<LikeDocument>(val, {
+		uid: isString,
+		id: isString,
+		likedAt: isTimestamp
+	});
+}
+
 export function isNewUser(uid: string) {
 	return useAwait(async () => {
 		const userDoc = await getDoc(doc(db, collections.users, uid));
@@ -41,7 +49,9 @@ export function isRuntimeTweet(val: unknown): val is RuntimeTweet {
 		createdAt: isString,
 		user: isUserHeader,
 		text: isStringOrNull,
-		stats: isTweetStats,
+		favouriteCount: isNumber,
+		replyCount: isNumber,
+		retweetCount: isNumber,
 		imageURL: isStringOrNull,
 		whoCanReply: isWhoCanReply,
 		hasMedia: isBoolean,
@@ -59,7 +69,9 @@ export function isTweetDocument(val: unknown): val is TweetDocument {
 		createdAt: isTimestamp,
 		user: isUserHeader,
 		text: isStringOrNull,
-		stats: isTweetStats,
+		favouriteCount: isNumber,
+		replyCount: isNumber,
+		retweetCount: isNumber,
 		imageURL: isStringOrNull,
 		whoCanReply: isWhoCanReply,
 		hasMedia: isBoolean,
@@ -68,14 +80,6 @@ export function isTweetDocument(val: unknown): val is TweetDocument {
 		inReplyToDisplayName: isStringOrNull,
 		inReplyToID: isStringOrNull,
 		inReplyToUID: isStringOrNull
-	});
-}
-
-export function isTweetStats(val: unknown): val is TweetStats {
-	return isInterface<TweetStats>(val, {
-		favouritedCount: isNumber,
-		retweetCount: isNumber,
-		replyCount: isNumber
 	});
 }
 

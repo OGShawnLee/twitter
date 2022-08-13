@@ -135,15 +135,15 @@
 			<span> Twitter Web App </span>
 		</div>
 
-		{#if tweet.stats.favouritedCount || tweet.stats.replyCount || tweet.stats.retweetCount}
+		{#if tweet.favouriteCount || tweet.replyCount || tweet.retweetCount}
 			<div class="py-2.5 | flex items-center justify-between | border-b-2 border-zinc-800">
-				<TweetStat href="{path}/retweets" value={tweet.stats.retweetCount} stat="Retweets" />
+				<TweetStat href="{path}/retweets" value={tweet.retweetCount} stat="Retweets" />
 				<TweetStat
 					href="{path}/retweets/with_comments"
-					value={tweet.stats.replyCount}
+					value={tweet.replyCount}
 					stat="Quote Tweets"
 				/>
-				<TweetStat href="{path}/likes" value={tweet.stats.favouritedCount} stat="Likes" />
+				<TweetStat href="{path}/likes" value={tweet.favouriteCount} stat="Likes" />
 			</div>
 		{/if}
 

@@ -9,7 +9,6 @@ import type {
 	UserDocumentTimestamp
 } from "@root/types";
 import type { Timestamp } from "firebase/firestore";
-import { arrayRemove, arrayUnion } from "firebase/firestore";
 import {
 	collection,
 	doc,
@@ -32,8 +31,8 @@ import { generateRuntimeTweets, joinWithIDs, toUnderscore } from "$lib/utils";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { isString } from "malachite-ui/predicate";
 
-export { updateUserProfile } from "./user";
-export { bookmarkTweet, getTweetReplyingTo } from "./tweet";
+export { getUserBookmarks, getUserLikes, updateUserProfile } from "./user";
+export { bookmarkTweet, getTweetReplyingTo, handleLikeTweet } from "./tweet";
 
 export async function getTweetReplies(id: string) {
 	return useAwait(async () => {
@@ -137,11 +136,9 @@ function createTweetDocumentObject(
 			imageURL: user.imageURL,
 			stats: user.stats
 		},
-		stats: {
-			favouritedCount: 0,
-			retweetCount: 0,
-			replyCount: 0
-		},
+		favouriteCount: 0,
+		retweetCount: 0,
+		replyCount: 0,
 		whoCanReply,
 		isReply: inReplyTo !== null,
 		inReplyToDisplayName: inReplyTo?.displayName || null,
@@ -235,45 +232,4 @@ export function getUserDocumentWithDisplayName(displayName: string) {
 		if (isUserDocument(data)) return data;
 		else throw new Error("INVALID USER DOCUMENT");
 	});
-}
-
-export async function handleLikeTweet(configuration: {
-	uid: string;
-	isFavourite: boolean;
-	tweet: Pick<TweetDocument, "id" | "user" | "stats">;
-	onDislike?: () => void;
-	onLike?: () => void;
-}) {
-	const { uid, isFavourite, tweet, onDislike, onLike } = configuration;
-
-	if (uid === tweet.user.uid) return;
-	if (isFavourite) {
-		if (tweet.stats.favouritedCount <= 0) return;
-		await dislikeTweet(tweet.id, uid);
-		onLike?.();
-	} else {
-		await likeTweet(tweet.id, uid);
-		onDislike?.();
-	}
-}
-
-export function likeTweet(id: string, uid: string) {
-	return updateTweetDocument(id, {
-		likedBy: arrayUnion(uid),
-		stats: { favouritedCount: increment(1) }
-	});
-}
-
-export function dislikeTweet(id: string, uid: string) {
-	return updateTweetDocument(id, {
-		likedBy: arrayRemove(uid),
-		stats: { favouritedCount: increment(-1) }
-	});
-}
-
-function updateTweetDocument<K extends keyof Omit<TweetDocument, "id">>(
-	id: string,
-	data: Pick<UpdatableTweetDocument, K>
-) {
-	return setDoc(doc(db, collections.tweets, id), data, { merge: true });
 }
