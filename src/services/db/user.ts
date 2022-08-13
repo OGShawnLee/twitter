@@ -16,6 +16,16 @@ import { useAwait } from "$lib/hooks";
 import { isBookmarkDocument, isLikeDocument, isTweetDocument } from "$lib/predicate/db";
 import { generateRuntimeTweets, joinWithIDs } from "$lib/utils";
 
+export async function clearUserBookmarks(uid: string) {
+	// ? WE SHOULD PROBABLY HANDLE THIS IN A SERVER ENVIRONMENT
+	const querySnapshot = await getDocs(
+		query(collection(db, collections.bookmarks(uid)), orderBy("createdAt", "desc"))
+	);
+	const batch = writeBatch(db);
+	querySnapshot.forEach((document) => batch.delete(document.ref));
+	return batch.commit();
+}
+
 export function getUserLikes(uid: string) {
 	return useAwait(async () => {
 		const querySnapshot = await getDocs(
