@@ -3,15 +3,20 @@ import { getTweetDocument } from "@root/services/db";
 import {
 	arrayRemove,
 	arrayUnion,
+	collectionGroup,
 	doc,
+	getDocs,
 	increment,
+	query,
 	serverTimestamp,
 	setDoc,
+	where,
 	writeBatch
 } from "firebase/firestore";
-import { collections, db } from "@root/firebase";
+import { collections, db, storage } from "@root/firebase";
 import { useAwait } from "$lib/hooks";
 import { isBookmarked } from "$lib/predicate/db";
+import { deleteObject, ref } from "firebase/storage";
 
 export async function bookmarkTweet(tid: string, uid: string) {
 	return useAwait(async () => {
@@ -28,6 +33,21 @@ export async function bookmarkTweet(tid: string, uid: string) {
 			throw new Error("Unable to Bookmark Tweet");
 		}
 	});
+}
+
+export async function deleteTweet(id: string, uid: string, hasMedia: boolean) {
+	const batch = writeBatch(db);
+	const bookmarks = await getDocs(query(collectionGroup(db, "Bookmarks"), where("id", "==", id)));
+	const likes = await getDocs(query(collectionGroup(db, "Likes"), where("id", "==", id)));
+	batch.update(doc(db, collections.users, uid), {
+		"stats.tweetCount": increment(-1)
+	});
+	// ? we should probably handle this with a firebase function
+	batch.delete(doc(db, collections.tweets, id));
+	bookmarks.forEach((document) => batch.delete(document.ref));
+	likes.forEach((document) => batch.delete(document.ref));
+	await batch.commit();
+	if (hasMedia) return deleteObject(ref(storage, "/posts/" + id));
 }
 
 export async function getTweetReplyingTo({

@@ -32,7 +32,7 @@ import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { isString } from "malachite-ui/predicate";
 
 export { deleteUserBookmark, getUserBookmarks, getUserLikes, updateUserProfile } from "./user";
-export { bookmarkTweet, getTweetReplyingTo, handleLikeTweet } from "./tweet";
+export { bookmarkTweet, deleteTweet, getTweetReplyingTo, handleLikeTweet } from "./tweet";
 
 export async function getTweetReplies(id: string) {
 	return useAwait(async () => {

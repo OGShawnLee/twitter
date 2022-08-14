@@ -8,6 +8,7 @@ export { default as Separator } from "./Separator.svelte";
 export { default as SettingsLink } from "./SettingsLink.svelte";
 export { default as Tweet } from "./Tweet/Tweet.svelte";
 export { default as TweetButton } from "./Tweet/Button.svelte";
+export { default as TweetButtonDelete } from "./Tweet/Button/Delete.svelte";
 export { default as TweetButtonLike } from "./Tweet/Button/Like.svelte";
 export { default as TweetButtonBookmark } from "./Tweet/Button/Bookmark.svelte";
 export { default as TweetCompose } from "./Tweet/Compose.svelte";

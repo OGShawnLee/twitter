@@ -36,6 +36,8 @@
 	import { isTweetDocument } from "$lib/predicate/db";
 	import { generateRuntimeTweets, toRuntimeTweet } from "$lib/utils";
 	import { onMount } from "svelte";
+	import { slide } from "svelte/transition";
+	import { cubicOut } from "svelte/easing";
 
 	export let tweets: RuntimeTweet[] = [];
 
@@ -69,8 +71,10 @@
 	<section class="after:text-red-400">
 		<h2 class="sr-only">Tweets</h2>
 		<div class="grid gap-12">
-			{#each tweets as tweet}
-				<Tweet {tweet} />
+			{#each tweets as tweet (tweet.id)}
+				<div out:slide|local={{ easing: cubicOut }}>
+					<Tweet {tweet} />
+				</div>
 			{/each}
 		</div>
 	</section>

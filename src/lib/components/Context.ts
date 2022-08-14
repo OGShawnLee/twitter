@@ -5,6 +5,7 @@ import { useContext } from "malachite-ui/hooks";
 interface TweetContext {
 	isBookmarked: Writable<boolean>;
 	onBookmarkDeletion: (id: string) => void;
+	onDelete: (id: string) => void;
 }
 
 export const TweetContext = useContext({
@@ -12,6 +13,7 @@ export const TweetContext = useContext({
 	predicate: (val): val is TweetContext =>
 		isInterface<TweetContext>(val, {
 			isBookmarked: isWritable,
-			onBookmarkDeletion: isFunction
+			onBookmarkDeletion: isFunction,
+			onDelete: isFunction
 		})
 });

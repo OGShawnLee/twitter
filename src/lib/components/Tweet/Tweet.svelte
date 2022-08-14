@@ -1,13 +1,14 @@
 <script lang="ts">
 	import "@root/styles/button-after.css";
 	import type { RuntimeTweet } from "@root/types";
-	import { TweetButton, TweetButtonLike, TweetMenuItem, TweetMenuShare } from "$lib/components";
+	import { TweetContext } from "$lib/components/Context";
+	import { TweetButton, TweetMenuItem, TweetMenuShare } from "$lib/components";
+	import { TweetButtonDelete, TweetButtonLike } from "$lib/components/Tweet/Button";
 	import { Menu, MenuButton, MenuItem } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
 	import { hideScrollbar } from "$lib/actions";
 	import { user } from "@root/state";
-	import { TweetContext } from "../Context";
 	import { writable } from "svelte/store";
 	import { createEventDispatcher } from "svelte";
 
@@ -15,12 +16,15 @@
 	export let isReply = false;
 	export let isBookmarked = false;
 
-	const dispatch = createEventDispatcher<{ bookmarkRemoval: string }>();
+	const dispatch = createEventDispatcher<{ bookmarkRemoval: string; delete: string }>();
 
 	TweetContext.setContext({
 		isBookmarked: writable(isBookmarked),
 		onBookmarkDeletion: (id) => {
 			dispatch("bookmarkRemoval", id);
+		},
+		onDelete: (id) => {
+			dispatch("delete", id);
 		}
 	});
 </script>
@@ -75,7 +79,7 @@
 					transition:fly|local={{ y: 250 }}
 				>
 					{#if $user.account.uid === tweet.user.uid}
-						<TweetMenuItem icon="bx-trash" text="Delete" isDanger />
+						<TweetButtonDelete id={tweet.id} uid={tweet.user.uid} hasImageURL={tweet.hasMedia} />
 						<TweetMenuItem icon="bx-pin" text="Pin to your profile" />
 						<TweetMenuItem icon="bx-detail">
 							<span> Add/remove <b>@{tweet.user.displayName}</b> from lists </span>
