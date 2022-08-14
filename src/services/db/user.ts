@@ -2,6 +2,7 @@ import type { UserDocument } from "@root/types";
 import { collections, db, storage } from "@root/firebase";
 import {
 	collection,
+	deleteDoc,
 	doc,
 	getDocs,
 	limit,
@@ -24,6 +25,10 @@ export async function clearUserBookmarks(uid: string) {
 	const batch = writeBatch(db);
 	querySnapshot.forEach((document) => batch.delete(document.ref));
 	return batch.commit();
+}
+
+export function deleteUserBookmark(uid: string, id: string) {
+	return deleteDoc(doc(db, collections.bookmarks(uid), id));
 }
 
 export function getUserLikes(uid: string) {

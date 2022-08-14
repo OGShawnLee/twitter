@@ -31,7 +31,7 @@ import { generateRuntimeTweets, joinWithIDs, toUnderscore } from "$lib/utils";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { isString } from "malachite-ui/predicate";
 
-export { getUserBookmarks, getUserLikes, updateUserProfile } from "./user";
+export { deleteUserBookmark, getUserBookmarks, getUserLikes, updateUserProfile } from "./user";
 export { bookmarkTweet, getTweetReplyingTo, handleLikeTweet } from "./tweet";
 
 export async function getTweetReplies(id: string) {

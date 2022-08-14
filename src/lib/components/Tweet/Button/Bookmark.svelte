@@ -1,19 +1,42 @@
 <script lang="ts">
+	import { TweetContext } from "$lib/components/Context";
 	import { TweetMenuItem } from "$lib/components";
-	import { bookmarkTweet } from "@root/services/db";
+	import { bookmarkTweet, deleteUserBookmark } from "@root/services/db";
 	import { user } from "@root/state";
+	import { writable } from "svelte/store";
+	import { onDestroy } from "svelte";
+
+	const { isBookmarked = writable(false), onBookmarkDeletion } =
+		TweetContext.getContext(false) || {};
 
 	export let id: string;
 	export let state: "IDLE" | "SAVING" | "ERROR" = "IDLE";
 
+	let isBookmarkDeleted = false;
+
 	async function handleBookmark() {
 		if (!$user) return;
-		state = "SAVING";
-		await bookmarkTweet(id, $user.document.uid);
-		state = "IDLE";
+
+		if ($isBookmarked) {
+			state = "SAVING";
+			await deleteUserBookmark($user.account.uid, id);
+			isBookmarkDeleted = true;
+			state = "IDLE";
+		} else {
+			state = "SAVING";
+			await bookmarkTweet(id, $user.document.uid);
+			state = "IDLE";
+		}
 	}
+
+	onDestroy(() => isBookmarkDeleted && onBookmarkDeletion?.(id));
 </script>
 
 {#if $user && state === "IDLE"}
-	<TweetMenuItem icon="bx-bookmark" text="Bookmark" on:click={handleBookmark} />
+	<TweetMenuItem
+		icon={$isBookmarked ? "bx-bookmark-minus" : "bx-bookmark"}
+		text={$isBookmarked ? "Remove Tweet from Bookmarks" : "Bookmark"}
+		isDanger={$isBookmarked}
+		on:click={handleBookmark}
+	/>
 {/if}

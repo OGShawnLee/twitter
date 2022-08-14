@@ -7,9 +7,22 @@
 	import { cubicOut } from "svelte/easing";
 	import { hideScrollbar } from "$lib/actions";
 	import { user } from "@root/state";
+	import { TweetContext } from "../Context";
+	import { writable } from "svelte/store";
+	import { createEventDispatcher } from "svelte";
 
 	export let tweet: RuntimeTweet;
 	export let isReply = false;
+	export let isBookmarked = false;
+
+	const dispatch = createEventDispatcher<{ bookmarkRemoval: string }>();
+
+	TweetContext.setContext({
+		isBookmarked: writable(isBookmarked),
+		onBookmarkDeletion: (id) => {
+			dispatch("bookmarkRemoval", id);
+		}
+	});
 </script>
 
 <article class="relative | grid gap-5" class:reply-tweet={isReply}>

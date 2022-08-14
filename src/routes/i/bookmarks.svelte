@@ -29,6 +29,10 @@
 		}
 	}
 
+	function handleBookmarkRemoval({ detail }: CustomEvent<string>) {
+		bookmarks = bookmarks.filter(({ id }) => id !== detail);
+	}
+
 	onMount(async () => {
 		if (!$user) return;
 		const [tweets] = await getUserBookmarks($user.document.uid);
@@ -122,8 +126,8 @@
 	{:else if state === "LOADED"}
 		<div class="grid gap-12">
 			{#each bookmarks as bookmark (bookmark.id)}
-				<div in:slide={{ easing: cubicOut }}>
-					<Tweet tweet={bookmark} />
+				<div in:slide={{ easing: cubicOut }} out:slide|local={{ easing: cubicOut }}>
+					<Tweet tweet={bookmark} isBookmarked on:bookmarkRemoval={handleBookmarkRemoval} />
 				</div>
 			{:else}
 				<div class="grid gap-6">
