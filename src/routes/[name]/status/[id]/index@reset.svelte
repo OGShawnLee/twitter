@@ -20,8 +20,15 @@
 
 <script lang="ts">
 	import type { RuntimeTweet } from "@root/types";
+	import { TweetContext } from "$lib/components/Context";
 	import { MobileNavigation, TweetReplyInput } from "$lib/layout";
-	import { ButtonRounded, Header, MobileNavigationLink, Tweet } from "$lib/components";
+	import {
+		ButtonRounded,
+		Header,
+		MobileNavigationLink,
+		Tweet,
+		TweetCompose
+	} from "$lib/components";
 	import {
 		TweetButton,
 		TweetButtonDelete,
@@ -37,6 +44,8 @@
 	import { cubicOut } from "svelte/easing";
 	import { hideScrollbar } from "$lib/actions";
 	import { user } from "@root/state";
+	import { writable } from "svelte/store";
+	import { goto } from "$app/navigation";
 
 	$: path = $page.url.pathname;
 
@@ -47,6 +56,11 @@
 
 	$: isOwner = $user?.account.uid === tweet.user.uid;
 	$: isStranger = $user?.account.uid !== tweet.user.uid;
+
+	TweetContext.setContext({
+		isBookmarked: writable(false),
+		onDelete: () => goto("/home")
+	});
 </script>
 
 <svelte:head>
