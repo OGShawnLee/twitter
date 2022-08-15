@@ -24,6 +24,7 @@
 	import { ButtonRounded, Header, MobileNavigationLink, Tweet } from "$lib/components";
 	import {
 		TweetButton,
+		TweetButtonDelete,
 		TweetButtonLike,
 		TweetHeader,
 		TweetMenuItem,
@@ -43,6 +44,9 @@
 	export let tweet: RuntimeTweet;
 	export let replies: RuntimeTweet[];
 	export let replyingTo: RuntimeTweet[];
+
+	$: isOwner = $user?.account.uid === tweet.user.uid;
+	$: isStranger = $user?.account.uid !== tweet.user.uid;
 </script>
 
 <svelte:head>
@@ -72,21 +76,31 @@
 	{/each}
 	<div>
 		<TweetHeader user={tweet.user}>
-			<TweetMenuItem icon="bx-user-x">
-				<span> Unfollow <b>@{tweet.user.displayName}</b> </span>
-			</TweetMenuItem>
-			<TweetMenuItem icon="bx-detail">
-				<span> Add/remove <b>@{tweet.user.displayName}</b> from lists </span>
-			</TweetMenuItem>
-			<TweetMenuItem icon="bx-volume-mute">
-				<span> Mute <b>@{tweet.user.displayName}</b> </span>
-			</TweetMenuItem>
-			<TweetMenuItem icon="bx-volume-mute" text="Mute this conversation" />
-			<TweetMenuItem icon="bx-block" isDanger>
-				<span> Block <b>@{tweet.user.displayName}</b> </span>
-			</TweetMenuItem>
+			{#if $user && isOwner}
+				<TweetButtonDelete id={tweet.id} uid={$user.account.uid} hasImageURL={tweet.hasMedia} />
+				<TweetMenuItem icon="bx-detail">
+					<span> Add/remove <b>@{tweet.user.displayName}</b> from lists </span>
+				</TweetMenuItem>
+				<TweetMenuItem icon="bx-volume-mute" text="Mute this conversation" />
+			{:else}
+				<TweetMenuItem icon="bx-user-x">
+					<span> Unfollow <b>@{tweet.user.displayName}</b> </span>
+				</TweetMenuItem>
+				<TweetMenuItem icon="bx-detail">
+					<span> Add/remove <b>@{tweet.user.displayName}</b> from lists </span>
+				</TweetMenuItem>
+				<TweetMenuItem icon="bx-volume-mute">
+					<span> Mute <b>@{tweet.user.displayName}</b> </span>
+				</TweetMenuItem>
+				<TweetMenuItem icon="bx-volume-mute" text="Mute this conversation" />
+				<TweetMenuItem icon="bx-block" isDanger>
+					<span> Block <b>@{tweet.user.displayName}</b> </span>
+				</TweetMenuItem>
+			{/if}
 			<TweetMenuItem icon="bx-code-alt" text="Embed Tweet" />
-			<TweetMenuItem icon="bxs-radiation" text="Report Tweet" isDanger />
+			{#if isStranger}
+				<TweetMenuItem icon="bxs-radiation" text="Report Tweet" isDanger />
+			{/if}
 			<TweetMenuItem icon="bxs-show" text="View hidden replies" />
 			<MenuItem
 				as="button"
