@@ -16,13 +16,10 @@
 	export let isReply = false;
 	export let isBookmarked = false;
 
-	const dispatch = createEventDispatcher<{ bookmarkRemoval: string; delete: string }>();
+	const dispatch = createEventDispatcher<{ delete: string }>();
 
 	TweetContext.setContext({
 		isBookmarked: writable(isBookmarked),
-		onBookmarkDeletion: (id) => {
-			dispatch("bookmarkRemoval", id);
-		},
 		onDelete: (id) => {
 			dispatch("delete", id);
 		}

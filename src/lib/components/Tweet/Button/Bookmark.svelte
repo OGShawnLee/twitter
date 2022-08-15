@@ -6,8 +6,7 @@
 	import { writable } from "svelte/store";
 	import { onDestroy } from "svelte";
 
-	const { isBookmarked = writable(false), onBookmarkDeletion } =
-		TweetContext.getContext(false) || {};
+	const { isBookmarked = writable(false), onDelete } = TweetContext.getContext(false) || {};
 
 	export let id: string;
 	export let state: "IDLE" | "SAVING" | "ERROR" = "IDLE";
@@ -29,7 +28,7 @@
 		}
 	}
 
-	onDestroy(() => isBookmarkDeleted && onBookmarkDeletion?.(id));
+	onDestroy(() => isBookmarkDeleted && onDelete?.(id));
 </script>
 
 {#if $user && state === "IDLE"}

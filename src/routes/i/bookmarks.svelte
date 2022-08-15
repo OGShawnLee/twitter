@@ -29,10 +29,6 @@
 		}
 	}
 
-	function handleBookmarkRemoval({ detail }: CustomEvent<string>) {
-		bookmarks = bookmarks.filter(({ id }) => id !== detail);
-	}
-
 	function handleTweetDelete({ detail }: CustomEvent<string>) {
 		bookmarks = bookmarks.filter(({ id }) => id !== detail);
 	}
@@ -131,12 +127,7 @@
 		<div class="grid gap-12">
 			{#each bookmarks as bookmark (bookmark.id)}
 				<div in:slide={{ easing: cubicOut }} out:slide|local={{ easing: cubicOut }}>
-					<Tweet
-						tweet={bookmark}
-						isBookmarked
-						on:bookmarkRemoval={handleBookmarkRemoval}
-						on:delete={handleTweetDelete}
-					/>
+					<Tweet tweet={bookmark} isBookmarked on:delete={handleTweetDelete} />
 				</div>
 			{:else}
 				<div class="grid gap-6">
