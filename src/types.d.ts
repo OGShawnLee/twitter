@@ -26,7 +26,7 @@ interface NewTweetOptions {
 	id: string;
 	text: string | null;
 	whoCanReply?: WhoCanReply;
-	inReplyTo?: TweetReply;
+	inReplyTo?: TweetReply | null;
 }
 
 interface TweetDocument extends Omit<DraftTweet, "inReplyTo"> {

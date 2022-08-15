@@ -88,7 +88,7 @@ export function changeDisplayName(displayName: string, user: UserDocument) {
 }
 
 export function sendTweet(userDoc: UserDocument, draftTweet: DraftTweet) {
-	const { imageURL, text, whoCanReply, inReplyTo = {} } = draftTweet;
+	const { imageURL, text, whoCanReply, inReplyTo } = draftTweet;
 
 	return useAwait(async () => {
 		const docReference = doc(collection(db, collections.tweets));
@@ -119,7 +119,7 @@ export function updateUserDocument<K extends keyof Omit<UserDocument, "uid">>(
 
 function createTweetDocumentObject(
 	user: UserDocument,
-	{ id, text, whoCanReply = "EVERYONE", inReplyTo }: NewTweetOptions
+	{ id, text, whoCanReply = "EVERYONE", inReplyTo = null }: NewTweetOptions
 ): TweetDocument {
 	return {
 		id,
