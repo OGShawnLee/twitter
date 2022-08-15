@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { RuntimeTweet } from "@root/types";
+	import type { RuntimeTweet, TweetDocument } from "@root/types";
 	import { handleLikeTweet } from "@root/services/db";
 	import { user } from "@root/state";
 
-	export let tweet: RuntimeTweet;
+	export let tweet: RuntimeTweet | TweetDocument;
 
 	let isDisabled = false;
 	let state: "IDLE" | "PROCESSING" = "IDLE";

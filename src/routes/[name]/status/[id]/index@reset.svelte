@@ -19,16 +19,10 @@
 </script>
 
 <script lang="ts">
-	import type { RuntimeTweet } from "@root/types";
+	import type { RuntimeTweet, TweetDocument } from "@root/types";
 	import { TweetContext } from "$lib/components/Context";
-	import { MobileNavigation, TweetReplyInput } from "$lib/layout";
-	import {
-		ButtonRounded,
-		Header,
-		MobileNavigationLink,
-		Tweet,
-		TweetCompose
-	} from "$lib/components";
+	import { MobileNavigation, TweetReplyInput, TweetStatusDate } from "$lib/layout";
+	import { ButtonRounded, Header, MobileNavigationLink, Tweet } from "$lib/components";
 	import {
 		TweetButton,
 		TweetButtonDelete,
@@ -46,11 +40,12 @@
 	import { user } from "@root/state";
 	import { writable } from "svelte/store";
 	import { goto } from "$app/navigation";
+	import { onMount } from "svelte";
 
 	$: path = $page.url.pathname;
 
 	export let name: string;
-	export let tweet: RuntimeTweet;
+	export let tweet: TweetDocument;
 	export let replies: RuntimeTweet[];
 	export let replyingTo: RuntimeTweet[];
 
@@ -153,15 +148,7 @@
 	</section>
 
 	<div>
-		<div
-			class="pb-2.5 | flex items-center justify-between | border-b-2 border-zinc-800 text-sm text-zinc-400"
-		>
-			<span> 5:02 PM </span>
-			<span aria-hidden="true"> • </span>
-			<span> Jun 15, 2022 </span>
-			<span aria-hidden="true"> • </span>
-			<span> Twitter Web App </span>
-		</div>
+		<TweetStatusDate createdAt={tweet.createdAt} />
 
 		{#if tweet.favouriteCount || tweet.replyCount || tweet.retweetCount}
 			<div class="py-2.5 | flex items-center justify-between | border-b-2 border-zinc-800">

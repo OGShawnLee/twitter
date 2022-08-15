@@ -5,6 +5,34 @@ import { isValidImageFileType } from "$lib/predicate";
 import { isTweetDocument } from "$lib/predicate/db";
 import { isString } from "malachite-ui/predicate";
 
+const STRING_MONTHS = Object.freeze({
+	0: "Jan",
+	1: "Feb",
+	2: "Mar",
+	3: "Apr",
+	4: "May",
+	5: "Jun",
+	6: "Jul",
+	7: "Aug",
+	8: "Sep",
+	9: "Oct",
+	10: "Nov",
+	11: "Dec"
+});
+
+export function formatHour(date: Date) {
+	const hours = date.getHours();
+	const minutes = date.getMinutes();
+	return `${hours % 12}:${minutes} ${hours < 12 ? "AM" : "PM"}`;
+}
+
+export function formatStatusDate(date: Date) {
+	const day = date.getDate();
+	const month = date.getMonth() as keyof typeof STRING_MONTHS;
+	const year = date.getFullYear();
+	return `${STRING_MONTHS[month]} ${day}, ${year}`;
+}
+
 export function generateRuntimeTweets(querySnapshot: QuerySnapshot): RuntimeTweet[];
 export function generateRuntimeTweets(documents: TweetDocument[]): RuntimeTweet[];
 
