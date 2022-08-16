@@ -22,7 +22,7 @@ const STRING_MONTHS = Object.freeze({
 export function formatHour(date: Date) {
 	const hours = date.getHours();
 	const minutes = date.getMinutes();
-	return `${hours % 12}:${minutes} ${hours < 12 ? "AM" : "PM"}`;
+	return `${hours % 12}:${zeroPad(minutes, 2)} ${hours < 12 ? "AM" : "PM"}`;
 }
 
 export function formatStatusDate(date: Date) {
@@ -143,4 +143,8 @@ export class Time {
 
 		return formatStatusDate(then);
 	}
+}
+
+function zeroPad(num: number, places: number) {
+	return num.toString().padStart(places, "0");
 }
