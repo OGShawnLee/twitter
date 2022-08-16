@@ -128,7 +128,7 @@ export class Time {
 	}
 
 	private static getMessage(diff: number, timeUnit: string) {
-		return `${diff.toFixed()} ${diff > 1 ? timeUnit + "s" : timeUnit} ago`;
+		return `${diff.toFixed()} ${diff > 2 ? timeUnit + "s" : timeUnit} ago`;
 	}
 
 	static getTimeMessage(then: Date, now = new Date()) {
