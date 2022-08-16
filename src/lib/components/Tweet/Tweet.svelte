@@ -1,8 +1,8 @@
 <script lang="ts">
 	import "@root/styles/button-after.css";
-	import type { RuntimeTweet } from "@root/types";
+	import type { TweetDocument } from "@root/types";
 	import { TweetContext } from "$lib/components/Context";
-	import { TweetButton, TweetMenuItem, TweetMenuShare } from "$lib/components";
+	import { TweetButton, TweetMenuItem, TweetMenuShare, TweetTime } from "$lib/components";
 	import { TweetButtonDelete, TweetButtonLike } from "$lib/components/Tweet/Button";
 	import { Menu, MenuButton, MenuItem } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
@@ -12,7 +12,7 @@
 	import { writable } from "svelte/store";
 	import { createEventDispatcher } from "svelte";
 
-	export let tweet: RuntimeTweet;
+	export let tweet: TweetDocument;
 	export let isReply = false;
 	export let isBookmarked = false;
 
@@ -45,7 +45,7 @@
 				</h3>
 				<div class="space-x-1 | text-xs">
 					<span class="text-zinc-400">@{tweet.user.displayName}</span>
-					<span class="text-zinc-500">{tweet.createdAt}</span>
+					<TweetTime createdAt={tweet.createdAt} />
 				</div>
 			</div>
 		</div>

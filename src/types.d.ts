@@ -50,10 +50,6 @@ interface TweetReply {
 	displayName?: string;
 }
 
-interface RuntimeTweet extends TweetDocument {
-	createdAt: string;
-}
-
 interface UpdatableTweetDocument extends Omit<TweetDocument, "id"> {
 	likedBy: FieldValue;
 	favouriteCount: FieldValue;

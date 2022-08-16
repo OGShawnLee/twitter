@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { RuntimeTweet } from "@root/types";
+	import type { TweetDocument } from "@root/types";
 	import { ButtonRounded, Header, Tweet, TweetMenuItem } from "$lib/components";
 	import { Menu, MenuButton, MenuItem } from "malachite-ui/components";
 	import { Circle3 as Circle, DoubleBounce } from "svelte-loading-spinners";
@@ -13,7 +13,7 @@
 
 	// TODO: HANDLE ERROR
 
-	let bookmarks: RuntimeTweet[] = [];
+	let bookmarks: TweetDocument[] = [];
 	let state: "LOADED" | "LOADING" | "ERROR" = "LOADING";
 	let bookmarkClearState: "CLEARING" | "IDLE" | "ERROR" = "IDLE";
 

@@ -1,4 +1,5 @@
 export { default as Tweet } from "./Tweet.svelte";
+export { default as TweetTime } from "./Time.svelte";
 export { default as TweetButton } from "./Button.svelte";
 export { default as TweetButtonDelete } from "./Button/Delete.svelte";
 export { default as TweetButtonLike } from "./Button/Like.svelte";

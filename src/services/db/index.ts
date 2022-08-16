@@ -27,7 +27,7 @@ import {
 import { useAwait } from "$lib/hooks";
 import { collections, db, storage } from "@root/firebase";
 import { isTweetDocument, isUserDocument } from "$lib/predicate/db";
-import { generateRuntimeTweets, joinWithIDs, toUnderscore } from "$lib/utils";
+import { generateTweetDocuments, joinWithIDs, toUnderscore } from "$lib/utils";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { isString } from "malachite-ui/predicate";
 
@@ -46,7 +46,7 @@ export async function getTweetReplies(id: string) {
 			)
 		);
 
-		return generateRuntimeTweets(querySnapshot);
+		return generateTweetDocuments(querySnapshot);
 	});
 }
 

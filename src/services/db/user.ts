@@ -15,7 +15,7 @@ import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { isEmpty } from "malachite-ui/predicate";
 import { useAwait } from "$lib/hooks";
 import { isBookmarkDocument, isLikeDocument, isTweetDocument } from "$lib/predicate/db";
-import { generateRuntimeTweets, joinWithIDs } from "$lib/utils";
+import { joinWithIDs } from "$lib/utils";
 
 export async function clearUserBookmarks(uid: string) {
 	// ? WE SHOULD PROBABLY HANDLE THIS IN A SERVER ENVIRONMENT
@@ -60,12 +60,7 @@ export async function getUserBookmarks(uid: string) {
 			if (isBookmarkDocument(data)) return data.id;
 			throw new Error("Invalid Bookmark Document");
 		});
-		const initialTweets = await joinWithIDs(
-			collection(db, collections.tweets),
-			initialTweetsIDs,
-			isTweetDocument
-		);
-		return generateRuntimeTweets(initialTweets);
+		return await joinWithIDs(collection(db, collections.tweets), initialTweetsIDs, isTweetDocument);
 	});
 }
 

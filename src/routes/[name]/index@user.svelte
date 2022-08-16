@@ -2,7 +2,6 @@
 	import type { Load } from "@sveltejs/kit";
 	import { collection, getDocs, limit, orderBy, query, where } from "firebase/firestore";
 	import { collections, db } from "@root/firebase";
-	import { toRuntimeTweet } from "$lib/utils";
 
 	export const load: Load = async ({ stuff: context }) => {
 		if (!context.displayName) return { status: 500 };
@@ -17,11 +16,7 @@
 		);
 
 		try {
-			const tweets = querySnapshot.docs.map((doc) => {
-				const docData = doc.data();
-				if (isTweetDocument(docData)) return toRuntimeTweet(docData);
-				else throw new TypeError("Invalid Tweet Document");
-			});
+			const tweets = generateTweetDocuments(querySnapshot);
 			return { status: 200, props: { tweets } };
 		} catch (error) {
 			return {
@@ -36,11 +31,11 @@
 </script>
 
 <script lang="ts">
-	import type { RuntimeTweet } from "@root/types";
+	import type { TweetDocument } from "@root/types";
 	import { Tweet } from "$lib/components";
-	import { isTweetDocument } from "$lib/predicate/db";
+	import { generateTweetDocuments } from "$lib/utils";
 
-	export let tweets: RuntimeTweet[] = [];
+	export let tweets: TweetDocument[] = [];
 </script>
 
 <div class="grid gap-12">

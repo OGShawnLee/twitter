@@ -1,19 +1,28 @@
 <script lang="ts" context="module">
 	import type { Load } from "@sveltejs/kit";
 	import { collections, db } from "@root/firebase";
-	import { collection, getDocs, limit, onSnapshot, orderBy, query } from "firebase/firestore";
+	import {
+		collection,
+		getDocs,
+		limit,
+		onSnapshot,
+		orderBy,
+		query,
+		where
+	} from "firebase/firestore";
 
 	export const load: Load = async () => {
 		const querySnapshot = await getDocs(
-			query(collection(db, collections.tweets), orderBy("createdAt", "desc"), limit(10))
+			query(
+				collection(db, collections.tweets),
+				orderBy("createdAt", "desc"),
+				where("isReply", "==", false),
+				limit(10)
+			)
 		);
 
 		try {
-			const tweets = querySnapshot.docs.map((doc) => {
-				const docData = doc.data();
-				if (isTweetDocument(docData)) return toRuntimeTweet(docData);
-				else throw new TypeError("Invalid Tweet Document");
-			});
+			const tweets = generateTweetDocuments(querySnapshot);
 			return { status: 200, props: { tweets } };
 		} catch {
 			return {
@@ -28,25 +37,29 @@
 </script>
 
 <script lang="ts">
-	import type { RuntimeTweet } from "@root/types";
+	import type { TweetDocument } from "@root/types";
 	import { MobileSidebar, TopTweetPreferences } from "$lib/layout";
 	import { Tweet } from "$lib/components";
 	import { PopoverButton } from "malachite-ui/components";
 	import { user } from "@root/state";
-	import { isTweetDocument } from "$lib/predicate/db";
-	import { generateRuntimeTweets, toRuntimeTweet } from "$lib/utils";
 	import { onMount } from "svelte";
 	import { slide } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
+	import { generateTweetDocuments } from "$lib/utils";
 
-	export let tweets: RuntimeTweet[] = [];
+	export let tweets: TweetDocument[] = [];
 
 	// ? temporal
 	onMount(() =>
 		onSnapshot(
-			query(collection(db, collections.tweets), orderBy("createdAt", "desc"), limit(10)),
+			query(
+				collection(db, collections.tweets),
+				orderBy("createdAt", "desc"),
+				where("isReply", "==", false),
+				limit(10)
+			),
 			(collectionSnapshot) => {
-				tweets = generateRuntimeTweets(collectionSnapshot);
+				tweets = generateTweetDocuments(collectionSnapshot);
 			}
 		)
 	);

@@ -1,7 +1,6 @@
 <script lang="ts" context="module">
 	import type { Load } from "@sveltejs/kit";
 	import { getTweetDocument, getTweetReplies, getTweetReplyingTo } from "@root/services/db";
-	import { generateRuntimeTweets } from "$lib/utils";
 
 	export const load: Load = async ({ params: { name, id } }) => {
 		const [tweet, err] = await getTweetDocument(id, name);
@@ -11,7 +10,7 @@
 			const replyingTo = await getTweetReplyingTo(tweet);
 			return {
 				status: 200,
-				props: { name, tweet, replies, replyingTo: generateRuntimeTweets(replyingTo) }
+				props: { name, tweet, replies, replyingTo }
 			};
 		}
 		return { status: 404 };
@@ -19,7 +18,7 @@
 </script>
 
 <script lang="ts">
-	import type { RuntimeTweet, TweetDocument } from "@root/types";
+	import type { TweetDocument } from "@root/types";
 	import { TweetContext } from "$lib/components/Context";
 	import { MobileNavigation, TweetReplyInput, TweetStatusDate } from "$lib/layout";
 	import { ButtonRounded, Header, MobileNavigationLink, Tweet } from "$lib/components";
@@ -40,14 +39,13 @@
 	import { user } from "@root/state";
 	import { writable } from "svelte/store";
 	import { goto } from "$app/navigation";
-	import { onMount } from "svelte";
 
 	$: path = $page.url.pathname;
 
 	export let name: string;
 	export let tweet: TweetDocument;
-	export let replies: RuntimeTweet[];
-	export let replyingTo: RuntimeTweet[];
+	export let replies: TweetDocument[];
+	export let replyingTo: TweetDocument[];
 
 	$: isOwner = $user?.account.uid === tweet.user.uid;
 	$: isStranger = $user?.account.uid !== tweet.user.uid;

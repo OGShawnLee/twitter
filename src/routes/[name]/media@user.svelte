@@ -2,7 +2,7 @@
 	import type { Load } from "@sveltejs/kit";
 	import { collections, db } from "@root/firebase";
 	import { collection, getDocs, limit, orderBy, query, where } from "firebase/firestore";
-	import { generateRuntimeTweets } from "$lib/utils";
+	import { generateTweetDocuments } from "$lib/utils";
 
 	export const load: Load = async ({ stuff: context }) => {
 		if (!context.uid) return { status: 500 };
@@ -18,7 +18,7 @@
 		);
 
 		try {
-			return { status: 200, props: { tweets: generateRuntimeTweets(querySnapshot) } };
+			return { status: 200, props: { tweets: generateTweetDocuments(querySnapshot) } };
 		} catch {
 			return {
 				status: 500,
@@ -32,10 +32,10 @@
 </script>
 
 <script lang="ts">
-	import type { RuntimeTweet } from "@root/types";
+	import type { TweetDocument } from "@root/types";
 	import { Tweet } from "$lib/components";
 
-	export let tweets: RuntimeTweet[] = [];
+	export let tweets: TweetDocument[];
 </script>
 
 <div class="grid gap-12">

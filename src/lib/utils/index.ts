@@ -1,9 +1,8 @@
-import type { RuntimeTweet, TweetDocument } from "@root/types";
-import { type CollectionReference, QuerySnapshot } from "firebase/firestore";
+import type { CollectionReference, QuerySnapshot } from "firebase/firestore";
 import { doc, getDoc } from "firebase/firestore";
 import { isValidImageFileType } from "$lib/predicate";
-import { isTweetDocument } from "$lib/predicate/db";
 import { isString } from "malachite-ui/predicate";
+import { isTweetDocument } from "$lib/predicate/db";
 
 const STRING_MONTHS = Object.freeze({
 	0: "Jan",
@@ -33,18 +32,12 @@ export function formatStatusDate(date: Date) {
 	return `${STRING_MONTHS[month]} ${day}, ${year}`;
 }
 
-export function generateRuntimeTweets(querySnapshot: QuerySnapshot): RuntimeTweet[];
-export function generateRuntimeTweets(documents: TweetDocument[]): RuntimeTweet[];
-
-export function generateRuntimeTweets(queryOrDocuments: QuerySnapshot | TweetDocument[]) {
-	if (queryOrDocuments instanceof QuerySnapshot) {
-		return queryOrDocuments.docs.map((doc) => {
-			const docData = doc.data();
-			if (isTweetDocument(docData)) return toRuntimeTweet(docData);
-			else throw new TypeError("Invalid Tweet Document");
-		});
-	}
-	return queryOrDocuments.map(toRuntimeTweet);
+export function generateTweetDocuments(queryOrDocuments: QuerySnapshot) {
+	return queryOrDocuments.docs.map((doc) => {
+		const docData = doc.data();
+		if (isTweetDocument(docData)) return docData;
+		throw new TypeError("Invalid Tweet Document");
+	});
 }
 
 export function getImageFilePathURL(file: File) {
@@ -79,6 +72,75 @@ export function toUnderscore(str: string) {
 	return str.trim().replace(/\s+/g, "_");
 }
 
-export function toRuntimeTweet(document: TweetDocument): RuntimeTweet {
-	return { ...document, createdAt: document.createdAt.toDate().toDateString() };
+export class Time {
+	private static MILLISECONDS_TO_SECONDS = 1000;
+	private static MILLISECONDS_TO_MINUTES = 60000;
+	private static MILLISECONDS_TO_HOURS = 3.6e6;
+	private static MILLISECONDS_TO_DAYS = 8.64e7;
+	private static MILLISECONDS_TO_YEARS = 3.154e10;
+
+	static toSeconds(date = new Date()) {
+		return date.valueOf() / this.MILLISECONDS_TO_SECONDS;
+	}
+
+	static toMinutes(date = new Date()) {
+		return date.valueOf() / this.MILLISECONDS_TO_MINUTES;
+	}
+
+	static toHours(date = new Date()) {
+		return date.valueOf() / this.MILLISECONDS_TO_HOURS;
+	}
+
+	static toDays(date = new Date()) {
+		return date.valueOf() / this.MILLISECONDS_TO_DAYS;
+	}
+
+	static toYears(date = new Date()) {
+		return date.valueOf() / this.MILLISECONDS_TO_YEARS;
+	}
+
+	static isCurrentMinute(then: Date, now = new Date()) {
+		return this.toMinutes(now) - this.toMinutes(then) < 1;
+	}
+
+	static isCurrentHour(then: Date, now = new Date()) {
+		return this.toHours(now) - this.toHours(then) < 1;
+	}
+
+	static isCurrentDay(then: Date, now = new Date()) {
+		return this.toDays(now) - this.toDays(then) < 1;
+	}
+
+	static isCurrentYear(then: Date, now = new Date()) {
+		return this.toYears(now) - this.toYears(then) < 1;
+	}
+
+	static getSecondDifference(then: Date, now = new Date()) {
+		return this.toSeconds(now) - this.toSeconds(then);
+	}
+
+	static getMinuteDifference(then: Date, now = new Date()) {
+		return this.toMinutes(now) - this.toMinutes(then);
+	}
+
+	static getHourDifference(then: Date, now = new Date()) {
+		return this.toHours(now) - this.toHours(then);
+	}
+
+	private static getMessage(diff: number, timeUnit: string) {
+		return `${diff.toFixed()} ${diff > 1 ? timeUnit + "s" : timeUnit} ago`;
+	}
+
+	static getTimeMessage(then: Date, now = new Date()) {
+		if (this.isCurrentMinute(then, now))
+			return this.getMessage(this.getSecondDifference(then, now), "second");
+
+		if (this.isCurrentHour(then, now))
+			return this.getMessage(this.getMinuteDifference(then, now), "minute");
+
+		if (this.isCurrentDay(then, now))
+			return this.getMessage(this.getHourDifference(then, now), "hour");
+
+		return formatStatusDate(then);
+	}
 }

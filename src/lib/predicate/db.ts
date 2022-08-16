@@ -1,7 +1,6 @@
 import type {
 	BookmarkDocument,
 	LikeDocument,
-	RuntimeTweet,
 	TweetDocument,
 	UserDocument,
 	UserHeader,
@@ -40,26 +39,6 @@ export function isNewUser(uid: string) {
 	return useAwait(async () => {
 		const userDoc = await getDoc(doc(db, collections.users, uid));
 		return !userDoc.exists();
-	});
-}
-
-export function isRuntimeTweet(val: unknown): val is RuntimeTweet {
-	return isInterface<RuntimeTweet>(val, {
-		id: isString,
-		createdAt: isString,
-		user: isUserHeader,
-		text: isStringOrNull,
-		favouriteCount: isNumber,
-		replyCount: isNumber,
-		retweetCount: isNumber,
-		imageURL: isStringOrNull,
-		whoCanReply: isWhoCanReply,
-		hasMedia: isBoolean,
-		likedBy: Array.isArray,
-		isReply: isBoolean,
-		inReplyToDisplayName: isStringOrNull,
-		inReplyToID: isStringOrNull,
-		inReplyToUID: isStringOrNull
 	});
 }
 
