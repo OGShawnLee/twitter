@@ -22,3 +22,4 @@ export { default as TweetStat } from "./Tweet/Stat.svelte";
 export { default as NavigableLink } from "./NavigableLink.svelte";
 export { default as NavigableLinkSidebar } from "./NavigableLinkSidebar.svelte";
 export { default as UserCard } from "./UserCard.svelte";
+export { default as UserFollowStats } from "./UserFollowStats.svelte";

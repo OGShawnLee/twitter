@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { hideScrollbar } from "$lib/actions";
-	import { Header, NavigableLinkSidebar } from "$lib/components";
+	import { Header, NavigableLinkSidebar, UserFollowStats } from "$lib/components";
 	import { Popover, Navigable, NavigableItem } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
@@ -64,17 +64,10 @@
 							<span class="text-xs text-zinc-400">@{$user?.document?.displayName}</span>
 						</div>
 					</div>
-
-					<div class="flex items-center gap-3">
-						<div class="space-x-1 | text-xs">
-							<span class="font-medium">{$user?.document?.stats.followingCount}</span>
-							<span class="text-zinc-400">Following</span>
-						</div>
-						<div class="space-x-1 | text-xs">
-							<span class="font-medium">{$user?.document?.stats.followerCount}</span>
-							<span class="text-zinc-400">Followers</span>
-						</div>
-					</div>
+					<UserFollowStats
+						followerCount={$user?.document.stats.followerCount}
+						followingCount={$user?.document.stats.followingCount}
+					/>
 				</section>
 			</div>
 
