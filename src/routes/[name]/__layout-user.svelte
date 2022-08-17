@@ -20,7 +20,8 @@
 		Header,
 		NavigableLink,
 		TweetMenuItem,
-		UserFollowButton
+		UserFollowButton,
+		UserFollowStats
 	} from "$lib/components";
 	import { Menu, MenuButton, MenuItem, Navigable } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
@@ -173,6 +174,11 @@
 					<span> Joined {userDoc.createdAt}</span>
 				</div>
 			</div>
+
+			<UserFollowStats
+				followerCount={userDoc.stats.followerCount}
+				followingCount={userDoc.stats.followingCount}
+			/>
 		</div>
 	</header>
 
