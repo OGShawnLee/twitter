@@ -31,6 +31,9 @@ export const collections = Object.freeze({
 	bookmarks(uid: string) {
 		return `${this.users}/${uid}/Bookmarks`;
 	},
+	following(uid: string) {
+		return `${this.users}/${uid}/Following`;
+	},
 	likes(uid: string) {
 		return `${this.users}/${uid}/Likes`;
 	}

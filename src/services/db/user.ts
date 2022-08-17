@@ -1,13 +1,16 @@
-import type { UserDocument } from "@root/types";
+import type { FollowDocument, UserDocument } from "@root/types";
+import type { Timestamp } from "firebase/firestore";
 import { collections, db, storage } from "@root/firebase";
 import {
 	collection,
 	deleteDoc,
 	doc,
 	getDocs,
+	increment,
 	limit,
 	orderBy,
 	query,
+	serverTimestamp,
 	where,
 	writeBatch
 } from "firebase/firestore";
@@ -29,6 +32,23 @@ export async function clearUserBookmarks(uid: string) {
 
 export function deleteUserBookmark(uid: string, id: string) {
 	return deleteDoc(doc(db, collections.bookmarks(uid), id));
+}
+
+export function followUser(uid: string, id: string) {
+	const batch = writeBatch(db);
+	batch.update(doc(db, collections.users, uid), {
+		"stats.followingCount": increment(1)
+	});
+	batch.update(doc(db, collections.users, id), {
+		"stats.followerCount": increment(1)
+	});
+	const followRef = doc(db, collections.following(uid), id);
+	batch.set(followRef, createFollowDocument(uid, id));
+	return batch.commit();
+}
+
+function createFollowDocument(uid: string, id: string): FollowDocument {
+	return { id, uid, createdAt: serverTimestamp() as Timestamp };
 }
 
 export function getUserLikes(uid: string) {

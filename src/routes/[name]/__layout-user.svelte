@@ -15,7 +15,13 @@
 
 <script lang="ts">
 	import type { UserDocument } from "@root/types";
-	import { ButtonRounded, Header, NavigableLink, TweetMenuItem } from "$lib/components";
+	import {
+		ButtonRounded,
+		Header,
+		NavigableLink,
+		TweetMenuItem,
+		UserFollowButton
+	} from "$lib/components";
 	import { Menu, MenuButton, MenuItem, Navigable } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
@@ -127,9 +133,7 @@
 						</Menu>
 					{/if}
 
-					<button class="h-9.5 px-8 | bg-white rounded-full text-sm text-zinc-900 font-medium">
-						Follow
-					</button>
+					<UserFollowButton uid={userDoc.uid} />
 				{/if}
 			</div>
 		</div>

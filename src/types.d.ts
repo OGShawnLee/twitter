@@ -7,6 +7,13 @@ interface BookmarkDocument {
 	createdAt: Timestamp;
 }
 
+// * Follow
+interface FollowDocument {
+	id: string; // ? user followed id
+	uid: string; // ? user following id
+	createdAt: Timestamp;
+}
+
 // * Likes
 interface LikeDocument {
 	uid: string;

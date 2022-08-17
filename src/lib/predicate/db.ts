@@ -1,5 +1,6 @@
 import type {
 	BookmarkDocument,
+	FollowDocument,
 	LikeDocument,
 	TweetDocument,
 	UserDocument,
@@ -24,6 +25,21 @@ export function isBookmarked(tid: string, uid: string) {
 	return useAwait(async () => {
 		const documentSnapshot = await getDoc(doc(db, collections.bookmarks(uid), tid));
 		return documentSnapshot.exists();
+	});
+}
+
+export function isFollowDocument(val: unknown): val is FollowDocument {
+	return isInterface<FollowDocument>(val, {
+		id: isString,
+		uid: isString,
+		createdAt: isTimestamp
+	});
+}
+
+export async function isFollowingUser(uid: string, id: string) {
+	return useAwait(async () => {
+		const followDocument = await getDoc(doc(db, collections.following(uid), id));
+		return followDocument.exists();
 	});
 }
 
