@@ -33,9 +33,9 @@ import { isString } from "malachite-ui/predicate";
 
 export {
 	deleteUserBookmark,
-	followUser,
 	getUserBookmarks,
 	getUserLikes,
+	handleFollowUser,
 	updateUserProfile
 } from "./user";
 export { bookmarkTweet, deleteTweet, getTweetReplyingTo, handleLikeTweet } from "./tweet";

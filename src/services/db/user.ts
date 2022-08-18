@@ -17,7 +17,12 @@ import {
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { isEmpty } from "malachite-ui/predicate";
 import { useAwait } from "$lib/hooks";
-import { isBookmarkDocument, isLikeDocument, isTweetDocument } from "$lib/predicate/db";
+import {
+	isBookmarkDocument,
+	isFollowingUser,
+	isLikeDocument,
+	isTweetDocument
+} from "$lib/predicate/db";
 import { joinWithIDs } from "$lib/utils";
 
 export async function clearUserBookmarks(uid: string) {
@@ -34,7 +39,7 @@ export function deleteUserBookmark(uid: string, id: string) {
 	return deleteDoc(doc(db, collections.bookmarks(uid), id));
 }
 
-export function followUser(uid: string, id: string) {
+async function followUser(uid: string, id: string): Promise<{ error: null | string }> {
 	const batch = writeBatch(db);
 	batch.update(doc(db, collections.users, uid), {
 		"stats.followingCount": increment(1)
@@ -44,7 +49,12 @@ export function followUser(uid: string, id: string) {
 	});
 	const followRef = doc(db, collections.following(uid), id);
 	batch.set(followRef, createFollowDocument(uid, id));
-	return batch.commit();
+	try {
+		await batch.commit();
+		return { error: null };
+	} catch {
+		return { error: "Unable to Follow User" };
+	}
 }
 
 function createFollowDocument(uid: string, id: string): FollowDocument {
@@ -82,6 +92,36 @@ export async function getUserBookmarks(uid: string) {
 		});
 		return await joinWithIDs(collection(db, collections.tweets), initialTweetsIDs, isTweetDocument);
 	});
+}
+
+export async function handleFollowUser(uid: string, id: string) {
+	const [isFollowing, error] = await isFollowingUser(uid, id);
+	if (error) return { error: "Unable to Check Following State" };
+	if (isFollowing) {
+		const { error } = await unfollowUser(uid, id);
+		return error ? { error } : { isFollowing: false };
+	} else {
+		const { error } = await followUser(uid, id);
+		return error ? { error } : { isFollowing: true };
+	}
+}
+
+async function unfollowUser(uid: string, id: string): Promise<{ error: null | string }> {
+	const batch = writeBatch(db);
+	batch.update(doc(db, collections.users, uid), {
+		"stats.followingCount": increment(-1)
+	});
+	batch.update(doc(db, collections.users, id), {
+		"stats.followerCount": increment(-1)
+	});
+	const followRef = doc(db, collections.following(uid), id);
+	batch.delete(followRef);
+	try {
+		await batch.commit();
+		return { error: null };
+	} catch {
+		return { error: "Unable to Unfollow User" };
+	}
 }
 
 export async function updateUserProfile(

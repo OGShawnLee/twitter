@@ -1,47 +1,55 @@
 <script lang="ts">
-	import { followUser } from "@root/services/db";
+	import { handleFollowUser } from "@root/services/db";
 	import { isFollowingUser } from "$lib/predicate/db";
 	import { user } from "@root/state";
+	import { isBoolean } from "malachite-ui/predicate";
+	import { createEventDispatcher } from "svelte";
+
+	const dispatch = createEventDispatcher<{ follow: void; unfollow: void }>();
 
 	export let uid: string;
 	export let isFollowing = false;
 
 	let isDisabled = false;
-	let failedIsFollowing = false;
 
+	$: isStranger = $user?.account.uid !== uid;
 	$: if ($user) loadIsFollowing($user.account.uid, uid);
 
 	async function loadIsFollowing(uid: string, id: string) {
-		const [isFollowed, error] = await isFollowingUser(uid, id);
+		const [isFollowed] = await isFollowingUser(uid, id);
 		if (isFollowed) isFollowing = isFollowed;
-		if (error) failedIsFollowing = true;
 	}
 
-	async function handleFollowUser() {
-		if (!$user || $user.account.uid === uid || isFollowing || isDisabled || failedIsFollowing)
-			return;
-		try {
-			isDisabled = true;
-			await followUser($user.account.uid, uid);
-			isFollowing = true;
-		} catch (error) {
-			// TODO: HANDLE ERROR
-		} finally {
-			isDisabled = false;
+	async function handleFollow() {
+		if (!$user || isDisabled) return;
+		isDisabled = true;
+		const { isFollowing: isFollower } = await handleFollowUser($user.account.uid, uid);
+		if (isBoolean(isFollower)) {
+			isFollowing = isFollower;
+			if (isFollowing) {
+				$user.document.stats.followingCount++;
+				dispatch("follow");
+			} else {
+				$user.document.stats.followingCount--;
+				dispatch("unfollow");
+			}
 		}
+		isDisabled = false;
 	}
 </script>
 
-<button
-	class="h-9.5 px-8 | border-2 rounded-full text-sm font-medium {isFollowing
-		? 'button--unfollow'
-		: 'button--follow'}"
-	disabled={isDisabled}
-	class:opacity-50={isDisabled}
-	on:click={handleFollowUser}
->
-	{isFollowing ? "Following" : "Follow"}
-</button>
+{#if isStranger}
+	<button
+		class="h-9.5 px-8 | border-2 rounded-full text-sm font-medium {isFollowing
+			? 'button--unfollow'
+			: 'button--follow'}"
+		disabled={isDisabled}
+		class:opacity-50={isDisabled}
+		on:click={handleFollow}
+	>
+		{isFollowing ? "Following" : "Follow"}
+	</button>
+{/if}
 
 <style>
 	.button--follow {

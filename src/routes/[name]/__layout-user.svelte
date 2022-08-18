@@ -134,7 +134,11 @@
 						</Menu>
 					{/if}
 
-					<UserFollowButton uid={userDoc.uid} />
+					<UserFollowButton
+						uid={userDoc.uid}
+						on:follow={() => userDoc.stats.followerCount++}
+						on:unfollow={() => userDoc.stats.followerCount--}
+					/>
 				{/if}
 			</div>
 		</div>
