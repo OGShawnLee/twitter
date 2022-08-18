@@ -13,4 +13,6 @@
 	}, 60000);
 </script>
 
-<span class="text-zinc-500"> {timeText} </span>
+<div label={date.toLocaleDateString()}>
+	<time class="text-zinc-500" datetime={date.toISOString()}> {timeText} </time>
+</div>

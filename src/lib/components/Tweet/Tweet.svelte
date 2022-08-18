@@ -43,7 +43,7 @@
 						{tweet.user.name}
 					</a>
 				</h3>
-				<div class="space-x-1 | text-xs">
+				<div class="flex items-center gap-2.5 | text-xs">
 					<span class="text-zinc-400">@{tweet.user.displayName}</span>
 					<TweetTime createdAt={tweet.createdAt} />
 				</div>
