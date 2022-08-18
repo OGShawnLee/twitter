@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { UserDocument } from "@root/types";
+	import { UserFollowButton } from "$lib/components";
 	import { goto } from "$app/navigation";
 
 	export let user: UserDocument;
@@ -34,10 +35,9 @@
 					<span class="text-sm text-zinc-400">@{user.displayName}</span>
 				</div>
 			</div>
-
-			<button class="w-[fit-content] px-6 py-1.5 | bg-white rounded-full text-zinc-900 font-medium">
-				Follow
-			</button>
+			<div on:click|stopPropagation>
+				<UserFollowButton uid={user.uid} />
+			</div>
 		</header>
 
 		{#if user.description}
