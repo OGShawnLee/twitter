@@ -12,7 +12,7 @@
 <MobileSidebar>
 	<div class="flex items-center gap-4">
 		<PopoverButton class="h-12 min-w-12 rounded-full outline-none focus:(ring-2 ring-white)">
-			<img class="h-full w-full rounded-full" src="/{$user?.document?.displayName}" alt="" />
+			<img class="h-full w-full rounded-full" src={$user?.document.imageURL} alt="" />
 			<span class="sr-only">View Account Info</span>
 		</PopoverButton>
 		<div class="grid">
