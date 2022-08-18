@@ -1,7 +1,7 @@
 <script lang="ts">
+	import { EmptyState, MobileNavigation, MobileSidebar } from "$lib/layout";
 	import { MobileNavigationLink } from "$lib/components";
 	import { PopoverButton } from "malachite-ui/components";
-	import { MobileNavigation, MobileSidebar } from "$lib/layout";
 	import { user } from "@root/state";
 </script>
 
@@ -26,25 +26,16 @@
 </MobileSidebar>
 
 <main class="max-w-md w-full mx-auto px-6 my-24">
-	<div class="grid gap-6">
-		<img
-			src="https://abs.twimg.com/sticky/illustrations/empty-states/cracked-egg-microphones-800x400.v1.png"
-			width="800"
-			height="400"
-			alt=""
-		/>
-		<div class="flex flex-col items-center gap-1.5 text-center">
-			<span class="text-3xl font-semibold"> Waiting on a Moment </span>
-			<span class="text-sm text-zinc-400">
-				Moments are curated stories about what's happening—powered by Tweets.
-			</span>
-			<button
-				class="w-[fit-content] min-h-10.5 mt-6 px-12 py-2 | bg-sky-500 rounded-full font-medium"
-			>
-				Learn More
-			</button>
-		</div>
-	</div>
+	<EmptyState
+		class="grid gap-6"
+		title="Waiting on a Moment"
+		imageURL="https://abs.twimg.com/sticky/illustrations/empty-states/cracked-egg-microphones-800x400.v1.png"
+		width="800"
+		height="400"
+		buttonText="Learn More"
+	>
+		Moments are curated stories about what's happening—powered by Tweets.
+	</EmptyState>
 </main>
 
 <MobileNavigation class="justify-around">

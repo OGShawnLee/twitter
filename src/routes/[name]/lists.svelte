@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { EmptyState } from "$lib/layout";
 	import { ButtonRounded, Header } from "$lib/components";
 
 	export let name: string;
@@ -22,16 +23,13 @@
 </Header>
 
 <main class="max-w-md w-full mx-auto px-6 my-24">
-	<div class="grid gap-6">
-		<img
-			src="https://abs.twimg.com/sticky/illustrations/empty-states/calculator-with-egg-paper-400x200.v1.png"
-			width="400"
-			height="200"
-			alt=""
-		/>
-		<div class="grid gap-1.5 | text-center">
-			<span class="text-3xl font-semibold"> @{name} hasn't created any Lists </span>
-			<span class="text-sm text-zinc-400"> When they do, they'll show up here. </span>
-		</div>
-	</div>
+	<EmptyState
+		class="grid gap-6"
+		imageURL="https://abs.twimg.com/sticky/illustrations/empty-states/calculator-with-egg-paper-400x200.v1.png"
+		width="400"
+		height="200"
+		title=" @{name} hasn't created any Lists"
+	>
+		When they do, they'll show up here.
+	</EmptyState>
 </main>

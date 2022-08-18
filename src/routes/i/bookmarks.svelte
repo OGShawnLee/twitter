@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { TweetDocument } from "@root/types";
+	import { EmptyState } from "$lib/layout";
 	import { ButtonRounded, Header, Tweet, TweetMenuItem } from "$lib/components";
 	import { Menu, MenuButton, MenuItem } from "malachite-ui/components";
 	import { Circle3 as Circle, DoubleBounce } from "svelte-loading-spinners";
@@ -130,21 +131,15 @@
 					<Tweet tweet={bookmark} isBookmarked on:delete={handleTweetDelete} />
 				</div>
 			{:else}
-				<div class="grid gap-6">
-					<img
-						src="https://abs.twimg.com/sticky/illustrations/empty-states/book-in-bird-cage-800x400.v1.png"
-						width="800"
-						height="400"
-						alt=""
-					/>
-					<div class="grid gap-1.5 | text-center">
-						<span class="text-3xl font-semibold"> Save Tweets for later </span>
-						<span class="text-sm text-zinc-400">
-							Don't let the good ones fly away! Bookmark Tweets to easily find them again in the
-							future.
-						</span>
-					</div>
-				</div>
+				<EmptyState
+					class="grid gap-6"
+					title="Save Tweets for later"
+					imageURL="https://abs.twimg.com/sticky/illustrations/empty-states/book-in-bird-cage-800x400.v1.png"
+					width="800"
+					height="400"
+				>
+					Don't let the good ones fly away! Bookmark Tweets to easily find them again in the future.
+				</EmptyState>
 			{/each}
 		</div>
 	{/if}
