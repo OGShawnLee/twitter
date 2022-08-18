@@ -180,6 +180,7 @@
 			</div>
 
 			<UserFollowStats
+				displayName={userDoc.displayName}
 				followerCount={userDoc.stats.followerCount}
 				followingCount={userDoc.stats.followingCount}
 			/>

@@ -3,6 +3,7 @@ import type { Timestamp } from "firebase/firestore";
 import { collections, db, storage } from "@root/firebase";
 import {
 	collection,
+	collectionGroup,
 	deleteDoc,
 	doc,
 	getDocs,
@@ -19,9 +20,11 @@ import { isEmpty } from "malachite-ui/predicate";
 import { useAwait } from "$lib/hooks";
 import {
 	isBookmarkDocument,
+	isFollowDocument,
 	isFollowingUser,
 	isLikeDocument,
-	isTweetDocument
+	isTweetDocument,
+	isUserDocument
 } from "$lib/predicate/db";
 import { joinWithIDs } from "$lib/utils";
 
@@ -59,6 +62,39 @@ async function followUser(uid: string, id: string): Promise<{ error: null | stri
 
 function createFollowDocument(uid: string, id: string): FollowDocument {
 	return { id, uid, createdAt: serverTimestamp() as Timestamp };
+}
+
+export function getUserFollowing(uid: string) {
+	return useAwait(async () => {
+		const querySnapshot = await getDocs(
+			query(collection(db, collections.following(uid)), orderBy("createdAt"), limit(10))
+		);
+		const followingUIDs = querySnapshot.docs.map((document) => {
+			const data = document.data();
+			if (isFollowDocument(data)) return data.id;
+			throw new Error("Invalid Follow Document");
+		});
+		return joinWithIDs(collection(db, collections.users), followingUIDs, isUserDocument);
+	});
+}
+
+export function getUserFollowers(uid: string) {
+	return useAwait(async () => {
+		const querySnapshot = await getDocs(
+			query(
+				collectionGroup(db, "Following"),
+				where("id", "==", uid),
+				orderBy("createdAt", "desc"),
+				limit(10)
+			)
+		);
+		const followersUIDs = querySnapshot.docs.map((document) => {
+			const data = document.data();
+			if (isFollowDocument(data)) return data.uid;
+			throw new Error("Invalid Follow Document");
+		});
+		return joinWithIDs(collection(db, collections.users), followersUIDs, isUserDocument);
+	});
 }
 
 export function getUserLikes(uid: string) {

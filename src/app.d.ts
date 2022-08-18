@@ -8,6 +8,7 @@ declare namespace App {
 	// interface Platform {}
 	// interface Session {}
 	interface Stuff {
+		name: string;
 		displayName: string;
 		uid: string;
 	}

@@ -34,6 +34,8 @@ import { isString } from "malachite-ui/predicate";
 export {
 	deleteUserBookmark,
 	getUserBookmarks,
+	getUserFollowers,
+	getUserFollowing,
 	getUserLikes,
 	handleFollowUser,
 	updateUserProfile
