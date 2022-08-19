@@ -11,3 +11,4 @@ export { default as TweetStat } from "./Stat.svelte";
 export { default as TweetCompose } from "./Compose.svelte";
 export { default as TweetComposeMenuItem } from "./ComposeMenuItem.svelte";
 export { default as TweetQuote } from "./Quote.svelte";
+export { default as TweetUserImage } from "./UserImage.svelte";

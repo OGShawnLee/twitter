@@ -11,7 +11,8 @@ const RESTRICTED_ROUTES = Object.freeze({
 	"/settings": true,
 	"/i/bookmarks": true,
 	"/i/moment_maker": true,
-	"/compose/tweet": true
+	"/compose/tweet": true,
+	"/messages": true
 });
 
 const SUPPORTED_FILE_TYPES = {
