@@ -1,8 +1,9 @@
+import type { MessageDocument } from "@root/types";
 import type { CollectionReference, QuerySnapshot } from "firebase/firestore";
 import { doc, getDoc } from "firebase/firestore";
 import { isValidImageFileType } from "$lib/predicate";
 import { isString } from "malachite-ui/predicate";
-import { isTweetDocument } from "$lib/predicate/db";
+import { isMessageDocument, isTweetDocument } from "$lib/predicate/db";
 
 const STRING_MONTHS = Object.freeze({
 	0: "Jan",
@@ -19,6 +20,14 @@ const STRING_MONTHS = Object.freeze({
 	11: "Dec"
 });
 
+export function filterSnapshot<T>(querySnapshot: QuerySnapshot, isCorrectType: Predicate<T>) {
+	return querySnapshot.docs.reduce((acc, document) => {
+		const data = document.data();
+		if (isCorrectType(data)) acc.push(data);
+		return acc;
+	}, [] as Array<T>);
+}
+
 export function formatHour(date: Date) {
 	const hours = date.getHours();
 	const minutes = date.getMinutes();
@@ -30,6 +39,14 @@ export function formatStatusDate(date: Date) {
 	const month = date.getMonth() as keyof typeof STRING_MONTHS;
 	const year = date.getFullYear();
 	return `${STRING_MONTHS[month]} ${day}, ${year}`;
+}
+
+export function generateMessageDocuments(query: QuerySnapshot) {
+	return query.docs.reduce((messages, document) => {
+		const data = document.data();
+		if (isMessageDocument(data)) messages.push(data);
+		return messages;
+	}, [] as MessageDocument[]);
 }
 
 export function generateTweetDocuments(queryOrDocuments: QuerySnapshot) {
@@ -66,6 +83,13 @@ export async function joinWithIDs<T>(
 		if (predicate(data)) return data;
 		else throw new Error("Invalid Document Type");
 	});
+}
+
+export function toRecord<T>(value: T, ...keys: string[]): Record<string, T> {
+	return keys.reduce((acc, key) => {
+		acc[key] = value;
+		return acc;
+	}, {} as Record<string, T>);
 }
 
 export function toUnderscore(str: string) {

@@ -1,35 +1,49 @@
 <script lang="ts">
-	import type { Nullable } from "malachite-ui/types";
-	import { TweetMenuItem, TweetUserImage } from "$lib/components";
+	import type { ChatDocument } from "@root/types";
+	import { TweetMenuItem, TweetTime, TweetUserImage } from "$lib/components";
 	import { Menu, MenuButton, MenuItem } from "malachite-ui/components";
 	import { hideScrollbar } from "$lib/actions";
 	import { fade, fly } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
+	import { user } from "@root/state";
+	import { goto } from "$app/navigation";
+	import { isWithin } from "malachite-ui/predicate";
 
-	export let name: string;
-	export let displayName: string;
-	export let imageURL: Nullable<string>;
+	export let chat: ChatDocument;
+
+	const otherUser = chat.sender.uid === $user?.account.uid ? chat.receiver : chat.sender;
+
+	let buttonRef: HTMLElement;
+	let panelRef: HTMLElement;
+	let overlayRef: HTMLElement;
+
+	function viewChat(event?: MouseEvent | KeyboardEvent) {
+		if (isWithin([buttonRef, panelRef, overlayRef], event?.target)) return;
+		goto(`/messages/${$user?.account.uid}-${otherUser.uid}`);
+	}
 </script>
 
-<article
+<div
 	class="px-6 py-3 | border-2 border-transparent outline-none hover:bg-zinc-800 focus-visible:border-white"
+	role="button"
 	tabindex="0"
+	aria-label="View your Conversation with {otherUser.displayName}"
+	on:click={viewChat}
+	on:keydown|self={({ code }) => code === "Enter" && viewChat()}
 >
 	<div class="grid gap-3">
 		<header class="flex items-center justify-between">
 			<div class="flex items-center gap-3">
-				<TweetUserImage {displayName} {imageURL} />
+				<TweetUserImage displayName={otherUser.displayName} imageURL={otherUser.imageURL} />
 				<div class="grid">
 					<h3 class="font-medium">
-						<a class="relative outline-none focus:underline z-5" href="/{displayName}">
-							{name}
+						<a class="relative outline-none focus:underline z-5" href="/{otherUser.displayName}">
+							{otherUser.name}
 						</a>
 					</h3>
 					<div class="flex items-center gap-2.5 | text-xs">
-						<span class="text-zinc-400">@{displayName}</span>
-						<div class="text-zinc-500" label="Dec 12, 2018">
-							<time datetime="2018-12-12T21:53:35.2572"> Dec 12, 2018 </time>
-						</div>
+						<span class="text-zinc-400">@{otherUser.displayName}</span>
+						<TweetTime createdAt={chat.lastUpdated} />
 					</div>
 				</div>
 			</div>
@@ -37,6 +51,7 @@
 			<Menu let:items let:isOpen>
 				<MenuButton
 					class="button-after button-after-10 button-after--zinc | z-5 | group outline-none after:transition"
+					bind:element={buttonRef}
 				>
 					<span class="sr-only">Options</span>
 					<i
@@ -48,6 +63,7 @@
 					<div
 						class="fixed inset-0 z-20 | bg-zinc-800/70"
 						transition:fade|local={{ easing: cubicOut }}
+						bind:this={overlayRef}
 					/>
 				{/if}
 
@@ -57,6 +73,7 @@
 					use:items
 					use:hideScrollbar
 					transition:fly|local={{ y: 250 }}
+					bind:this={panelRef}
 				>
 					<TweetMenuItem icon="bx-pin" text="Pin conversation" />
 					<TweetMenuItem icon="bx-bell-off" text="Snooze conversation" />
@@ -74,8 +91,11 @@
 				</div>
 			</Menu>
 		</header>
-		<p class="text-sm text-zinc-400 leading-relaxed">
-			Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus a magnam laborum.
-		</p>
+
+		{#if chat.lastMessage?.text}
+			<p class="text-sm text-zinc-400 leading-relaxed">
+				{chat.lastMessage.text}
+			</p>
+		{/if}
 	</div>
-</article>
+</div>

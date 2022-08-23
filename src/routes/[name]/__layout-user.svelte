@@ -21,7 +21,8 @@
 		NavigableLink,
 		TweetMenuItem,
 		UserFollowButton,
-		UserFollowStats
+		UserFollowStats,
+		UserMessageButton
 	} from "$lib/components";
 	import { Menu, MenuButton, MenuItem, Navigable } from "malachite-ui/components";
 	import { fade, fly } from "svelte/transition";
@@ -72,7 +73,7 @@
 				alt=""
 			/>
 
-			<div class="ml-auto | flex items-center gap-3">
+			<div class="ml-auto | flex items-center gap-1.5">
 				{#if isUserProfile}
 					<a
 						class="h-9.5 px-8 | flex items-center | border-2 border-zinc-700 rounded-full text-sm font-medium"
@@ -132,6 +133,8 @@
 								</MenuItem>
 							</div>
 						</Menu>
+
+						<UserMessageButton uid={userDoc.uid} displayName={userDoc.displayName} />
 					{/if}
 
 					<UserFollowButton

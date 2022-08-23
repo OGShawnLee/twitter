@@ -28,8 +28,12 @@ export const storage = getStorage(app);
 export const collections = Object.freeze({
 	tweets: "Tweets",
 	users: "Users",
+	chats: "Chats",
 	bookmarks(uid: string) {
 		return `${this.users}/${uid}/Bookmarks`;
+	},
+	messages(id: string) {
+		return `${this.chats}/${id}/Messages`;
 	},
 	following(uid: string) {
 		return `${this.users}/${uid}/Following`;

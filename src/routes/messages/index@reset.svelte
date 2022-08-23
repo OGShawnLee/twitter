@@ -2,10 +2,23 @@
 	import "@root/styles/button-after.css";
 	import "@root/styles/button-rounded.css";
 	import { MobileNavigation, MobileSidebar } from "$lib/layout";
-	import { ButtonRounded, MessagePreview, MobileNavigationLink } from "$lib/components";
+	import { ButtonRounded, ChatPreview, MobileNavigationLink } from "$lib/components";
 	import { PopoverButton } from "malachite-ui/components";
+	import { Circle3 as Circle } from "svelte-loading-spinners";
 	import { user } from "@root/state";
+	import { useChatsSnapshot } from "@root/services/db";
+	import { onMount } from "svelte";
+
+	const { chats, isLoading, initialiseChatsSnapshot } = useChatsSnapshot();
+
+	onMount(async () => {
+		if ($user) return initialiseChatsSnapshot($user.account.uid);
+	});
 </script>
+
+<svelte:head>
+	<title>Twitter | Messages</title>
+</svelte:head>
 
 <MobileSidebar>
 	<div class="flex items-center gap-4">
@@ -27,12 +40,21 @@
 </MobileSidebar>
 
 <main class="max-w-md w-full mx-auto mt-24 mb-12">
-	<MessagePreview
-		name="Shawn"
-		displayName="elonmusk"
-		imageURL="https://lh3.googleusercontent.com/a-/AFdZucpJfiM9IztWXzGvcuh_JnoCEwlACG5tk74pV_Ty=s96-c"
-	/>
-	<MessagePreview name="Shawn Lee" displayName="OGShawnLee" imageURL={$user?.document.imageURL} />
+	{#if $isLoading}
+		<div class="fixed inset-0 grid place-content-center">
+			<Circle
+				size="64"
+				ballBottomLeft="#F43F5E"
+				ballBottomRight="#F59E0B"
+				ballTopLeft="#14b8a6"
+				ballTopRight="#6366F1"
+			/>
+		</div>
+	{:else}
+		{#each $chats as chat (chat.id)}
+			<ChatPreview {chat} />
+		{/each}
+	{/if}
 </main>
 
 <MobileNavigation>

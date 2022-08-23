@@ -40,7 +40,7 @@
 
 {#if isStranger}
 	<button
-		class="h-9.5 px-8 | border-2 rounded-full text-sm font-medium {isFollowing
+		class="h-9.5 px-6 | border-2 rounded-full text-sm font-medium {isFollowing
 			? 'button--unfollow'
 			: 'button--follow'}"
 		disabled={isDisabled}

@@ -32,6 +32,14 @@ import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { isString } from "malachite-ui/predicate";
 
 export {
+	createChat,
+	getAllChatDocuments,
+	getChatDocument,
+	sendMessage,
+	useChatSnapshot,
+	useChatsSnapshot
+} from "./messages";
+export {
 	deleteUserBookmark,
 	getUserBookmarks,
 	getUserFollowers,

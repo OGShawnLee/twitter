@@ -14,11 +14,35 @@ interface FollowDocument {
 	createdAt: Timestamp;
 }
 
-// * Likes
+// * Like
 interface LikeDocument {
 	uid: string;
 	id: string; // ? tweet id
 	likedAt: Timestamp;
+}
+
+// * Message
+interface ChatDocument {
+	id: string;
+	createdAt: Timestamp;
+	lastUpdated: Timestamp;
+	members: Record<string, boolean>;
+	membersList: string[];
+	lastMessage: MessageDocument | null;
+	sender: ChatUser;
+	receiver: ChatUser;
+	messageCount: number;
+}
+
+type ChatUser = Pick<UserDocument, "uid" | "name" | "displayName" | "imageURL" | "isVerified">;
+
+interface MessageDocument {
+	id: string;
+	user: ChatUser;
+	createdAt: Timestamp;
+	imageURL: string | null;
+	text: string | null;
+	hasBeenSeen: boolean;
 }
 
 // * Tweet

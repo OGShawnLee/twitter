@@ -1,7 +1,10 @@
 import type {
 	BookmarkDocument,
+	ChatDocument,
+	ChatUser,
 	FollowDocument,
 	LikeDocument,
+	MessageDocument,
 	TweetDocument,
 	UserDocument,
 	UserHeader,
@@ -11,7 +14,7 @@ import type {
 import { collections, db } from "@root/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useAwait } from "$lib/hooks";
-import { isBoolean, isInterface, isNumber, isString } from "malachite-ui/predicate";
+import { isBoolean, isInterface, isNumber, isObject, isString } from "malachite-ui/predicate";
 import { isStringOrNull, isTimestamp } from "./core";
 
 export function isBookmarkDocument(val: unknown): val is BookmarkDocument {
@@ -25,6 +28,41 @@ export function isBookmarked(tid: string, uid: string) {
 	return useAwait(async () => {
 		const documentSnapshot = await getDoc(doc(db, collections.bookmarks(uid), tid));
 		return documentSnapshot.exists();
+	});
+}
+
+export function isMessageDocument(val: unknown): val is MessageDocument {
+	return isInterface<MessageDocument>(val, {
+		id: isString,
+		user: isChatUser,
+		createdAt: isTimestamp,
+		imageURL: isStringOrNull,
+		text: isStringOrNull,
+		hasBeenSeen: isBoolean
+	});
+}
+
+export function isChatUser(val: unknown): val is ChatUser {
+	return isInterface<ChatUser>(val, {
+		uid: isString,
+		name: isStringOrNull,
+		displayName: isStringOrNull,
+		isVerified: isBoolean,
+		imageURL: isStringOrNull
+	});
+}
+
+export function isChatDocument(val: unknown): val is ChatDocument {
+	return isInterface<ChatDocument>(val, {
+		id: isString,
+		createdAt: isTimestamp,
+		lastUpdated: isTimestamp,
+		lastMessage: (val): val is MessageDocument | null => val === null || isMessageDocument(val),
+		members: isObject as Predicate<Record<string, boolean>>,
+		membersList: Array.isArray,
+		sender: isChatUser,
+		receiver: isChatUser,
+		messageCount: isNumber
 	});
 }
 
