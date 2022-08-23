@@ -26,6 +26,7 @@ export { default as NavigableLinkFloating } from "./NavigableLinkFloating.svelte
 export { default as NavigableLinkSidebar } from "./NavigableLinkSidebar.svelte";
 export { default as Message } from "./Message.svelte";
 export { default as MessageInput } from "./MessageInput.svelte";
+export { default as MessageTime } from "./MessageTime.svelte";
 export { default as UserCard } from "./UserCard.svelte";
 export { default as UserFollowButton } from "./UserFollowButton.svelte";
 export { default as UserFollowStats } from "./UserFollowStats.svelte";

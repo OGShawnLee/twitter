@@ -5,6 +5,16 @@ import { isValidImageFileType } from "$lib/predicate";
 import { isString } from "malachite-ui/predicate";
 import { isMessageDocument, isTweetDocument } from "$lib/predicate/db";
 
+const STRING_DAYS = Object.freeze({
+	0: "Monday",
+	1: "Tuesday",
+	2: "Wednesday",
+	3: "Thursday",
+	4: "Friday",
+	5: "Saturday",
+	6: "Sunday"
+});
+
 const STRING_MONTHS = Object.freeze({
 	0: "Jan",
 	1: "Feb",
@@ -41,6 +51,10 @@ export function formatStatusDate(date: Date) {
 	return `${STRING_MONTHS[month]} ${day}, ${year}`;
 }
 
+export function formatLongStatusDate(then: Date) {
+	return `${formatStatusDate(then)}, ${formatHour(then)}`;
+}
+
 export function generateMessageDocuments(query: QuerySnapshot) {
 	return query.docs.reduce((messages, document) => {
 		const data = document.data();
@@ -55,6 +69,12 @@ export function generateTweetDocuments(queryOrDocuments: QuerySnapshot) {
 		if (isTweetDocument(docData)) return docData;
 		throw new TypeError("Invalid Tweet Document");
 	});
+}
+
+// https://thewebdev.info/2022/01/24/how-to-get-the-week-number-of-the-month-of-a-given-date-with-javascript/
+export function getNumberOfWeek(date: Date) {
+	const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+	return Math.ceil((date.getDate() + (firstDay - 1)) / 7);
 }
 
 export function getImageFilePathURL(file: File) {
@@ -135,6 +155,16 @@ export class Time {
 		return this.toDays(now) - this.toDays(then) < 1;
 	}
 
+	static isYesterday(date: Date) {
+		const yesterday = new Date();
+		yesterday.setDate(yesterday.getDate() - 1);
+		return yesterday.toDateString() === date.toDateString();
+	}
+
+	static isCurrentWeek(then: Date, now = new Date()) {
+		return getNumberOfWeek(then) === getNumberOfWeek(now);
+	}
+
 	static isCurrentYear(then: Date, now = new Date()) {
 		return this.toYears(now) - this.toYears(then) < 1;
 	}
@@ -155,7 +185,13 @@ export class Time {
 		return `${diff.toFixed()} ${diff > 2 ? timeUnit + "s" : timeUnit} ago`;
 	}
 
-	static getTimeMessage(then: Date, now = new Date()) {
+	private static getWeekMessage(then: Date) {
+		const hour = formatHour(then);
+		const day = then.getDay() as keyof typeof STRING_DAYS;
+		return `${STRING_DAYS[day]}, ${hour}`;
+	}
+
+	static getTimeMessage(then: Date, now = new Date(), useLongDate = false) {
 		if (this.isCurrentMinute(then, now))
 			return this.getMessage(this.getSecondDifference(then, now), "second");
 
@@ -165,7 +201,11 @@ export class Time {
 		if (this.isCurrentDay(then, now))
 			return this.getMessage(this.getHourDifference(then, now), "hour");
 
-		return formatStatusDate(then);
+		if (this.isYesterday(then)) return `Yesteday, ${formatHour(then)}`;
+
+		if (this.isCurrentWeek(then)) return this.getWeekMessage(then);
+
+		return useLongDate ? formatLongStatusDate(then) : formatStatusDate(then);
 	}
 }
 

@@ -86,7 +86,7 @@
 	</button>
 </Header>
 
-<main class="max-w-md w-full mx-auto px-6 mt-24 mb-12">
+<main class="max-w-md w-full mx-auto px-6 mt-24 mb-16">
 	<div class="grid gap-6">
 		{#each $messages as message}
 			<Message {message} />
