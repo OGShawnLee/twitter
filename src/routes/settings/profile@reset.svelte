@@ -72,9 +72,7 @@
 			<span class="sr-only">Go Back</span>
 		</button>
 		<div class="grid">
-			<div class="flex items-center gap-3">
-				<h1 class="text-xl font-medium">Edit Profile</h1>
-			</div>
+			<h1 class="text-xl font-medium">Edit Profile</h1>
 			<span class="text-xs text-zinc-500">@{$user?.document?.displayName}</span>
 		</div>
 	</div>
