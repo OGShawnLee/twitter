@@ -1,3 +1,11 @@
+<script lang="ts" context="module">
+	import type { Load } from "@sveltejs/kit";
+
+	export const load: Load = ({ params: { name } }) => {
+		return { status: 200, props: { name } };
+	};
+</script>
+
 <script lang="ts">
 	import "@root/styles/button-rounded.css";
 	import { EmptyState } from "$lib/layout";
