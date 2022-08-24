@@ -1,7 +1,8 @@
 <script lang="ts">
+	import "@root/styles/button-rounded.css"
 	import type { TweetDocument } from "@root/types";
 	import { EmptyState } from "$lib/layout";
-	import { ButtonRounded, Header, Tweet, TweetMenuItem } from "$lib/components";
+	import { Header, Tweet, TweetMenuItem } from "$lib/components";
 	import { Menu, MenuButton, MenuItem } from "malachite-ui/components";
 	import { Circle3 as Circle, DoubleBounce } from "svelte-loading-spinners";
 	import { user } from "@root/state";
@@ -53,10 +54,10 @@
 
 <Header class="justify-between">
 	<div class="flex items-center gap-4">
-		<ButtonRounded on:click={() => history.back()}>
+		<button class="button-rounded size-12 background-zinc" on:click={() => history.back()}>
 			<i class="bx bxs-left-arrow-alt | text-2xl" />
 			<span class="sr-only">Go Back</span>
-		</ButtonRounded>
+		</button>
 		<div class="grid">
 			<div class="flex items-center gap-3">
 				<h1 class="text-xl font-medium">Bookmarks</h1>

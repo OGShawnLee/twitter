@@ -1,6 +1,7 @@
 <script lang="ts">
+	import "@root/styles/button-rounded.css";
 	import { EmptyState } from "$lib/layout";
-	import { ButtonRounded, Header } from "$lib/components";
+	import { Header } from "$lib/components";
 
 	export let name: string;
 </script>
@@ -10,10 +11,10 @@
 </svelte:head>
 
 <Header>
-	<ButtonRounded on:click={() => history.back()}>
+	<button class="button-rounded size-12 background-zinc" on:click={() => history.back()}>
 		<i class="bx bxs-left-arrow-alt | text-2xl" />
 		<span class="sr-only">Go Back</span>
-	</ButtonRounded>
+	</button>
 	<div class="grid">
 		<div class="flex items-center gap-3">
 			<h1 class="text-xl font-medium">Lists</h1>
