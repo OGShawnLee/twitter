@@ -11,7 +11,7 @@
 	export let success: string | null = null;
 	export let fontWeight = "font-medium";
 
-	$: className = `w-full h-full px-3 | bg-transparent outline-none ${fontWeight} placeholder-zinc-500`;
+	$: className = `w-full h-full min-h-12 px-3 | bg-transparent outline-none ${fontWeight} placeholder-zinc-500`;
 </script>
 
 <div class="grid gap-4">

@@ -63,9 +63,10 @@
 	<MobileNavigationLink icon="bx-bell" href="/notifications" />
 	<MobileNavigationLink icon="bx-envelope" href="/messages" class="relative">
 		<ButtonRounded
+			as="a"
 			class="absolute -top-24 right-1/2 | grid place-content-center | transform translate-x-1/2"
 			backgroundColor="bg-sky-500"
-			on:click={(event) => event.preventDefault()}
+			href="/i/lists/create"
 		>
 			<i class="bx bx-list-plus | text-2xl" />
 			<span class="sr-only">Create a new List</span>

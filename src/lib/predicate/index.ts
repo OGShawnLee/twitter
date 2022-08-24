@@ -10,6 +10,7 @@ const RESTRICTED_ROUTES = Object.freeze({
 	"/home": true,
 	"/settings": true,
 	"/i/bookmarks": true,
+	"/i/lists/create": true,
 	"/i/moment_maker": true,
 	"/compose/tweet": true,
 	"/messages": true

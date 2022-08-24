@@ -1,4 +1,5 @@
 export { default as EmptyState } from "./empty-state.svelte";
+export { default as InputImagePreview } from "./input-image-preview.svelte";
 export { default as Loader } from "./loader.svelte";
 export { default as MobileNavigation } from "./mobile-navigation.svelte";
 export { default as MobileSidebar } from "./mobile-sidebar.svelte";
