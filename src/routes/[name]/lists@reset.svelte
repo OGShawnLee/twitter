@@ -8,10 +8,13 @@
 
 <script lang="ts">
 	import "@root/styles/button-rounded.css";
-	import { EmptyState } from "$lib/layout";
-	import { Header } from "$lib/components";
+	import { EmptyState, MobileNavigation } from "$lib/layout";
+	import { ButtonRounded, Header, ListSection, MobileNavigationLink } from "$lib/components";
+	import { user } from "@root/state";
 
 	export let name: string;
+
+	$: isOwner = name === $user?.document.displayName;
 </script>
 
 <svelte:head>
@@ -32,13 +35,40 @@
 </Header>
 
 <main class="max-w-md w-full mx-auto px-6 my-24">
-	<EmptyState
-		class="grid gap-6"
-		imageURL="https://abs.twimg.com/sticky/illustrations/empty-states/calculator-with-egg-paper-400x200.v1.png"
-		width="400"
-		height="200"
-		title=" @{name} hasn't created any Lists"
-	>
-		When they do, they'll show up here.
-	</EmptyState>
+	{#if isOwner}
+		<div class="grid gap-6">
+			<ListSection title="Pinned Lists">
+				Nothing to see here yet — pin your favorite Lists to access them quickly.
+			</ListSection>
+			<ListSection title="Your Lists">
+				You haven't created or followed any Lists. When you do, they'll show up here.
+			</ListSection>
+		</div>
+	{:else}
+		<EmptyState
+			class="grid gap-6"
+			imageURL="https://abs.twimg.com/sticky/illustrations/empty-states/calculator-with-egg-paper-400x200.v1.png"
+			width="400"
+			height="200"
+			title=" @{name} hasn't created any Lists"
+		>
+			When they do, they'll show up here.
+		</EmptyState>
+	{/if}
 </main>
+
+<MobileNavigation>
+	<MobileNavigationLink icon="bx-home-circle" href="/home" />
+	<MobileNavigationLink icon="bx-search" href="/search" />
+	<MobileNavigationLink icon="bx-bell" href="/notifications" />
+	<MobileNavigationLink icon="bx-envelope" href="/messages" class="relative">
+		<ButtonRounded
+			class="absolute -top-24 right-1/2 | grid place-content-center | transform translate-x-1/2"
+			backgroundColor="bg-sky-500"
+			on:click={(event) => event.preventDefault()}
+		>
+			<i class="bx bx-list-plus | text-2xl" />
+			<span class="sr-only">Create a new List</span>
+		</ButtonRounded>
+	</MobileNavigationLink>
+</MobileNavigation>
