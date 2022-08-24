@@ -11,8 +11,7 @@
 
 <script lang="ts">
 	import "@root/styles/button-rounded.css";
-	import { Header, InputGroup, InputImage } from "$lib/components";
-	import { DoubleBounce } from "svelte-loading-spinners";
+	import { ButtonSubmit, Header, InputGroup, InputImage } from "$lib/components";
 	import { updateUserProfile } from "@root/services/db";
 	import { user } from "@root/state";
 	import { clearString } from "malachite-ui/utils";
@@ -79,16 +78,7 @@
 			<span class="text-xs text-zinc-500">@{$user?.document?.displayName}</span>
 		</div>
 	</div>
-	{#if isSaving}
-		<DoubleBounce size="32" color="#0EA5E9" />
-	{:else}
-		<button
-			class="py-2 px-6 | bg-white rounded-full text-zinc-900 font-medium text-sky-500"
-			on:click={updateProfile}
-		>
-			Save
-		</button>
-	{/if}
+	<ButtonSubmit text="Save" {isSaving} on:click={updateProfile} />
 </Header>
 
 <main class="mt-20 mb-12 | flex flex-col gap-0">
