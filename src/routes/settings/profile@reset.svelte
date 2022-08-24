@@ -11,6 +11,7 @@
 
 <script lang="ts">
 	import "@root/styles/button-rounded.css";
+	import { InputImagePreview } from "$lib/layout";
 	import { ButtonSubmit, Header, InputGroup, InputImage } from "$lib/components";
 	import { updateUserProfile } from "@root/services/db";
 	import { user } from "@root/state";
@@ -80,31 +81,7 @@
 </Header>
 
 <main class="mt-20 mb-12 | flex flex-col gap-0">
-	<div class="relative h-36">
-		{#if bannerURL}
-			<img class="w-full h-full object-center object-cover" src={bannerURL} alt="" />
-		{:else}
-			<div class="w-full h-full bg-zinc-800" />
-		{/if}
-
-		<div
-			class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 | flex items-center gap-5"
-		>
-			<InputImage
-				class="button-rounded size-12 center bg-zinc-900/60 | text-3xl"
-				icon="bx-camera"
-				bind:imagePathURL={bannerURL}
-			/>
-			{#if bannerURL}
-				<div class="button-rounded size-12 center bg-zinc-900/60">
-					<button class="mt-0.875 | outline-none" on:click={() => (bannerURL = null)}>
-						<i class="bx bx-x text-3xl" />
-						<span class="sr-only">Remove Banner</span>
-					</button>
-				</div>
-			{/if}
-		</div>
-	</div>
+	<InputImagePreview bind:imageURL={bannerURL} />
 	<div class="relative max-w-md w-full mx-auto px-6 py-3 | flex items-center">
 		<div
 			class="absolute top-0 h-25 w-25 min-w-25 | rounded-full ring-3 ring-zinc-900 transform -translate-y-1/2"
