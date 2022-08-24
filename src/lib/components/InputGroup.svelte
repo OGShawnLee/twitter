@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { isEmpty, isNumber, isString } from "malachite-ui/predicate";
+	import { isNumber } from "malachite-ui/predicate";
 	import { slide } from "svelte/transition";
 
 	export let id: string;

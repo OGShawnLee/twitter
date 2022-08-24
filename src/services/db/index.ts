@@ -3,7 +3,6 @@ import type {
 	DraftTweet,
 	NewTweetOptions,
 	TweetDocument,
-	UpdatableTweetDocument,
 	UpdatableUserDocument,
 	UserDocument,
 	UserDocumentTimestamp

@@ -20,19 +20,13 @@ import { isEmpty } from "malachite-ui/predicate";
 import { useAwait } from "$lib/hooks";
 import {
 	isBookmarkDocument,
-	isChatDocument,
 	isFollowDocument,
 	isFollowingUser,
 	isLikeDocument,
 	isTweetDocument,
 	isUserDocument
 } from "$lib/predicate/db";
-import { filterSnapshot, joinWithIDs } from "$lib/utils";
-import { writable } from "svelte/store";
-import type { FirebaseError } from "firebase/app";
-import { onMount } from "svelte";
-import { makeReadable } from "malachite-ui/utils";
-import type { Unsubscribe } from "firebase/auth";
+import { joinWithIDs } from "$lib/utils";
 
 export async function clearUserBookmarks(uid: string) {
 	// ? WE SHOULD PROBABLY HANDLE THIS IN A SERVER ENVIRONMENT
