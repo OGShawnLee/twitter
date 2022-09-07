@@ -119,6 +119,11 @@ export function sendTweet(userDoc: UserDocument, draftTweet: DraftTweet) {
 			await updateDoc(docReference, { imageURL: imagePathURL, hasMedia: true });
 		}
 
+		if (inReplyTo && inReplyTo.id) {
+			const targetTweetRef = doc(db, collections.tweets, inReplyTo.id);
+			updateDoc(targetTweetRef, { replyCount: increment(1) });
+		}
+
 		await updateUserDocument(userDoc.uid, {
 			stats: { tweetCount: increment(1) }
 		});
